@@ -1,0 +1,61 @@
+<div class="div">
+    <h1 class="page-title">Temas das Palestras</h1>
+
+    <div *ngIf="erro" class="error-container">
+        <p>Ocorreu um erro ao carregar os temas. Por favor, tente novamente mais tarde.</p>
+    </div>
+
+    <div *ngIf="carregando" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Carregando Temas das palestras...</p>
+    </div>
+
+
+
+    <div *ngIf="!carregando && !erro" class="agenda-content">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="palestras-table">
+                    <thead>
+                        <tr>
+                            <th>Imagem</th>
+                            <th>Titulo</th>
+                            <th>Link</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let tema of temas" (click)="selecionarPalestra(tema)"
+                            [class.selected]="temasSelecionada?.id === tema.id">
+                            <td>
+                                <img [src]="tema.imagem" alt="Imagem da palestra" class="imagem-palestra" />
+                            </td>
+                            <td>{{tema.titulo}}</td>
+                            <td>
+                                <a [href]="tema.link" target="_blank"
+                                    class="block text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+                                    📥 Download / Visualizar
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="temas.length === 0" class="empty-state">
+                <p>Não há palestras agendadas no momento.</p>
+            </div>
+
+            <div *ngIf="temasSelecionada" class="palestra-detalhes">
+                <h3>Detalhes do Tema</h3>
+                <div class="detalhes-card">
+                    <h4>{{ temasSelecionada.id }}</h4>
+                    <p><strong>Data:</strong> {{ temasSelecionada.id }}</p>
+                    <p><strong>Local:</strong> {{temasSelecionada.id }}</p>
+                    <p><strong>Palestrante:</strong> {{ temasSelecionada.id }}</p>
+                    <p *ngIf="temasSelecionada.id"><strong>Descrição:</strong> {{
+                        temasSelecionada.id }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

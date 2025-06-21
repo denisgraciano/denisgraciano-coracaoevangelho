@@ -1,0 +1,68 @@
+ .share-container {
+     margin-top: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+ }
+
+ .share-title {
+     font-size: 0.9rem;
+     color: var(--primary-color);
+     margin-bottom: 0.5rem;
+ }
+
+ .share-buttons {
+     display: flex;
+     gap: 0.75rem;
+     justify-content: center;
+ }
+
+ .share-btn {
+     width: 40px;
+     height: 40px;
+     border-radius: 50%;
+     border: none;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+     transition: transform 0.2s, box-shadow 0.2s;
+     color: white;
+ }
+
+ .share-btn:hover {
+     transform: translateY(-3px);
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ }
+
+ .share-btn:active {
+     transform: translateY(-1px);
+ }
+
+ .whatsapp {
+     background-color: #25D366;
+ }
+
+ .facebook {
+     background-color: #1877F2;
+ }
+
+ .twitter {
+     background-color: #1DA1F2;
+ }
+
+ .email {
+     background-color: #DB4437;
+ }
+
+ @media (max-width: 767px) {
+     .share-btn {
+         width: 36px;
+         height: 36px;
+     }
+
+     .share-btn svg {
+         width: 20px;
+         height: 20px;
+     }
+ }

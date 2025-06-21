@@ -1,0 +1,229 @@
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { Palestra } from './palestra.model';
+
+@Component({
+  selector: 'app-agenda',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <div class="agenda-container">
+      <h1 class="page-title">Agenda de Palestras</h1>
+      
+      <div *ngIf="carregando" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Carregando agenda de palestras...</p>
+      </div>
+      
+      <div *ngIf="erro" class="error-container">
+        <p>Ocorreu um erro ao carregar a agenda. Por favor, tente novamente mais tarde.</p>
+      </div>
+      
+      <div *ngIf="!carregando && !erro" class="agenda-content">
+        <div class="card">
+          <div class="table-responsive">
+            <table class="palestras-table">
+              <thead>
+                <tr>
+                  <th>Data</th>
+                  <th>Local</th>
+                  <th>Tema</th>
+                  <th>Palestrante</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let palestra of palestras" (click)="selecionarPalestra(palestra)" [class.selected]="palestraSelecionada?.id === palestra.id">
+                  <td>{{ palestra.data }}</td>
+                  <td>{{ palestra.local }}</td>
+                  <td>{{ palestra.tema }}</td>
+                  <td>{{ palestra.palestrante }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div *ngIf="palestras.length === 0" class="empty-state">
+            <p>Não há palestras agendadas no momento.</p>
+          </div>
+          
+          <div *ngIf="palestraSelecionada" class="palestra-detalhes">
+            <h3>Detalhes da Palestra</h3>
+            <div class="detalhes-card">
+              <h4>{{ palestraSelecionada.tema }}</h4>
+              <p><strong>Data:</strong> {{ palestraSelecionada.data }}</p>
+              <p><strong>Local:</strong> {{ palestraSelecionada.local }}</p>
+              <p><strong>Palestrante:</strong> {{ palestraSelecionada.palestrante }}</p>
+              <p *ngIf="palestraSelecionada.descricao"><strong>Descrição:</strong> {{ palestraSelecionada.descricao }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+  styles: [`
+    .agenda-container {
+      padding: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    .page-title {
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .loading-container, .error-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 300px;
+    }
+    
+    .loading-spinner {
+      border: 4px solid var(--accent-color);
+      border-top: 4px solid var(--primary-color);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 1rem;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .error-container {
+      color: #d32f2f;
+    }
+    
+    .card {
+      background-color: var(--card-background);
+      border-radius: 8px;
+      box-shadow: 0 4px 8px var(--shadow-color);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .table-responsive {
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+    
+    .palestras-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+    
+    .palestras-table th, .palestras-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .palestras-table th {
+      background-color: var(--primary-color);
+      color: var(--white-color);
+      font-weight: 500;
+    }
+    
+    .palestras-table tr {
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    
+    .palestras-table tr:hover {
+      background-color: var(--accent-color);
+    }
+    
+    .palestras-table tr.selected {
+      background-color: var(--accent-color);
+      border-left: 3px solid var(--primary-color);
+    }
+    
+    .empty-state {
+      text-align: center;
+      padding: 2rem;
+      color: #757575;
+    }
+    
+    .palestra-detalhes {
+      margin-top: 2rem;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 1.5rem;
+    }
+    
+    .palestra-detalhes h3 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+    
+    .detalhes-card {
+      background-color: var(--accent-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+      border-left: 4px solid var(--primary-color);
+    }
+    
+    .detalhes-card h4 {
+      margin-top: 0;
+      color: var(--primary-dark);
+      margin-bottom: 1rem;
+    }
+    
+    .detalhes-card p {
+      margin-bottom: 0.5rem;
+    }
+    
+    @media (max-width: 767px) {
+      .agenda-container {
+        padding: 1rem;
+      }
+      
+      .card {
+        padding: 1rem;
+      }
+      
+      .palestras-table th, .palestras-table td {
+        padding: 0.5rem;
+        font-size: 0.9rem;
+      }
+    }
+  `]
+})
+export class AgendaComponent implements OnInit {
+  palestras: Palestra[] = [];
+  palestraSelecionada: Palestra | null = null;
+  carregando = true;
+  erro = false;
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.carregarPalestras();
+  }
+
+  carregarPalestras(): void {
+    this.http.get<Palestra[]>('assets/palestras.json').subscribe({
+      next: (data) => {
+        this.palestras = data;
+        this.carregando = false;
+      },
+      error: (error) => {
+        console.error('Erro ao carregar palestras:', error);
+        this.carregando = false;
+        this.erro = true;
+      }
+    });
+  }
+
+  selecionarPalestra(palestra: Palestra): void {
+    this.palestraSelecionada = palestra;
+  }
+}

@@ -1,0 +1,54 @@
+<div class="agenda-container">
+    <h1 class="page-title">Agenda de Palestras</h1>
+
+    <div *ngIf="carregando" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Carregando agenda de palestras...</p>
+    </div>
+
+    <div *ngIf="erro" class="error-container">
+        <p>Ocorreu um erro ao carregar a agenda. Por favor, tente novamente mais tarde.</p>
+    </div>
+
+    <div *ngIf="!carregando && !erro" class="agenda-content">
+        <div class="card">
+            <div class="table-responsive">
+                <table class="palestras-table">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Local</th>
+                            <th>Tema</th>
+                            <th>Palestrante</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let palestra of palestras" (click)="selecionarPalestra(palestra)"
+                            [class.selected]="palestraSelecionada?.id === palestra.id">
+                            <td>{{ palestra.data }}</td>
+                            <td>{{ palestra.local }}</td>
+                            <td>{{ palestra.tema }}</td>
+                            <td>{{ palestra.palestrante }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div *ngIf="palestras.length === 0" class="empty-state">
+                <p>Não há palestras agendadas no momento.</p>
+            </div>
+
+            <div *ngIf="palestraSelecionada" class="palestra-detalhes">
+                <h3>Detalhes da Palestra</h3>
+                <div class="detalhes-card">
+                    <h4>{{ palestraSelecionada.tema }}</h4>
+                    <p><strong>Data:</strong> {{ palestraSelecionada.data }}</p>
+                    <p><strong>Local:</strong> {{ palestraSelecionada.local }}</p>
+                    <p><strong>Palestrante:</strong> {{ palestraSelecionada.palestrante }}</p>
+                    <p *ngIf="palestraSelecionada.descricao"><strong>Descrição:</strong> {{
+                        palestraSelecionada.descricao }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

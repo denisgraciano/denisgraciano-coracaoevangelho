@@ -1,0 +1,25 @@
+img {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #1f2937;
+    /* Gray-800 */
+}
+
+p {
+    font-size: 1rem;
+    color: #4b5563;
+    /* Gray-600 */
+    line-height: 1.6;
+}
+
+div {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: #f9fafb;
+    /* Gray-50 */
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
