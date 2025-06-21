@@ -1,5 +1,19 @@
+# Node modules
 node_modules
 # IDEs e editores
 .vscode/
 .idea/
-.angular/
+# Angular build artifacts
+/.angular/cache/
+/.angular/
+# Compiled output
+/dist/
+/out-tsc/
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
