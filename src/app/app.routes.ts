@@ -4,6 +4,9 @@ import { LivroDosEspiritosComponent } from './livro-dos-espiritos.component';
 import { AgendaComponent } from './agenda/components/palestra/agenda.component';
 import { PalestrasRealizadasComponent } from './palestras-realizadas.component';
 import { SobreComponent } from './sobre.component';
+import { DetalhesCursoComponent } from './detalhes-curso.component';
+import { InscricaoCursoComponent } from './inscricao-curso.component';
+
 
 
 export const routes: Routes = [
@@ -13,5 +16,7 @@ export const routes: Routes = [
   { path: 'palestra', component: PalestrasRealizadasComponent },
   { path: 'palestras-realizadas', component: PalestrasRealizadasComponent },
   { path: 'sobre', component: SobreComponent },
+  { path: 'curso/:id', component: DetalhesCursoComponent },
+  { path: 'inscricao/:id', component: InscricaoCursoComponent },
   { path: '**', redirectTo: '' }
 ];
