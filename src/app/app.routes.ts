@@ -5,7 +5,7 @@ import { AgendaComponent } from './agenda/components/palestra/agenda.component';
 import { PalestrasRealizadasComponent } from './palestra/components/palestras-realizadas.component';
 import { SobreComponent } from './sobre.component';
 import { DetalhesCursoComponent } from './detalhes-curso/detalhes-curso.component';
-import { InscricaoCursoComponent } from './inscricao-curso.component';
+import { InscricaoCursoComponent } from './inscricao-curso/inscricao-curso.component';
 import { PedidoVibracoesComponent } from './pedido-vibracoes/pedido-vibracoes.component';
 
 export const routes: Routes = [
