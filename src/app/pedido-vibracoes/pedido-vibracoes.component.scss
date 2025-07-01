@@ -1,0 +1,335 @@
+    .pedidos-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* Header */
+    .header-section {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 30px;
+        align-items: center;
+        margin-bottom: 40px;
+        background: linear-gradient(135deg, #2c5aa0 0%, #1e3d6f 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+    }
+
+    .header-content h1 {
+        font-size: 2.5em;
+        margin-bottom: 15px;
+        font-weight: bold;
+    }
+
+    .header-subtitle {
+        font-size: 1.1em;
+        opacity: 0.9;
+        line-height: 1.6;
+    }
+
+    .prayer-icon {
+        font-size: 4em;
+        opacity: 0.8;
+    }
+
+    /* Formulário */
+    .form-section {
+        margin-bottom: 40px;
+    }
+
+    .form-container {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .form-header {
+        background: #f8f9fa;
+        padding: 30px;
+        text-align: center;
+        border-bottom: 1px solid #e0e0e0;
+    }
+
+    .form-header h2 {
+        color: #2c5aa0;
+        margin-bottom: 10px;
+        font-size: 1.8em;
+    }
+
+    .form-header p {
+        color: #666;
+        font-size: 1.1em;
+    }
+
+    .pedido-form {
+        padding: 30px;
+    }
+
+    .form-section-group {
+        margin-bottom: 35px;
+    }
+
+    .form-section-group h3 {
+        color: #2c5aa0;
+        margin-bottom: 20px;
+        font-size: 1.3em;
+        border-bottom: 2px solid #e8f4fd;
+        padding-bottom: 10px;
+    }
+
+    .campo-grupo {
+        margin-bottom: 20px;
+    }
+
+    .campo-grupo label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .campo-grupo input,
+    .campo-grupo select,
+    .campo-grupo textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+        font-family: inherit;
+    }
+
+    .campo-grupo input:focus,
+    .campo-grupo select:focus,
+    .campo-grupo textarea:focus {
+        outline: none;
+        border-color: #2c5aa0;
+    }
+
+    .campo-grupo input.erro,
+    .campo-grupo select.erro,
+    .campo-grupo textarea.erro {
+        border-color: #ff4757;
+    }
+
+    .campo-grupo textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .campos-linha {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 15px;
+    }
+
+    .campo-pequeno {
+        grid-column: span 1;
+    }
+
+    .mensagem-erro {
+        color: #ff4757;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .campo-info {
+        margin-top: 5px;
+    }
+
+    .campo-info small {
+        color: #666;
+        font-style: italic;
+    }
+
+    .form-actions {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 30px;
+        border-top: 1px solid #e0e0e0;
+    }
+
+    .btn-enviar {
+        background: #2c5aa0;
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        min-width: 200px;
+    }
+
+    .btn-enviar:hover:not(:disabled) {
+        background: #1e3d6f;
+        transform: translateY(-2px);
+    }
+
+    .btn-enviar:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* Mensagem de Sucesso */
+    .sucesso-section {
+        text-align: center;
+    }
+
+    .sucesso-container {
+        background: white;
+        border-radius: 15px;
+        padding: 50px 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .sucesso-icon {
+        font-size: 4em;
+        margin-bottom: 20px;
+    }
+
+    .sucesso-container h2 {
+        color: #2c5aa0;
+        font-size: 2.2em;
+        margin-bottom: 20px;
+    }
+
+    .sucesso-mensagem {
+        margin-bottom: 40px;
+    }
+
+    .sucesso-mensagem>p {
+        font-size: 1.2em;
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    .info-vibracoes {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .info-card {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        text-align: left;
+    }
+
+    .info-icon {
+        font-size: 2em;
+        min-width: 60px;
+    }
+
+    .info-content h3 {
+        color: #2c5aa0;
+        margin-bottom: 8px;
+        font-size: 1.1em;
+    }
+
+    .info-content p {
+        color: #666;
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    .sucesso-actions {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-novo-pedido,
+    .btn-voltar {
+        padding: 12px 25px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: none;
+        font-size: 14px;
+    }
+
+    .btn-novo-pedido {
+        background: #2c5aa0;
+        color: white;
+    }
+
+    .btn-novo-pedido:hover {
+        background: #1e3d6f;
+    }
+
+    .btn-voltar {
+        background: transparent;
+        color: #2c5aa0;
+        border: 2px solid #2c5aa0;
+    }
+
+    .btn-voltar:hover {
+        background: #2c5aa0;
+        color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .pedidos-container {
+            padding: 15px;
+        }
+
+        .header-section {
+            grid-template-columns: 1fr;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .header-content h1 {
+            font-size: 2em;
+        }
+
+        .campos-linha {
+            grid-template-columns: 1fr;
+        }
+
+        .form-header,
+        .pedido-form {
+            padding: 20px;
+        }
+
+        .sucesso-container {
+            padding: 30px 20px;
+        }
+
+        .sucesso-container h2 {
+            font-size: 1.8em;
+        }
+
+        .info-card {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .sucesso-actions {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn-novo-pedido,
+        .btn-voltar {
+            width: 100%;
+            max-width: 250px;
+        }
+    }

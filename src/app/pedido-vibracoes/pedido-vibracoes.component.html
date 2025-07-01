@@ -1,0 +1,221 @@
+<div class="pedidos-container">
+    <div class="header-section">
+        <div class="header-content">
+            <h1>Pedidos de Vibrações</h1>
+            <p class="header-subtitle">
+                Envie seu pedido de oração e vibrações positivas. Nossa corrente de luz se reúne todas as
+                segundas-feiras às 20h para elevar pensamentos de amor e cura.
+            </p>
+        </div>
+        <div class="header-image">
+            <div class="prayer-icon">🙏</div>
+        </div>
+    </div>
+
+    <!-- Formulário -->
+    <div class="form-section" *ngIf="!pedidoEnviado">
+        <div class="form-container">
+            <form [formGroup]="formularioPedido" (ngSubmit)="enviarPedido()" class="pedido-form">
+                <div class="form-header">
+                    <h2>Compartilhe seu Pedido</h2>
+                    <p>Preencha os dados abaixo para que possamos incluir você em nossas orações</p>
+                </div>
+
+                <!-- Dados Pessoais -->
+                <div class="form-section-group">
+                    <h3>Dados Pessoais</h3>
+
+                    <div class="campo-grupo">
+                        <label for="nome">Nome Completo *</label>
+                        <input type="text" id="nome" formControlName="nome" placeholder="Digite seu nome completo"
+                            [class.erro]="formularioPedido.get('nome')?.invalid && formularioPedido.get('nome')?.touched">
+                        <div class="mensagem-erro"
+                            *ngIf="formularioPedido.get('nome')?.invalid && formularioPedido.get('nome')?.touched">
+                            Nome é obrigatório
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Endereço -->
+                <div class="form-section-group" formGroupName="endereco">
+                    <h3>Endereço</h3>
+
+                    <div class="campos-linha">
+                        <div class="campo-grupo campo-pequeno">
+                            <label for="cep">CEP *</label>
+                            <input type="text" id="cep" formControlName="cep" placeholder="00000-000"
+                                (blur)="buscarCep()"
+                                [class.erro]="formularioPedido.get('endereco.cep')?.invalid && formularioPedido.get('endereco.cep')?.touched">
+                            <div class="mensagem-erro"
+                                *ngIf="formularioPedido.get('endereco.cep')?.invalid && formularioPedido.get('endereco.cep')?.touched">
+                                CEP é obrigatório
+                            </div>
+                        </div>
+
+                        <div class="campo-grupo">
+                            <label for="logradouro">Logradouro *</label>
+                            <input type="text" id="logradouro" formControlName="logradouro"
+                                placeholder="Rua, Avenida, etc."
+                                [class.erro]="formularioPedido.get('endereco.logradouro')?.invalid && formularioPedido.get('endereco.logradouro')?.touched">
+                            <div class="mensagem-erro"
+                                *ngIf="formularioPedido.get('endereco.logradouro')?.invalid && formularioPedido.get('endereco.logradouro')?.touched">
+                                Logradouro é obrigatório
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="campos-linha">
+                        <div class="campo-grupo campo-pequeno">
+                            <label for="numero">Número *</label>
+                            <input type="text" id="numero" formControlName="numero" placeholder="123"
+                                [class.erro]="formularioPedido.get('endereco.numero')?.invalid && formularioPedido.get('endereco.numero')?.touched">
+                            <div class="mensagem-erro"
+                                *ngIf="formularioPedido.get('endereco.numero')?.invalid && formularioPedido.get('endereco.numero')?.touched">
+                                Número é obrigatório
+                            </div>
+                        </div>
+
+                        <div class="campo-grupo">
+                            <label for="complemento">Complemento</label>
+                            <input type="text" id="complemento" formControlName="complemento"
+                                placeholder="Apto, Bloco, etc.">
+                        </div>
+                    </div>
+
+                    <div class="campos-linha">
+                        <div class="campo-grupo">
+                            <label for="bairro">Bairro *</label>
+                            <input type="text" id="bairro" formControlName="bairro" placeholder="Nome do bairro"
+                                [class.erro]="formularioPedido.get('endereco.bairro')?.invalid && formularioPedido.get('endereco.bairro')?.touched">
+                            <div class="mensagem-erro"
+                                *ngIf="formularioPedido.get('endereco.bairro')?.invalid && formularioPedido.get('endereco.bairro')?.touched">
+                                Bairro é obrigatório
+                            </div>
+                        </div>
+
+                        <div class="campo-grupo">
+                            <label for="cidade">Cidade *</label>
+                            <input type="text" id="cidade" formControlName="cidade" placeholder="Nome da cidade"
+                                [class.erro]="formularioPedido.get('endereco.cidade')?.invalid && formularioPedido.get('endereco.cidade')?.touched">
+                            <div class="mensagem-erro"
+                                *ngIf="formularioPedido.get('endereco.cidade')?.invalid && formularioPedido.get('endereco.cidade')?.touched">
+                                Cidade é obrigatória
+                            </div>
+                        </div>
+
+                        <div class="campo-grupo campo-pequeno">
+                            <label for="estado">Estado *</label>
+                            <select id="estado" formControlName="estado"
+                                [class.erro]="formularioPedido.get('endereco.estado')?.invalid && formularioPedido.get('endereco.estado')?.touched">
+                                <option value="">Selecione</option>
+                                <option value="AC">AC</option>
+                                <option value="AL">AL</option>
+                                <option value="AP">AP</option>
+                                <option value="AM">AM</option>
+                                <option value="BA">BA</option>
+                                <option value="CE">CE</option>
+                                <option value="DF">DF</option>
+                                <option value="ES">ES</option>
+                                <option value="GO">GO</option>
+                                <option value="MA">MA</option>
+                                <option value="MT">MT</option>
+                                <option value="MS">MS</option>
+                                <option value="MG">MG</option>
+                                <option value="PA">PA</option>
+                                <option value="PB">PB</option>
+                                <option value="PR">PR</option>
+                                <option value="PE">PE</option>
+                                <option value="PI">PI</option>
+                                <option value="RJ">RJ</option>
+                                <option value="RN">RN</option>
+                                <option value="RS">RS</option>
+                                <option value="RO">RO</option>
+                                <option value="RR">RR</option>
+                                <option value="SC">SC</option>
+                                <option value="SP">SP</option>
+                                <option value="SE">SE</option>
+                                <option value="TO">TO</option>
+                            </select>
+                            <div class="mensagem-erro"
+                                *ngIf="formularioPedido.get('endereco.estado')?.invalid && formularioPedido.get('endereco.estado')?.touched">
+                                Estado é obrigatório
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pedido -->
+                <div class="form-section-group">
+                    <h3>Seu Pedido</h3>
+
+                    <div class="campo-grupo">
+                        <label for="pedido">Descreva seu pedido de oração *</label>
+                        <textarea id="pedido" formControlName="pedido"
+                            placeholder="Compartilhe aqui seu pedido de oração, vibrações de cura, proteção ou qualquer intenção que deseje incluir em nossas preces..."
+                            rows="6"
+                            [class.erro]="formularioPedido.get('pedido')?.invalid && formularioPedido.get('pedido')?.touched">
+                </textarea>
+                        <div class="mensagem-erro"
+                            *ngIf="formularioPedido.get('pedido')?.invalid && formularioPedido.get('pedido')?.touched">
+                            Por favor, descreva seu pedido
+                        </div>
+                        <div class="campo-info">
+                            <small>Seu pedido será tratado com total confidencialidade e respeito</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-enviar" [disabled]="formularioPedido.invalid || enviandoPedido">
+                        {{ enviandoPedido ? 'Enviando...' : 'Enviar Pedido' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Mensagem de Sucesso -->
+    <div class="sucesso-section" *ngIf="pedidoEnviado">
+        <div class="sucesso-container">
+            <div class="sucesso-icon">✨</div>
+            <h2>Estamos vibrando por você!</h2>
+            <div class="sucesso-mensagem">
+                <p>Seu pedido foi recebido com muito carinho e será incluído em nossas orações.</p>
+                <div class="info-vibracoes">
+                    <div class="info-card">
+                        <div class="info-icon">🕐</div>
+                        <div class="info-content">
+                            <h3>Quando oramos por você</h3>
+                            <p>Nossas orações de vibrações acontecem toda <strong>segunda-feira às 20 horas</strong></p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">💙</div>
+                        <div class="info-content">
+                            <h3>Nossa corrente de luz</h3>
+                            <p>Um grupo dedicado de irmãos se reúne para elevar pensamentos de amor, cura e proteção</p>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-icon">🙏</div>
+                        <div class="info-content">
+                            <h3>Confidencialidade</h3>
+                            <p>Seu pedido é tratado com total sigilo e respeito, apenas com intenções de luz</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sucesso-actions">
+                <button class="btn-novo-pedido" (click)="novoPedido()">
+                    Fazer Novo Pedido
+                </button>
+                <button class="btn-voltar" (click)="voltarHome()">
+                    Voltar ao Início
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

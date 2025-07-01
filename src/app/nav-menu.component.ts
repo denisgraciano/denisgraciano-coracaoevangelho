@@ -30,7 +30,12 @@ import { RouterModule, Router } from '@angular/router';
              (click)="fecharMenu()">
             Livro dos Espíritos
           </a>
-          
+          <a routerLink="/pedidos-vibracoes" 
+            routerLinkActive="active" 
+            class="nav-link"
+            (click)="fecharMenu()">
+            Pedidos de Vibrações
+          </a>
           <a routerLink="/agenda" 
              routerLinkActive="active" 
              class="nav-link"

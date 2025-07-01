@@ -6,8 +6,7 @@ import { PalestrasRealizadasComponent } from './palestra/components/palestras-re
 import { SobreComponent } from './sobre.component';
 import { DetalhesCursoComponent } from './detalhes-curso.component';
 import { InscricaoCursoComponent } from './inscricao-curso.component';
-
-
+import { PedidoVibracoesComponent } from './pedido-vibracoes/pedido-vibracoes.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -18,5 +17,6 @@ export const routes: Routes = [
   { path: 'sobre', component: SobreComponent },
   { path: 'curso/:id', component: DetalhesCursoComponent },
   { path: 'inscricao/:id', component: InscricaoCursoComponent },
+  { path: 'pedidos-vibracoes', component: PedidoVibracoesComponent },
   { path: '**', redirectTo: '' }
 ];
