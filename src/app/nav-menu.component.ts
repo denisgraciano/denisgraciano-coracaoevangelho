@@ -30,12 +30,7 @@ import { RouterModule, Router } from '@angular/router';
              (click)="fecharMenu()">
             Livro dos Espíritos
           </a>
-          <a routerLink="/pedidos-vibracoes" 
-            routerLinkActive="active" 
-            class="nav-link"
-            (click)="fecharMenu()">
-            Pedidos de Vibrações
-          </a>
+          
           <a routerLink="/agenda" 
              routerLinkActive="active" 
              class="nav-link"
@@ -43,6 +38,13 @@ import { RouterModule, Router } from '@angular/router';
             Agenda de Palestras
           </a>
           
+          <a routerLink="/pedidos-vibracoes" 
+             routerLinkActive="active" 
+             class="nav-link"
+             (click)="fecharMenu()">
+            Vibrações
+          </a>          
+
           <a routerLink="/palestras-realizadas" 
              routerLinkActive="active" 
              class="nav-link"

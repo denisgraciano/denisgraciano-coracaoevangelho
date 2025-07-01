@@ -1,197 +1,207 @@
-div {
-    background-color: #f3f4f6;
-    /* Gray-100 */
-}
+ .palestras-realizadas-container {
+     padding: 1.5rem;
+     max-width: 1200px;
+     margin: 0 auto;
+     width: 100%;
+ }
 
-.palestra-card {
-    background-color: #ffffff;
-    border-radius: 0.75rem;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
-    overflow: hidden;
-    transition: transform 0.2s ease;
-}
+ .page-title {
+     color: var(--primary-color);
+     text-align: center;
+     margin-bottom: 2rem;
+ }
 
-.palestra-card:hover {
-    transform: translateY(-5px);
-}
+ .loading-container,
+ .error-container {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     min-height: 300px;
+ }
 
-.palestra-card img {
-    max-height: 200px;
-    object-fit: cover;
-    width: 100%;
-}
+ .loading-spinner {
+     border: 4px solid var(--accent-color);
+     border-top: 4px solid var(--primary-color);
+     border-radius: 50%;
+     width: 40px;
+     height: 40px;
+     animation: spin 1s linear infinite;
+     margin-bottom: 1rem;
+ }
 
-.palestra-card h3 {
-    font-size: 1.25rem;
-    color: #1f2937;
-    /* Gray-800 */
-    margin-bottom: 0.5rem;
-}
+ @keyframes spin {
+     0% {
+         transform: rotate(0deg);
+     }
 
-.palestra-card a {
-    display: inline-block;
-    background-color: #2563eb;
-    /* Blue-600 */
-    color: white;
-    padding: 0.5rem 1rem;
-    margin-top: 1rem;
-    border-radius: 0.375rem;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
-}
+     100% {
+         transform: rotate(360deg);
+     }
+ }
 
-.palestra-card a:hover {
-    background-color: #1d4ed8;
-    /* Blue-700 */
-}
+ .error-container {
+     color: #d32f2f;
+ }
 
-.agenda-container {
-    padding: 1.5rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-}
+ .palestras-grid {
+     display: grid;
+     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+     gap: 2rem;
+ }
 
-.page-title {
-    color: var(--primary-color);
-    text-align: center;
-    margin-bottom: 2rem;
-}
+ .palestra-card {
+     background-color: var(--card-background);
+     border-radius: 8px;
+     box-shadow: 0 4px 8px var(--shadow-color);
+     overflow: hidden;
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+     display: flex;
+     flex-direction: column;
+     height: 100%;
+ }
 
-.loading-container,
-.error-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 300px;
-}
+ .palestra-card:hover {
+     transform: translateY(-5px);
+     box-shadow: 0 6px 12px var(--shadow-color);
+ }
 
-.loading-spinner {
-    border: 4px solid var(--accent-color);
-    border-top: 4px solid var(--primary-color);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 1rem;
-}
+ .palestra-imagem-container {
+     width: 100%;
+     height: 180px;
+     overflow: hidden;
+ }
 
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
-    }
+ .palestra-imagem {
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+     transition: transform 0.3s ease;
+ }
 
-    100% {
-        transform: rotate(360deg);
-    }
-}
+ .palestra-card:hover .palestra-imagem {
+     transform: scale(1.05);
+ }
 
-.error-container {
-    color: #d32f2f;
-}
+ .palestra-conteudo {
+     padding: 1.5rem;
+     display: flex;
+     flex-direction: column;
+     flex-grow: 1;
+ }
 
-.card {
-    background-color: var(--card-background);
-    border-radius: 8px;
-    box-shadow: 0 4px 8px var(--shadow-color);
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-}
+ .palestra-titulo {
+     color: var(--primary-color);
+     margin-top: 0;
+     margin-bottom: 1rem;
+     font-size: 1.2rem;
+ }
 
-.table-responsive {
-    overflow-x: auto;
-    margin-bottom: 1.5rem;
-}
+ .palestra-info {
+     margin-bottom: 1rem;
+ }
 
-.palestras-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 1rem;
-}
+ .palestra-data,
+ .palestra-palestrante {
+     margin: 0.25rem 0;
+     font-size: 0.9rem;
+ }
 
-.palestras-table th,
-.palestras-table td {
-    padding: 0.75rem;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-}
+ .palestra-descricao {
+     margin-bottom: 1rem;
+     flex-grow: 1;
+     font-size: 0.95rem;
+     line-height: 1.5;
+ }
 
-.palestras-table th {
-    background-color: var(--primary-color);
-    color: var(--white-color);
-    font-weight: 500;
-}
+ .palestra-tags {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 0.5rem;
+     margin-bottom: 1.5rem;
+ }
 
-.palestras-table tr {
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
+ .tag {
+     background-color: var(--accent-color);
+     color: var(--primary-color);
+     padding: 0.25rem 0.75rem;
+     border-radius: 50px;
+     font-size: 0.8rem;
+     font-weight: 500;
+ }
 
-.palestras-table tr:hover {
-    background-color: var(--accent-color);
-}
+ .palestra-acoes {
+     display: flex;
+     flex-direction: column;
+     gap: 1rem;
+ }
 
-.palestras-table tr.selected {
-    background-color: var(--accent-color);
-    border-left: 3px solid var(--primary-color);
-}
+ .btn-download {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 0.5rem;
+     background-color: var(--primary-color);
+     color: var(--white-color);
+     padding: 0.75rem 1rem;
+     border-radius: 4px;
+     text-decoration: none;
+     font-weight: 500;
+     transition: background-color 0.3s, transform 0.2s;
+ }
 
-.empty-state {
-    text-align: center;
-    padding: 2rem;
-    color: #757575;
-}
+ .btn-download:hover {
+     background-color: var(--primary-dark);
+     transform: translateY(-2px);
+ }
 
-.palestra-detalhes {
-    margin-top: 2rem;
-    border-top: 1px solid #e0e0e0;
-    padding-top: 1.5rem;
-}
+ .btn-download:active {
+     transform: translateY(0);
+ }
 
-.palestra-detalhes h3 {
-    color: var(--primary-color);
-    margin-bottom: 1rem;
-}
+ .link-container {
+     display: flex;
+     align-items: center;
+     flex-wrap: wrap;
+     gap: 0.5rem;
+     font-size: 0.9rem;
+ }
 
-.detalhes-card {
-    background-color: var(--accent-color);
-    border-radius: 8px;
-    padding: 1.5rem;
-    border-left: 4px solid var(--primary-color);
-}
+ .link-label {
+     font-weight: 500;
+ }
 
-.detalhes-card h4 {
-    margin-top: 0;
-    color: var(--primary-dark);
-    margin-bottom: 1rem;
-}
+ .link-url {
+     color: var(--primary-color);
+     text-decoration: none;
+     word-break: break-all;
+     transition: color 0.3s;
+ }
 
-.detalhes-card p {
-    margin-bottom: 0.5rem;
-}
+ .link-url:hover {
+     color: var(--primary-dark);
+     text-decoration: underline;
+ }
 
+ .empty-state {
+     grid-column: 1 / -1;
+     text-align: center;
+     padding: 3rem;
+     background-color: var(--card-background);
+     border-radius: 8px;
+     box-shadow: 0 4px 8px var(--shadow-color);
+ }
 
-.imagem-palestra {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 0.5rem;
-    /* arredondamento opcional */
-}
+ @media (max-width: 767px) {
+     .palestras-realizadas-container {
+         padding: 1rem;
+     }
 
-@media (max-width: 767px) {
-    .agenda-container {
-        padding: 1rem;
-    }
+     .palestras-grid {
+         grid-template-columns: 1fr;
+     }
 
-    .card {
-        padding: 1rem;
-    }
-
-    .palestras-table th,
-    .palestras-table td {
-        padding: 0.5rem;
-        font-size: 0.9rem;
-    }
-}
+     .palestra-imagem-container {
+         height: 160px;
+     }
+ }

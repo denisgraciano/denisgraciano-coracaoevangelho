@@ -2,46 +2,50 @@ import { Component, OnInit } from '@angular/core';
 import { PalestrasService } from '../../services/palestras.service';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Temas } from './temas.model';
+import { PalestraRealizada } from './PalestraRealizada.model';
 
 @Component({
     selector: 'app-palestras-realizadas',
     standalone: true,
     imports: [CommonModule],
-    templateUrl: 'palestras-realizadas.component.html',
+    templateUrl: './palestras-realizadas.component.html',
     styleUrls: ['./palestras-realizadas.component.scss']
 
 })
 
 export class PalestrasRealizadasComponent implements OnInit {
-    temas: Temas[] = [];
-    temasSelecionada: Temas | null = null;
-    carregando = false;
+    palestrasRealizadas: PalestraRealizada[] = [];
+    carregando = true;
     erro = false;
 
-    constructor(private http: HttpClient, private palestrasService: PalestrasService) { }
+    constructor(private http: HttpClient) { }
 
     ngOnInit(): void {
-        this.palestrasService.getPalestras().subscribe(data => this.temas = data);
+        this.carregarPalestras();
     }
 
-    carregarTemas(): void {
-        this.http.get<Temas[]>('assets/temas.json').subscribe({
+    carregarPalestras(): void {
+        this.http.get<PalestraRealizada[]>('assets/palestras-realizadas.json').subscribe({
             next: (data) => {
-                this.temas = data;
-                this.carregando = true;
-
+                this.palestrasRealizadas = data;
+                this.carregando = false;
             },
             error: (error) => {
-                console.error('Erro ao carregar palestras:', error);
+                console.error('Erro ao carregar palestras realizadas:', error);
                 this.carregando = false;
                 this.erro = true;
             }
         });
     }
 
-    selecionarPalestra(temas: Temas): void {
-        this.temasSelecionada = temas;
+    getShortUrl(url: string): string {
+        // Simplifica a URL para exibição
+        try {
+            const urlObj = new URL(url);
+            return `${urlObj.hostname}/...`;
+        } catch (e) {
+            return url.substring(0, 30) + '...';
+        }
     }
 
 }

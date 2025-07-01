@@ -1,61 +1,58 @@
-<div class="div">
-    <h1 class="page-title">Temas das Palestras</h1>
-
-    <div *ngIf="erro" class="error-container">
-        <p>Ocorreu um erro ao carregar os temas. Por favor, tente novamente mais tarde.</p>
-    </div>
+<div class="palestras-realizadas-container">
+    <h1 class="page-title">Palestras Realizadas</h1>
 
     <div *ngIf="carregando" class="loading-container">
         <div class="loading-spinner"></div>
-        <p>Carregando Temas das palestras...</p>
+        <p>Carregando palestras...</p>
     </div>
 
+    <div *ngIf="erro" class="error-container">
+        <p>Ocorreu um erro ao carregar as palestras. Por favor, tente novamente mais tarde.</p>
+    </div>
 
-
-    <div *ngIf="!carregando && !erro" class="agenda-content">
-        <div class="card">
-            <div class="table-responsive">
-                <table class="palestras-table">
-                    <thead>
-                        <tr>
-                            <th>Imagem</th>
-                            <th>Titulo</th>
-                            <th>Link</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr *ngFor="let tema of temas" (click)="selecionarPalestra(tema)"
-                            [class.selected]="temasSelecionada?.id === tema.id">
-                            <td>
-                                <img [src]="tema.imagem" alt="Imagem da palestra" class="imagem-palestra" />
-                            </td>
-                            <td>{{tema.titulo}}</td>
-                            <td>
-                                <a [href]="tema.link" target="_blank"
-                                    class="block text-center bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-                                    📥 Download / Visualizar
-                                </a>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+    <div *ngIf="!carregando && !erro" class="palestras-grid">
+        <div *ngFor="let palestra of palestrasRealizadas" class="palestra-card">
+            <div class="palestra-imagem-container">
+                <img [src]="palestra.imagemUrl" [alt]="palestra.titulo" class="palestra-imagem"
+                    onerror="this.src='assets/images/palestra-placeholder.jpg'">
             </div>
 
-            <div *ngIf="temas.length === 0" class="empty-state">
-                <p>Não há palestras agendadas no momento.</p>
-            </div>
+            <div class="palestra-conteudo">
+                <h3 class="palestra-titulo">{{ palestra.titulo }}</h3>
 
-            <div *ngIf="temasSelecionada" class="palestra-detalhes">
-                <h3>Detalhes do Tema</h3>
-                <div class="detalhes-card">
-                    <h4>{{ temasSelecionada.id }}</h4>
-                    <p><strong>Data:</strong> {{ temasSelecionada.id }}</p>
-                    <p><strong>Local:</strong> {{temasSelecionada.id }}</p>
-                    <p><strong>Palestrante:</strong> {{ temasSelecionada.id }}</p>
-                    <p *ngIf="temasSelecionada.id"><strong>Descrição:</strong> {{
-                        temasSelecionada.id }}</p>
+                <div class="palestra-info">
+                    <p class="palestra-data"><strong>Data:</strong> {{ palestra.data }}</p>
+                    <p class="palestra-palestrante"><strong>Palestrante:</strong> {{ palestra.palestrante }}</p>
+                </div>
+
+                <p class="palestra-descricao">{{ palestra.descricao }}</p>
+
+                <div class="palestra-tags">
+                    <span *ngFor="let tag of palestra.tags" class="tag">{{ tag }}</span>
+                </div>
+
+                <div class="palestra-acoes">
+                    <a [href]="palestra.downloadUrl" target="_blank" class="btn-download">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Download
+                    </a>
+
+                    <div class="link-container">
+                        <span class="link-label">Link:</span>
+                        <a [href]="palestra.downloadUrl" target="_blank" class="link-url">{{
+                            getShortUrl(palestra.downloadUrl) }}</a>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <div *ngIf="palestrasRealizadas.length === 0" class="empty-state">
+            <p>Não há palestras realizadas disponíveis no momento.</p>
         </div>
     </div>
 </div>
