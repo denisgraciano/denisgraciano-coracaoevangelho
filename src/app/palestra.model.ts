@@ -1,4 +1,4 @@
-export interface Palestra {
+export interface oldPalestra {
   id: number;
   data: string;
   local: string;
