@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { LivroDosEspiritosComponent } from './livro-dos-espiritos.component';
 import { AgendaComponent } from './agenda/components/palestra/agenda.component';
-import { PalestrasRealizadasComponent } from './palestras-realizadas.component';
+import { PalestrasRealizadasComponent } from './palestra/components/palestras-realizadas.component';
 import { SobreComponent } from './sobre.component';
 import { DetalhesCursoComponent } from './detalhes-curso.component';
 import { InscricaoCursoComponent } from './inscricao-curso.component';
