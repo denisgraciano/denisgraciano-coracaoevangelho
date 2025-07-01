@@ -1,0 +1,136 @@
+<div class="home-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Transforme sua vida através do conhecimento espiritual</h1>
+                <p>Descubra os ensinamentos da Doutrina Espírita e encontre respostas para os desafios do dia a dia</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary" (click)="scrollToCursos()">Ver Cursos</button>
+                    <a routerLink="/livro-dos-espiritos" class="btn-secondary">Livro dos Espíritos</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="./assets/images/hero-bg.jpg" alt="Centro Espírita" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Cursos em Destaque -->
+    <section class="cursos-destaque" id="cursos">
+        <div class="section-header">
+            <h2>Cursos em Destaque</h2>
+            <p>Aprenda com nossos especialistas e transforme sua jornada espiritual</p>
+        </div>
+
+        <div class="cursos-grid">
+            <div class="curso-card" *ngFor="let curso of cursosDestaque">
+                <div class="curso-imagem">
+                    <img [src]="curso.imagem" [alt]="curso.titulo" />
+                    <div class="curso-categoria">{{ curso.categoria }}</div>
+                </div>
+
+                <div class="curso-info">
+                    <h3>{{ curso.titulo }}</h3>
+                    <p class="curso-descricao">{{ curso.descricao }}</p>
+
+                    <div class="curso-meta">
+                        <span class="meta-item">📅 {{ curso.dataInicio }}</span>
+                        <span class="meta-item">⏰ {{ curso.duracao }}</span>
+                        <span class="meta-item">👥 {{ curso.vagasDisponiveis }} vagas</span>
+                    </div>
+
+                    <div class="curso-preco">
+                        <span class="preco-promocional" *ngIf="curso.precoPromocional">
+                            R$ {{ curso.precoPromocional | number:'1.2-2' }}
+                        </span>
+                        <span class="preco-original" [class.riscado]="curso.precoPromocional">
+                            R$ {{ curso.preco | number:'1.2-2' }}
+                        </span>
+                    </div>
+
+                    <a [routerLink]="['/curso', curso.id]" class="btn-curso">Ver Detalhes</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categorias de Cursos -->
+    <section class="categorias-section">
+        <div class="section-header">
+            <h2>Categorias de Cursos</h2>
+            <p>Escolha a área que mais desperta seu interesse</p>
+        </div>
+
+        <div class="categorias-grid">
+            <div class="categoria-card" *ngFor="let categoria of categorias">
+                <div class="categoria-icon">
+                    <img [src]="categoria.icone" [alt]="categoria.nome" />
+                </div>
+                <h3>{{ categoria.nome }}</h3>
+                <p>{{ categoria.descricao }}</p>
+                <span class="categoria-count">{{ categoria.totalCursos }} cursos disponíveis</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Próximos Cursos -->
+    <section class="proximos-cursos">
+        <div class="section-header">
+            <h2>Próximos Cursos</h2>
+            <p>Não perca as próximas oportunidades de aprendizado</p>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item" *ngFor="let curso of proximosCursos">
+                <div class="timeline-date">
+                    <span class="dia">{{ extrairDia(curso.dataInicio) }}</span>
+                    <span class="mes">{{ extrairMes(curso.dataInicio) }}</span>
+                </div>
+                <div class="timeline-content">
+                    <h4>{{ curso.titulo }}</h4>
+                    <p>{{ curso.horario }} - {{ curso.modalidade }}</p>
+                    <a [routerLink]="['/curso', curso.id]" class="timeline-link">Saiba mais →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section class="depoimentos-section">
+        <div class="section-header">
+            <h2>O que nossos alunos dizem</h2>
+            <p>Experiências reais de transformação e aprendizado</p>
+        </div>
+
+        <div class="depoimentos-grid">
+            <div class="depoimento-card" *ngFor="let depoimento of depoimentos">
+                <div class="depoimento-content">
+                    <div class="aspas">"</div>
+                    <p>{{ depoimento.texto }}</p>
+                </div>
+                <div class="depoimento-autor">
+                    <img [src]="depoimento.avatar" [alt]="depoimento.nome" />
+                    <div class="autor-info">
+                        <h4>{{ depoimento.nome }}</h4>
+                        <span>{{ depoimento.curso }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+        <div class="newsletter-content">
+            <h2>Mantenha-se atualizado</h2>
+            <p>Receba novidades sobre cursos, palestras e eventos em seu e-mail</p>
+
+            <form class="newsletter-form" (ngSubmit)="inscreverNewsletter()">
+                <input type="email" placeholder="Seu melhor e-mail" [(ngModel)]="emailNewsletter" name="email" required>
+                <button type="submit" class="btn-newsletter">Inscrever-se</button>
+            </form>
+        </div>
+    </section>
+</div>
+`,
