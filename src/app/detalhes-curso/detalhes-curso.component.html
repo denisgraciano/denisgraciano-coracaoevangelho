@@ -1,0 +1,136 @@
+<div class="detalhes-curso-container">
+    <div class="curso-header">
+        <button class="btn-voltar" (click)="voltar()">
+            ← Voltar
+        </button>
+
+        <div class="curso-hero">
+            <div class="curso-imagem">
+                <img [src]="curso.imagem" [alt]="curso.titulo" />
+                <div class="curso-categoria">{{ curso.categoria }}</div>
+            </div>
+
+            <div class="curso-info-principal">
+                <h1>{{ curso.titulo }}</h1>
+                <div class="instrutor-info">
+                    <span class="instrutor">Por {{ curso.instrutor }}</span>
+                    <div class="nivel-badge">{{ curso.nivel }}</div>
+                </div>
+
+                <div class="curso-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Duração:</span>
+                        <span class="meta-value">{{ curso.duracao }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Modalidade:</span>
+                        <span class="meta-value">{{ curso.modalidade }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Vagas:</span>
+                        <span class="meta-value">{{ curso.vagasDisponiveis }}/{{ curso.vagas }}</span>
+                    </div>
+                </div>
+
+                <div class="preco-container">
+                    <div class="preco-atual" *ngIf="curso.precoPromocional">
+                        R$ {{ curso.precoPromocional | number:'1.2-2' }}
+                    </div>
+                    <div class="preco-original" [class.riscado]="curso.precoPromocional">
+                        R$ {{ curso.preco | number:'1.2-2' }}
+                    </div>
+                    <div class="desconto" *ngIf="curso.precoPromocional">
+                        {{ calcularDesconto() }}% OFF
+                    </div>
+                </div>
+
+                <button class="btn-inscrever" (click)="abrirInscricao()" [disabled]="curso.vagasDisponiveis === 0">
+                    {{ curso.vagasDisponiveis > 0 ? 'Inscrever-se Agora' : 'Esgotado' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="curso-conteudo">
+        <div class="conteudo-principal">
+            <section class="secao">
+                <h2>Sobre o Curso</h2>
+                <p>{{ curso.descricao }}</p>
+            </section>
+
+            <section class="secao">
+                <h2>Objetivos</h2>
+                <ul class="lista-objetivos">
+                    <li *ngFor="let objetivo of curso.objetivos">{{ objetivo }}</li>
+                </ul>
+            </section>
+
+            <section class="secao">
+                <h2>Conteúdo Programático</h2>
+                <div class="programatico">
+                    <div class="modulo" *ngFor="let modulo of curso.conteudoProgramatico; let i = index">
+                        <div class="modulo-numero">{{ i + 1 }}</div>
+                        <div class="modulo-titulo">{{ modulo }}</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="secao">
+                <h2>Requisitos</h2>
+                <ul class="lista-requisitos">
+                    <li *ngFor="let requisito of curso.requisitos">{{ requisito }}</li>
+                </ul>
+            </section>
+
+            <section class="secao" *ngIf="curso.depoimentos.length > 0">
+                <h2>Depoimentos</h2>
+                <div class="depoimentos">
+                    <div class="depoimento" *ngFor="let depoimento of curso.depoimentos">
+                        <div class="depoimento-header">
+                            <span class="depoimento-nome">{{ depoimento.nome }}</span>
+                            <div class="estrelas">
+                                <span *ngFor="let star of getEstrelas(depoimento.nota)" class="estrela">★</span>
+                            </div>
+                        </div>
+                        <p class="depoimento-texto">{{ depoimento.comentario }}</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="sidebar">
+            <div class="card-inscricao">
+                <h3>Informações do Curso</h3>
+
+                <div class="info-item">
+                    <strong>Data de Início:</strong>
+                    <span>{{ formatarData(curso.dataInicio) }}</span>
+                </div>
+
+                <div class="info-item">
+                    <strong>Data de Término:</strong>
+                    <span>{{ formatarData(curso.dataFim) }}</span>
+                </div>
+
+                <div class="info-item">
+                    <strong>Horário:</strong>
+                    <span>{{ curso.horario }}</span>
+                </div>
+
+                <div class="info-item">
+                    <strong>Certificação:</strong>
+                    <span>{{ curso.certificacao }}</span>
+                </div>
+
+                <div class="tags">
+                    <span class="tag" *ngFor="let tag of curso.tags">{{ tag }}</span>
+                </div>
+
+                <button class="btn-inscrever-sidebar" (click)="abrirInscricao()"
+                    [disabled]="curso.vagasDisponiveis === 0">
+                    {{ curso.vagasDisponiveis > 0 ? 'Inscrever-se' : 'Esgotado' }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
