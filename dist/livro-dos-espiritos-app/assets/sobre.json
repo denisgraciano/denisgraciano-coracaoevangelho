@@ -1,0 +1,35 @@
+{
+  "titulo": "Centro Espírita Luz e Caridade",
+  "descricao": "Somos uma instituição dedicada ao estudo e à prática da doutrina espírita, seguindo os ensinamentos de Allan Kardec e promovendo a caridade, o amor e o conhecimento espiritual.",
+  "missao": "Promover o estudo, a difusão e a prática dos princípios da Doutrina Espírita, contribuindo para a evolução moral e espiritual da humanidade através da caridade e do amor ao próximo.",
+  "visao": "Ser referência no estudo e na prática da doutrina espírita, contribuindo para a formação de pessoas mais conscientes de sua natureza espiritual e comprometidas com o bem comum.",
+  "valores": [
+    "Caridade",
+    "Amor ao próximo",
+    "Estudo contínuo",
+    "Fraternidade",
+    "Respeito à diversidade",
+    "Humildade",
+    "Solidariedade"
+  ],
+  "historia": "Fundado em [ANO DE FUNDAÇÃO], o Centro Espírita Luz e Caridade iniciou suas atividades em um pequeno espaço cedido por colaboradores. Ao longo dos anos, graças ao trabalho dedicado de voluntários e ao apoio da comunidade, expandimos nossas instalações e atividades. Hoje, contamos com uma sede própria onde realizamos estudos sistemáticos da doutrina espírita, palestras públicas, atendimento fraterno, passes espirituais e diversas ações sociais voltadas para a comunidade.",
+  "contato": {
+    "email": "contato@centroespirita.org",
+    "telefone": "(00) 00000-0000",
+    "endereco": "Rua das Flores, 123 - Bairro Jardim - Cidade/UF - CEP: 00000-000",
+    "redesSociais": [
+      {
+        "nome": "Facebook",
+        "url": "https://facebook.com/centroespirita"
+      },
+      {
+        "nome": "Instagram",
+        "url": "https://instagram.com/centroespirita"
+      },
+      {
+        "nome": "YouTube",
+        "url": "https://youtube.com/centroespirita"
+      }
+    ]
+  }
+}
