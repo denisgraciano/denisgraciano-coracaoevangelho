@@ -1,0 +1,65 @@
+<div class="home-container">
+    <main class="app-content">
+        <!-- Exibição de carregamento e erro -->
+        <div *ngIf="carregando" class="loading-container">
+            <div class="loading-spinner"></div>
+            <p>Carregando perguntas...</p>
+        </div>
+
+        <div *ngIf="erro" class="error-container">
+            <p>Ocorreu um erro ao carregar as perguntas. Por favor, tente novamente mais tarde.</p>
+        </div>
+
+        <!-- Conteúdo principal quando carregado -->
+        <div *ngIf="!carregando && !erro" class="content-container">
+            <!-- Componente de busca por número -->
+            <app-search-by-number [minPergunta]="1" [maxPergunta]="1020"
+                (perguntaSelecionada)="buscarPerguntaPorNumero($event)">
+            </app-search-by-number>
+
+            <!-- Seção da Pergunta do Dia -->
+            <section class="pergunta-do-dia-section">
+                <div class="card">
+                    <h2>Pergunta do Dia</h2>
+                    <div *ngIf="perguntaDoDia" class="qa-container">
+                        <div class="pergunta-container">
+                            <p class="pergunta-texto">
+                                <span class="pergunta-numero">{{ perguntaDoDia.id }}.</span> {{ perguntaDoDia.pergunta
+                                }}
+                            </p>
+                        </div>
+                        <div class="resposta-container">
+                            <p class="resposta-texto">{{ perguntaDoDia.resposta }}</p>
+                        </div>
+                        <app-share-buttons [perguntaId]="perguntaDoDia.id" [perguntaTexto]="perguntaDoDia.pergunta"
+                            [respostaTexto]="perguntaDoDia.resposta">
+                        </app-share-buttons>
+                    </div>
+                    <p class="data-atual">Data: {{ dataAtual }}</p>
+                </div>
+            </section>
+
+            <!-- Seção de Sorteio de Perguntas -->
+            <section class="sorteio-section">
+                <div class="card">
+                    <h2>Sorteio de Perguntas</h2>
+                    <div *ngIf="perguntaSorteada" class="qa-container">
+                        <div class="pergunta-container">
+                            <p class="pergunta-texto">
+                                <span class="pergunta-numero">{{ perguntaSorteada.id }}.</span> {{
+                                perguntaSorteada.pergunta }}
+                            </p>
+                        </div>
+                        <div class="resposta-container">
+                            <p class="resposta-texto">{{ perguntaSorteada.resposta }}</p>
+                        </div>
+                        <app-share-buttons [perguntaId]="perguntaSorteada.id"
+                            [perguntaTexto]="perguntaSorteada.pergunta" [respostaTexto]="perguntaSorteada.resposta">
+                        </app-share-buttons>
+                    </div>
+                    <button class="btn-primary" (click)="novaPergunta()">Nova Pergunta</button>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>

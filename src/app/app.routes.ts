@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { LivroDosEspiritosComponent } from './livro-dos-espiritos.component';
+import { LivroEspiritosComponent } from './livro-espiritos/livro-espiritos.component';
 import { AgendaComponent } from './agenda/components/palestra/agenda.component';
 import { PalestrasRealizadasComponent } from './palestra/components/palestras-realizadas.component';
 import { SobreComponent } from './sobre.component';
@@ -10,7 +10,7 @@ import { PedidoVibracoesComponent } from './pedido-vibracoes/pedido-vibracoes.co
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
-  { path: 'livro-dos-espiritos', component: LivroDosEspiritosComponent },
+  { path: 'livro-dos-espiritos', component: LivroEspiritosComponent },
   { path: 'agenda', component: AgendaComponent },
   { path: 'palestra', component: PalestrasRealizadasComponent },
   { path: 'palestras-realizadas', component: PalestrasRealizadasComponent },
