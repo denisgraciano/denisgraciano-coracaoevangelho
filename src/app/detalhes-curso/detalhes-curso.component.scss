@@ -1,0 +1,385 @@
+    .detalhes-curso-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .btn-voltar {
+        background: #2c5aa0;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 20px;
+        font-size: 14px;
+        transition: background-color 0.3s;
+    }
+
+    .btn-voltar:hover {
+        background: #1e3d6f;
+    }
+
+    .curso-hero {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+        margin-bottom: 40px;
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .curso-imagem {
+        position: relative;
+    }
+
+    .curso-imagem img {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .curso-categoria {
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        background: #2c5aa0;
+        color: white;
+        padding: 5px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .curso-info-principal h1 {
+        color: #2c5aa0;
+        margin: 0 0 15px 0;
+        font-size: 2.2em;
+        line-height: 1.2;
+    }
+
+    .instrutor-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .instrutor {
+        color: #666;
+        font-size: 16px;
+    }
+
+    .nivel-badge {
+        background: #e8f4fd;
+        color: #2c5aa0;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .curso-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 25px;
+    }
+
+    .meta-item {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .meta-label {
+        color: #666;
+        font-weight: 500;
+    }
+
+    .meta-value {
+        color: #333;
+        font-weight: bold;
+    }
+
+    .preco-container {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .preco-atual {
+        font-size: 2em;
+        font-weight: bold;
+        color: #2c5aa0;
+    }
+
+    .preco-original {
+        font-size: 1.2em;
+        color: #666;
+    }
+
+    .preco-original.riscado {
+        text-decoration: line-through;
+        color: #999;
+    }
+
+    .desconto {
+        background: #ff4757;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .btn-inscrever {
+        background: #2c5aa0;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s;
+    }
+
+    .btn-inscrever:hover:not(:disabled) {
+        background: #1e3d6f;
+    }
+
+    .btn-inscrever:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    .curso-conteudo {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 40px;
+    }
+
+    .conteudo-principal {
+        background: white;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .secao {
+        margin-bottom: 40px;
+    }
+
+    .secao h2 {
+        color: #2c5aa0;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+        border-bottom: 2px solid #e8f4fd;
+        padding-bottom: 10px;
+    }
+
+    .lista-objetivos,
+    .lista-requisitos {
+        list-style: none;
+        padding: 0;
+    }
+
+    .lista-objetivos li,
+    .lista-requisitos li {
+        padding: 10px 0;
+        border-bottom: 1px solid #f0f0f0;
+        position: relative;
+        padding-left: 25px;
+    }
+
+    .lista-objetivos li:before {
+        content: "✓";
+        color: #2c5aa0;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+    }
+
+    .lista-requisitos li:before {
+        content: "•";
+        color: #2c5aa0;
+        font-weight: bold;
+        position: absolute;
+        left: 0;
+    }
+
+    .programatico {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .modulo {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 15px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border-left: 4px solid #2c5aa0;
+    }
+
+    .modulo-numero {
+        background: #2c5aa0;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .modulo-titulo {
+        flex: 1;
+        font-weight: 500;
+    }
+
+    .depoimentos {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .depoimento {
+        background: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        border-left: 4px solid #2c5aa0;
+    }
+
+    .depoimento-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .depoimento-nome {
+        font-weight: bold;
+        color: #2c5aa0;
+    }
+
+    .estrelas {
+        color: #ffd700;
+    }
+
+    .sidebar {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .card-inscricao {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 20px;
+    }
+
+    .card-inscricao h3 {
+        color: #2c5aa0;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .info-item strong {
+        color: #2c5aa0;
+        font-size: 14px;
+    }
+
+    .info-item span {
+        color: #333;
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .tag {
+        background: #e8f4fd;
+        color: #2c5aa0;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .btn-inscrever-sidebar {
+        background: #2c5aa0;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s;
+    }
+
+    .btn-inscrever-sidebar:hover:not(:disabled) {
+        background: #1e3d6f;
+    }
+
+    .btn-inscrever-sidebar:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+        .detalhes-curso-container {
+            padding: 15px;
+        }
+
+        .curso-hero {
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .curso-conteudo {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .curso-info-principal h1 {
+            font-size: 1.8em;
+        }
+
+        .preco-container {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .card-inscricao {
+            position: static;
+        }
+    }

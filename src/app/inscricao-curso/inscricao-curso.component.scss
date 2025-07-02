@@ -1,0 +1,303 @@
+    .inscricao-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .inscricao-header {
+        margin-bottom: 30px;
+    }
+
+    .btn-voltar {
+        background: #2c5aa0;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-bottom: 20px;
+        font-size: 14px;
+        transition: background-color 0.3s;
+    }
+
+    .btn-voltar:hover {
+        background: #1e3d6f;
+    }
+
+    .curso-info h1 {
+        color: #2c5aa0;
+        margin-bottom: 15px;
+        font-size: 2em;
+    }
+
+    .curso-resumo {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .curso-resumo h2 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .curso-detalhes {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .detalhe {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .formulario-inscricao {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+    }
+
+    .secoes-formulario {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    .secao-formulario {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .secao-formulario h3 {
+        color: #2c5aa0;
+        margin-bottom: 20px;
+        font-size: 1.3em;
+        border-bottom: 2px solid #e8f4fd;
+        padding-bottom: 10px;
+    }
+
+    .campo-grupo {
+        margin-bottom: 20px;
+    }
+
+    .campo-grupo label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .campo-grupo input,
+    .campo-grupo select,
+    .campo-grupo textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #e0e0e0;
+        border-radius: 5px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+    }
+
+    .campo-grupo input:focus,
+    .campo-grupo select:focus,
+    .campo-grupo textarea:focus {
+        outline: none;
+        border-color: #2c5aa0;
+    }
+
+    .campo-grupo input.erro,
+    .campo-grupo select.erro {
+        border-color: #ff4757;
+    }
+
+    .campos-linha {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .campo-pequeno {
+        grid-column: span 1;
+    }
+
+    .mensagem-erro {
+        color: #ff4757;
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .opcoes-pagamento {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .opcao-pagamento {
+        display: flex;
+        align-items: center;
+        padding: 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .opcao-pagamento:hover {
+        border-color: #2c5aa0;
+        background: #f8f9fa;
+    }
+
+    .opcao-pagamento input[type="radio"] {
+        margin-right: 15px;
+        width: auto;
+    }
+
+    .opcao-conteudo {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .opcao-titulo {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .opcao-descricao {
+        font-size: 12px;
+        color: #666;
+    }
+
+    .checkbox-grupo {
+        margin-bottom: 15px;
+    }
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    .checkbox-label input[type="checkbox"] {
+        margin-right: 10px;
+        width: auto;
+    }
+
+    .checkbox-label a {
+        color: #2c5aa0;
+        text-decoration: none;
+    }
+
+    .checkbox-label a:hover {
+        text-decoration: underline;
+    }
+
+    .resumo-inscricao {
+        position: sticky;
+        top: 20px;
+        height: fit-content;
+    }
+
+    .resumo-card {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .resumo-card h3 {
+        color: #2c5aa0;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .resumo-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    .resumo-label {
+        color: #666;
+        font-weight: 500;
+    }
+
+    .resumo-valor {
+        color: #333;
+        font-weight: bold;
+    }
+
+    .resumo-total {
+        display: flex;
+        justify-content: space-between;
+        margin: 20px 0;
+        padding: 15px 0;
+        border-top: 2px solid #2c5aa0;
+        border-bottom: 2px solid #2c5aa0;
+    }
+
+    .total-label {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #2c5aa0;
+    }
+
+    .total-valor {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #2c5aa0;
+    }
+
+    .btn-finalizar {
+        background: #2c5aa0;
+        color: white;
+        border: none;
+        padding: 15px 25px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s;
+    }
+
+    .btn-finalizar:hover:not(:disabled) {
+        background: #1e3d6f;
+    }
+
+    .btn-finalizar:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 768px) {
+        .inscricao-container {
+            padding: 15px;
+        }
+
+        .formulario-inscricao {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .campos-linha {
+            grid-template-columns: 1fr;
+        }
+
+        .curso-detalhes {
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .resumo-inscricao {
+            position: static;
+            order: -1;
+        }
+    }
