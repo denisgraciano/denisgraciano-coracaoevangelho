@@ -3,7 +3,7 @@ import { HomeComponent } from './home/home.component';
 import { LivroEspiritosComponent } from './livro-espiritos/livro-espiritos.component';
 import { AgendaComponent } from './agenda/components/palestra/agenda.component';
 import { PalestrasRealizadasComponent } from './palestra/components/palestras-realizadas.component';
-import { SobreComponent } from './sobre.component';
+import { SobreComponent } from './sobre/sobre.component';
 import { DetalhesCursoComponent } from './detalhes-curso/detalhes-curso.component';
 import { InscricaoCursoComponent } from './inscricao-curso/inscricao-curso.component';
 import { PedidoVibracoesComponent } from './pedido-vibracoes/pedido-vibracoes.component';

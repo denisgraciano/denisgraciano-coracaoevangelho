@@ -1,0 +1,66 @@
+<div class="sobre-container">
+    <h1 class="page-title">Sobre Nós</h1>
+
+    <div *ngIf="carregando" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Carregando informações...</p>
+    </div>
+
+    <div *ngIf="erro" class="error-container">
+        <p>Ocorreu um erro ao carregar as informações. Por favor, tente novamente mais tarde.</p>
+    </div>
+
+    <div *ngIf="!carregando && !erro && sobreInfo" class="sobre-content">
+        <!-- Seção Principal -->
+        <section class="card main-section">
+            <h2>{{ sobreInfo.titulo }}</h2>
+            <p class="descricao">{{ sobreInfo.descricao }}</p>
+        </section>
+
+        <!-- Missão, Visão e Valores -->
+        <div class="mvv-container">
+            <section class="card mvv-card">
+                <h3>Nossa Missão</h3>
+                <p>{{ sobreInfo.missao }}</p>
+            </section>
+
+            <section class="card mvv-card">
+                <h3>Nossa Visão</h3>
+                <p>{{ sobreInfo.visao }}</p>
+            </section>
+
+            <section class="card mvv-card">
+                <h3>Nossos Valores</h3>
+                <ul class="valores-list">
+                    <li *ngFor="let valor of sobreInfo.valores">{{ valor }}</li>
+                </ul>
+            </section>
+        </div>
+
+        <!-- História -->
+        <section class="card historia-section">
+            <h3>Nossa História</h3>
+            <p>{{ sobreInfo.historia }}</p>
+        </section>
+
+        <!-- Contato -->
+        <section class="card contato-section">
+            <h3>Contato</h3>
+            <div class="contato-info">
+                <p><strong>E-mail:</strong> {{ sobreInfo.contato.email }}</p>
+                <p><strong>Telefone:</strong> {{ sobreInfo.contato.telefone }}</p>
+                <p><strong>Endereço:</strong> {{ sobreInfo.contato.endereco }}</p>
+            </div>
+
+            <div class="redes-sociais">
+                <h4>Redes Sociais</h4>
+                <div class="redes-links">
+                    <a *ngFor="let rede of sobreInfo.contato.redesSociais" [href]="rede.url" target="_blank"
+                        class="rede-social-link">
+                        {{ rede.nome }}
+                    </a>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
