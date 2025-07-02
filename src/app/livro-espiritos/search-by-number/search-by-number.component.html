@@ -1,0 +1,21 @@
+<div class="search-container">
+    <h3 class="search-title">Buscar pergunta específica</h3>
+
+    <div class="search-form">
+        <div class="input-wrapper">
+            <label for="perguntaNumero" class="input-label">Número da pergunta ({{ minPergunta }}-{{ maxPergunta
+                }}):</label>
+            <div class="input-button-group">
+                <input type="number" id="perguntaNumero" [(ngModel)]="perguntaNumero" min="{{ minPergunta }}"
+                    max="{{ maxPergunta }}" class="number-input" placeholder="Digite o número...">
+                <button class="btn-search" (click)="buscarPergunta()" [disabled]="!isPerguntaValida()">
+                    Buscar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="mensagemErro" class="error-message">
+        {{ mensagemErro }}
+    </div>
+</div>

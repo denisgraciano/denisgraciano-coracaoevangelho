@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { SearchByNumberComponent } from '../search-by-number.component';
+import { SearchByNumberComponent } from './search-by-number/search-by-number.component';
 import { ShareButtonsComponent } from '../shared/components/share-buttons/share-buttons.component'
 
 @Component({
