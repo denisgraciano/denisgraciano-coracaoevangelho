@@ -1,0 +1,42 @@
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-logo">
+            <a routerLink="/" class="logo-link">
+                <span class="logo-text">Coração do Evangelho</span>
+            </a>
+        </div>
+
+        <div class="nav-menu" [class.active]="menuAberto">
+            <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link"
+                (click)="fecharMenu()">
+                Home
+            </a>
+
+            <a routerLink="/livro-dos-espiritos" routerLinkActive="active" class="nav-link" (click)="fecharMenu()">
+                Livro dos Espíritos
+            </a>
+
+            <a routerLink="/agenda" routerLinkActive="active" class="nav-link" (click)="fecharMenu()">
+                Agenda de Palestras
+            </a>
+
+            <a routerLink="/pedidos-vibracoes" routerLinkActive="active" class="nav-link" (click)="fecharMenu()">
+                Vibrações
+            </a>
+
+            <a routerLink="/palestras-realizadas" routerLinkActive="active" class="nav-link" (click)="fecharMenu()">
+                Palestras Realizadas
+            </a>
+
+            <a routerLink="/sobre" routerLinkActive="active" class="nav-link" (click)="fecharMenu()">
+                Sobre
+            </a>
+        </div>
+
+        <div class="nav-toggle" (click)="alternarMenu()">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </div>
+</nav>
