@@ -7,7 +7,6 @@ node_modules
 /.angular/cache/
 /.angular/
 # Compiled output
-/dist/
 /out-tsc/
 # OS files
 .DS_Store
