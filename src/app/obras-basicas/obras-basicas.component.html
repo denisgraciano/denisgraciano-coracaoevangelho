@@ -1,0 +1,49 @@
+<div class="obras-basicas-container">
+    <h1 class="page-title">Obras Básicas</h1>
+
+    <div *ngIf="carregando" class="loading-container">
+        <div class="loading-spinner"></div>
+        <p>Carregando Obras Básicas...</p>
+    </div>
+
+    <div *ngIf="erro" class="error-container">
+        <p>Ocorreu um erro ao carregar as Obras Básicas. Por favor, tente novamente mais tarde.</p>
+    </div>
+
+    <div *ngIf="!carregando && !erro" class="obras-grid">
+        <div *ngFor="let obras of obraBasicas" class="obra-card">
+            <div class="obra-imagem-container">
+                <img [src]="obras.imagemUrl" [alt]="obras.titulo" class="obra-imagem"
+                    onerror="this.src='assets/images/palestra-placeholder.jpg'">
+            </div>
+
+            <div class="obra-conteudo">
+                <h3 class="obra-titulo">{{ obras.titulo }}</h3>
+
+                <p class="obra-descricao">{{ obras.descricao }}</p>
+
+                <div class="obra-acoes">
+                    <a [href]="obras.downloadUrl" target="_blank" class="btn-download">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="7 10 12 15 17 10"></polyline>
+                            <line x1="12" y1="15" x2="12" y2="3"></line>
+                        </svg>
+                        Download
+                    </a>
+
+                    <div class="link-container">
+                        <span class="link-label">Link:</span>
+                        <a [href]="obras.downloadUrl" target="_blank" class="link-url">{{
+                            getShortUrl(obras.downloadUrl) }}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="obraBasicas.length === 0" class="empty-state">
+            <p>Não há Obras Básicas disponíveis no momento.</p>
+        </div>
+    </div>
+</div>

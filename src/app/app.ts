@@ -12,7 +12,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
       <app-nav-menu></app-nav-menu>
       <router-outlet></router-outlet>
       <footer class="app-footer">
-        <p>Videira Espirita - Desenvolvido com ❤️</p>
+        <p>Coração do Evangelho - Desenvolvido com ❤️</p>
       </footer>
     </div>
   `,
