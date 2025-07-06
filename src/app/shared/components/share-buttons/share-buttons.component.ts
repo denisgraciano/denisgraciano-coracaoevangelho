@@ -25,7 +25,7 @@ export class ShareButtonsComponent {
     }
 
     shareOnTwitter(): void {
-        const text = `Pergunta ${this.perguntaId} do Livro dos Espíritos: "${this.perguntaTexto.substring(0, 100)}${this.perguntaTexto.length > 100 ? '...' : ''}"`;
+        const text = `Pergunta ${this.perguntaId} do Livro dos Espíritos: "${this.perguntaTexto.substring(0, 280)}${this.perguntaTexto.length > 280 ? '...' : ''}"`;
         this.shareService.shareOnTwitter(text);
     }
 

@@ -1,0 +1,85 @@
+<div class="blog-container">
+    <!-- Cabeçalho do Blog -->
+    <header class="blog-header">
+        <div class="header-content">
+            <h1>📖 Blog Espírita</h1>
+            <p>Reflexões, ensinamentos e orientações para o crescimento espiritual</p>
+        </div>
+    </header>
+
+    <!-- Filtros de Categoria -->
+    <div class="filtros-container">
+        <h3>Categorias</h3>
+        <div class="filtros">
+            <button class="filtro-btn" [class.ativo]="categoriaAtiva === 'todas'"
+                (click)="filtrarPorCategoria('todas')">
+                Todas
+            </button>
+            <button class="filtro-btn" [class.ativo]="categoriaAtiva === 'Doutrina'"
+                (click)="filtrarPorCategoria('Doutrina')">
+                Doutrina Espírita
+            </button>
+            <button class="filtro-btn" [class.ativo]="categoriaAtiva === 'Reflexões'"
+                (click)="filtrarPorCategoria('Reflexões')">
+                Reflexões
+            </button>
+            <button class="filtro-btn" [class.ativo]="categoriaAtiva === 'Orientações'"
+                (click)="filtrarPorCategoria('Orientações')">
+                Orientações
+            </button>
+            <button class="filtro-btn" [class.ativo]="categoriaAtiva === 'Reforma Intima'"
+                (click)="filtrarPorCategoria('Reforma Intima')">
+                Reforma Intima
+            </button>
+        </div>
+    </div>
+
+    <!-- Lista de Artigos -->
+    <div class="artigos-container">
+        <div class="artigos-grid">
+            <article *ngFor="let artigo of artigosFiltrados" class="artigo-card"
+                [class.expandido]="artigo.id === artigoExpandido">
+
+                <!-- Cabeçalho do Artigo -->
+                <div class="artigo-header">
+                    <div class="categoria-badge">{{artigo.categoria}}</div>
+                    <h2 class="artigo-titulo">{{artigo.titulo}}</h2>
+                    <div class="artigo-meta">
+                        <span class="autor">👤 {{artigo.autor}}</span>
+                        <span class="data">📅 {{artigo.dataPublicacao | date:'dd/MM/yyyy'}}</span>
+                    </div>
+                </div>
+
+                <!-- Resumo -->
+                <div class="artigo-resumo" *ngIf="artigo.id !== artigoExpandido">
+                    <p>{{artigo.resumo}}</p>
+                    <button class="btn-ler-mais" (click)="expandirArtigo(artigo.id)">
+                        Ler mais →
+                    </button>
+                </div>
+
+                <!-- Conteúdo Completo -->
+                <div class="artigo-conteudo" *ngIf="artigo.id === artigoExpandido">
+                    <div [innerHTML]="artigo.conteudo"></div>
+                    <button class="btn-recolher" (click)="recolherArtigo()">
+                        ← Recolher
+                    </button>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <!-- Seção de Newsletter -->
+    <div class="newsletter-section">
+        <div class="newsletter-content">
+            <h3>📧 Receba nossos artigos</h3>
+            <p>Inscreva-se para receber novos artigos e reflexões diretamente em seu e-mail</p>
+            <div class="newsletter-form">
+                <input type="email" placeholder="Seu e-mail" [(ngModel)]="emailNewsletter" class="newsletter-input">
+                <button class="newsletter-btn" (click)="inscreverNewsletter()">
+                    Inscrever-se
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

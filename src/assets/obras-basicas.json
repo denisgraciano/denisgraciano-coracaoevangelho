@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "titulo": "Livros dos Espiritos",
+    "descricao": "Definição do Livro",
+    "imagemUrl": "assets/images/palestra1.jpg",
+    "downloadUrl": "https://docs.google.com/presentation/d/14Gqe5XIMm6WlbwmOcpDRNB2z9TGIUcGE/edit?usp=sharing&ouid=102217973744794442284&rtpof=true&sd=true"
+  },
+  {
+    "id": 2,
+    "titulo": "Evangelho Segundo Espiritismo",
+    "descricao": "Definição do Livro",
+    "imagemUrl": "assets/images/palestra1.jpg",
+    "downloadUrl": "https://docs.google.com/presentation/d/14Gqe5XIMm6WlbwmOcpDRNB2z9TGIUcGE/edit?usp=sharing&ouid=102217973744794442284&rtpof=true&sd=true"
+  },
+  {
+    "id": 3,
+    "titulo": "Evangelho Segundo Espiritismo",
+    "descricao": "Definição do Livro",
+    "imagemUrl": "assets/images/palestra1.jpg",
+    "downloadUrl": "https://docs.google.com/presentation/d/14Gqe5XIMm6WlbwmOcpDRNB2z9TGIUcGE/edit?usp=sharing&ouid=102217973744794442284&rtpof=true&sd=true"
+  },
+  {
+    "id": 4,
+    "titulo": "Evangelho Segundo Espiritismo",
+    "descricao": "Definição do Livro",
+    "imagemUrl": "assets/images/palestra1.jpg",
+    "downloadUrl": "https://docs.google.com/presentation/d/14Gqe5XIMm6WlbwmOcpDRNB2z9TGIUcGE/edit?usp=sharing&ouid=102217973744794442284&rtpof=true&sd=true"
+  },
+  {
+    "id": 5,
+    "titulo": "Evangelho Segundo Espiritismo",
+    "descricao": "Definição do Livro",
+    "imagemUrl": "assets/images/palestra1.jpg",
+    "downloadUrl": "https://docs.google.com/presentation/d/14Gqe5XIMm6WlbwmOcpDRNB2z9TGIUcGE/edit?usp=sharing&ouid=102217973744794442284&rtpof=true&sd=true"
+  }
+]
