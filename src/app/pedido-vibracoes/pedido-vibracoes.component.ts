@@ -1,21 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { PedidoVibracao } from './pedido-vibracao.model';
+import { HttpClient } from '@angular/common/http';
 
-interface PedidoVibracao {
-  nome: string;
-  endereco: {
-    cep: string;
-    logradouro: string;
-    numero: string;
-    complemento?: string;
-    bairro: string;
-    cidade: string;
-    estado: string;
-  };
-  pedido: string;
-  dataEnvio: Date;
-}
 
 @Component({
   selector: 'app-pedido-vibracoes',
@@ -29,7 +17,7 @@ export class PedidoVibracoesComponent {
   pedidoEnviado = false;
   enviandoPedido = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private http: HttpClient) {
     this.formularioPedido = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       endereco: this.fb.group({
@@ -46,11 +34,30 @@ export class PedidoVibracoesComponent {
   }
 
   buscarCep() {
-    const cep = this.formularioPedido.get('endereco.cep')?.value;
+    const cep = this.formularioPedido.get('endereco.cep')?.value.replace(/\D/g, '');;
     if (cep && cep.length === 8) {
+      fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.erro) {
+            console.error("CEP não encontrado.");
+          } else {
+            console.log(data); // Exibe: {cep, logradouro, bairro, localidade, uf, ...}
+            this.formularioPedido.patchValue({
+              endereco: {
+                logradouro: data.logradouro,
+                bairro: data.bairro,
+                cidade: data.localidade,
+                estado: data.uf
+              }
+            });
+          }
+        })
+        .catch(error => console.error("Erro na requisição:", error));
+
       // Aqui você faria a chamada para a API de CEP
       // Por enquanto, simulando preenchimento automático
-      console.log('Buscando CEP:', cep);
+
 
       // Exemplo de preenchimento automático (remover em produção)
       // Implementar integração com ViaCEP ou similar
