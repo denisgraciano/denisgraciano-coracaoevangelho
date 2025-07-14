@@ -1,34 +1,34 @@
 {
   "titulo": "Centro Espírita Luz e Caridade",
   "descricao": "Somos uma instituição dedicada ao estudo e à prática da doutrina espírita, seguindo os ensinamentos de Allan Kardec e promovendo a caridade, o amor e o conhecimento espiritual.",
-  "missao": "Promover o estudo, a difusão e a prática dos princípios da Doutrina Espírita, contribuindo para a evolução moral e espiritual da humanidade através da caridade e do amor ao próximo.",
-  "visao": "Ser referência no estudo e na prática da doutrina espírita, contribuindo para a formação de pessoas mais conscientes de sua natureza espiritual e comprometidas com o bem comum.",
+  "missao": "Inspirar e transformar vidas por meio do estudo e da prática da Doutrina Espírita, promovendo o autoconhecimento, a caridade e os valores do amor ensinado por Jesus.",
+  "visao": "Ser uma comunidade acolhedora e atuante, referência na vivência do Espiritismo com propósito, que une fé, razão e ação para construir um mundo mais justo, consciente e fraterno.",
   "valores": [
-    "Caridade",
-    "Amor ao próximo",
-    "Estudo contínuo",
-    "Fraternidade",
-    "Respeito à diversidade",
-    "Humildade",
-    "Solidariedade"
+    "Amor em ação – Tudo começa com o amor: nas palavras, nas escolhas e nas atitudes",
+    "Caridade que transforma – Fazer o bem de forma simples, constante e com propósito.",
+    "Estudo com propósito – Conhecer para compreender, compreender para evoluir.",
+    "Espiritualidade com consciência – Fé e razão caminhando juntas.",
+    "Respeito e acolhimento – Valorizamos cada ser humano em sua essência.",
+    "Trabalho voluntário – Servir com alegria e responsabilidade.",
+    "Compromisso com o bem – Promover o bem comum com integridade e leveza."
   ],
-  "historia": "Fundado em [ANO DE FUNDAÇÃO], o Centro Espírita Luz e Caridade iniciou suas atividades em um pequeno espaço cedido por colaboradores. Ao longo dos anos, graças ao trabalho dedicado de voluntários e ao apoio da comunidade, expandimos nossas instalações e atividades. Hoje, contamos com uma sede própria onde realizamos estudos sistemáticos da doutrina espírita, palestras públicas, atendimento fraterno, passes espirituais e diversas ações sociais voltadas para a comunidade.",
+  "historia": "Fundado em 2022, o Centro Coracao do Evangelho iniciou suas atividades em um pequeno espaço cedido por colaboradores.  Ao longo dos anos, graças ao trabalho dedicado de voluntários e ao apoio da comunidade, expandimos nossas instalações e atividades. Realizamos estudos sistemáticos da doutrina espírita, palestras públicas, atendimento fraterno, passes espirituais e diversas ações sociais voltadas para a comunidade.",
   "contato": {
-    "email": "contato@centroespirita.org",
+    "email": "contato@coracaodoenvangelho.org",
     "telefone": "(00) 00000-0000",
-    "endereco": "Rua das Flores, 123 - Bairro Jardim - Cidade/UF - CEP: 00000-000",
+    "endereco": "",
     "redesSociais": [
       {
         "nome": "Facebook",
-        "url": "https://facebook.com/centroespirita"
+        "url": "https://facebook.com/coracaodoenvangelho"
       },
       {
         "nome": "Instagram",
-        "url": "https://instagram.com/centroespirita"
+        "url": "https://instagram.com/coracaodoenvangelho"
       },
       {
         "nome": "YouTube",
-        "url": "https://youtube.com/centroespirita"
+        "url": "https://youtube.com/coracaodoenvangelho"
       }
     ]
   }

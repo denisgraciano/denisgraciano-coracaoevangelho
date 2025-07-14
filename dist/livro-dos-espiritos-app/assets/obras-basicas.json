@@ -2,36 +2,36 @@
   {
     "id": 1,
     "titulo": "Livros dos Espiritos",
-    "descricao": "Definição do Livro",
-    "imagemUrl": "assets/images/palestra1.jpg",
-    "downloadUrl": "https://docs.google.com/presentation/d/14Gqe5XIMm6WlbwmOcpDRNB2z9TGIUcGE/edit?usp=sharing&ouid=102217973744794442284&rtpof=true&sd=true"
+    "descricao": "'O Livro dos Espíritos' é a obra fundamental da Doutrina Espírita, codificada por Allan Kardec, que apresenta os ensinamentos dos Espíritos sobre Deus, a vida após a morte, a moral, as leis divinas e o sentido da existência. É um guia para o autoconhecimento e a evolução espiritual.",
+    "imagemUrl": "assets/images/livrodosespirtos.jpg",
+    "downloadUrl": "https://drive.google.com/file/d/1-85LHrRsgirmUFR2OUYeIM-ZDowLTyO_/view?usp=sharing"
   },
   {
     "id": 2,
     "titulo": "Evangelho Segundo Espiritismo",
-    "descricao": "Definição do Livro",
-    "imagemUrl": "assets/images/palestra1.jpg",
-    "downloadUrl": "https://docs.google.com/presentation/d/14Gqe5XIMm6WlbwmOcpDRNB2z9TGIUcGE/edit?usp=sharing&ouid=102217973744794442284&rtpof=true&sd=true"
+    "descricao": "'O Evangelho Segundo o Espiritismo' é uma das obras fundamentais da Doutrina Espírita, onde Allan Kardec apresenta os ensinamentos morais de Jesus à luz da espiritualidade. É um guia de transformação interior, caridade e vivência do amor cristão no dia a dia.",
+    "imagemUrl": "assets/images/evangelho.jpg",
+    "downloadUrl": "https://drive.google.com/file/d/1p6hJfOVnwIi2G6pxCtBHnq0UBoe8HkPH/view?usp=sharing"
   },
   {
     "id": 3,
-    "titulo": "Evangelho Segundo Espiritismo",
-    "descricao": "Definição do Livro",
-    "imagemUrl": "assets/images/palestra1.jpg",
-    "downloadUrl": "https://docs.google.com/presentation/d/14Gqe5XIMm6WlbwmOcpDRNB2z9TGIUcGE/edit?usp=sharing&ouid=102217973744794442284&rtpof=true&sd=true"
+    "titulo": "Livro dos Mediuns",
+    "descricao": "'O Livro dos Médiuns' é a obra da Doutrina Espírita que explica como acontecem as comunicações com os Espíritos. Codificado por Allan Kardec, é um guia prático para entender e desenvolver a mediunidade com responsabilidade e segurança.",
+    "imagemUrl": "assets/images/mediuns.jpg",
+    "downloadUrl": "https://drive.google.com/file/d/1UZrOKHCysLKjcljdNOMnsj_WCsBj7PJj/view?usp=sharing"
   },
   {
     "id": 4,
-    "titulo": "Evangelho Segundo Espiritismo",
-    "descricao": "Definição do Livro",
-    "imagemUrl": "assets/images/palestra1.jpg",
-    "downloadUrl": "https://docs.google.com/presentation/d/14Gqe5XIMm6WlbwmOcpDRNB2z9TGIUcGE/edit?usp=sharing&ouid=102217973744794442284&rtpof=true&sd=true"
+    "titulo": "Céu e Inferno",
+    "descricao": "'O Céu e o Inferno' é uma obra de Allan Kardec que analisa a justiça divina segundo o Espiritismo, explicando o destino das almas após a morte. Por meio de relatos de Espíritos, mostra que o bem conduz à paz e o mal, ao sofrimento, reafirmando a lei de causa e efeito.",
+    "imagemUrl": "assets/images/ceueinfeno.webp",
+    "downloadUrl": "https://drive.google.com/file/d/11BOMCd5COlJT7-4tkwVsvh5ONnt_0_gh/view?usp=sharing"
   },
   {
     "id": 5,
-    "titulo": "Evangelho Segundo Espiritismo",
-    "descricao": "Definição do Livro",
-    "imagemUrl": "assets/images/palestra1.jpg",
+    "titulo": "Genese",
+    "descricao": "'A Gênese' é a obra espírita em que Allan Kardec analisa a criação do universo, os milagres de Jesus e as profecias à luz da ciência e da razão. Une fé e conhecimento para mostrar a evolução espiritual e o papel do Espiritismo no progresso da humanidade.",
+    "imagemUrl": "assets/images/genese.jpg",
     "downloadUrl": "https://docs.google.com/presentation/d/14Gqe5XIMm6WlbwmOcpDRNB2z9TGIUcGE/edit?usp=sharing&ouid=102217973744794442284&rtpof=true&sd=true"
   }
 ]
