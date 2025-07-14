@@ -6,6 +6,7 @@
                 Envie seu pedido de oração e vibrações positivas. Nossa corrente de luz se reúne todas as
                 segundas-feiras às 20h para elevar pensamentos de amor e cura.
             </p>
+            <p>Seus dados serão mantidos em sigilo.</p>
         </div>
         <div class="header-image">
             <div class="prayer-icon">🙏</div>
@@ -44,7 +45,7 @@
                         <div class="campo-grupo campo-pequeno">
                             <label for="cep">CEP *</label>
                             <input type="text" id="cep" formControlName="cep" placeholder="00000-000"
-                                (blur)="buscarCep()"
+                                (blur)="carregarCep()"
                                 [class.erro]="formularioPedido.get('endereco.cep')?.invalid && formularioPedido.get('endereco.cep')?.touched">
                             <div class="mensagem-erro"
                                 *ngIf="formularioPedido.get('endereco.cep')?.invalid && formularioPedido.get('endereco.cep')?.touched">

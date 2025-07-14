@@ -29,7 +29,7 @@
                             </p>
                         </div>
                         <div class="resposta-container">
-                            <p class="resposta-texto">{{ perguntaDoDia.resposta }}</p>
+                            <div [innerHTML]="perguntaDoDia.resposta" class="resposta-texto"></div>
                         </div>
                         <app-share-buttons [perguntaId]="perguntaDoDia.id" [perguntaTexto]="perguntaDoDia.pergunta"
                             [respostaTexto]="perguntaDoDia.resposta">
@@ -51,7 +51,7 @@
                             </p>
                         </div>
                         <div class="resposta-container">
-                            <p class="resposta-texto">{{ perguntaSorteada.resposta }}</p>
+                            <div [innerHTML]="perguntaSorteada.resposta" class="resposta-texto"></div>
                         </div>
                         <app-share-buttons [perguntaId]="perguntaSorteada.id"
                             [perguntaTexto]="perguntaSorteada.pergunta" [respostaTexto]="perguntaSorteada.resposta">

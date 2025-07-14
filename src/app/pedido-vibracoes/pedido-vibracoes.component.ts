@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PedidoVibracao } from './pedido-vibracao.model';
 import { HttpClient } from '@angular/common/http';
+import { CepService, Endereco } from '../services/cep.service';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @Component({
   selector: 'app-pedido-vibracoes',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, HttpClientModule],
   templateUrl: './pedido-vibracoes.component.html',
   styleUrl: './pedido-vibracoes.component.scss'
 })
@@ -16,8 +18,9 @@ export class PedidoVibracoesComponent {
   formularioPedido: FormGroup;
   pedidoEnviado = false;
   enviandoPedido = false;
+  erro?: string;
 
-  constructor(private fb: FormBuilder, private http: HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private cepService: CepService) {
     this.formularioPedido = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       endereco: this.fb.group({
@@ -33,16 +36,14 @@ export class PedidoVibracoesComponent {
     });
   }
 
-  buscarCep() {
+  carregarCep() {
     const cep = this.formularioPedido.get('endereco.cep')?.value.replace(/\D/g, '');;
     if (cep && cep.length === 8) {
-      fetch(`https://viacep.com.br/ws/${cep}/json/`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.erro) {
-            console.error("CEP não encontrado.");
+      this.cepService.buscarCEP(cep).subscribe({
+        next: (data) => {
+          if ('erro' in data) {
+            this.erro = 'CEP não encontrado';
           } else {
-            console.log(data); // Exibe: {cep, logradouro, bairro, localidade, uf, ...}
             this.formularioPedido.patchValue({
               endereco: {
                 logradouro: data.logradouro,
@@ -50,29 +51,14 @@ export class PedidoVibracoesComponent {
                 cidade: data.localidade,
                 estado: data.uf
               }
-            });
+            }),
+              this.erro = 'Não Encontrado';
           }
-        })
-        .catch(error => console.error("Erro na requisição:", error));
-
-      // Aqui você faria a chamada para a API de CEP
-      // Por enquanto, simulando preenchimento automático
-
-
-      // Exemplo de preenchimento automático (remover em produção)
-      // Implementar integração com ViaCEP ou similar
-      /*
-      setTimeout(() => {
-        this.formularioPedido.patchValue({
-          endereco: {
-            logradouro: 'Rua das Flores',
-            bairro: 'Centro',
-            cidade: 'São Paulo',
-            estado: 'SP'
-          }
-        });
-      }, 1000);
-      */
+        },
+        error: () => {
+          this.erro = 'Erro ao buscar o CEP';
+        }
+      });
     }
   }
 
