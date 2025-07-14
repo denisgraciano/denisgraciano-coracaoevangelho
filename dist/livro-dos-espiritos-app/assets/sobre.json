@@ -15,20 +15,20 @@
   "historia": "Fundado em 2022, o Centro Coracao do Evangelho iniciou suas atividades em um pequeno espaço cedido por colaboradores.  Ao longo dos anos, graças ao trabalho dedicado de voluntários e ao apoio da comunidade, expandimos nossas instalações e atividades. Realizamos estudos sistemáticos da doutrina espírita, palestras públicas, atendimento fraterno, passes espirituais e diversas ações sociais voltadas para a comunidade.",
   "contato": {
     "email": "contato@coracaodoenvangelho.org",
-    "telefone": "(00) 00000-0000",
+    "telefone": "",
     "endereco": "",
     "redesSociais": [
       {
         "nome": "Facebook",
-        "url": "https://facebook.com/coracaodoenvangelho"
+        "url": "https://facebook.com/coracao_do_evangelho/"
       },
       {
         "nome": "Instagram",
-        "url": "https://instagram.com/coracaodoenvangelho"
+        "url": "https://instagram.com/coracao_do_evangelho/"
       },
       {
         "nome": "YouTube",
-        "url": "https://youtube.com/coracaodoenvangelho"
+        "url": "https://youtube.com/coracao_do_evangelho/"
       }
     ]
   }
