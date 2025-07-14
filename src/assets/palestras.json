@@ -1,42 +1,10 @@
 [
   {
     "id": 1,
-    "data": "10/06/2025",
-    "local": "Centro Espírita Luz e Caridade",
-    "tema": "A Lei de Causa e Efeito",
-    "palestrante": "Carlos Silva",
-    "descricao": "Palestra sobre os princípios da lei de causa e efeito segundo a doutrina espírita."
-  },
-  {
-    "id": 2,
-    "data": "15/06/2025",
-    "local": "Associação Espírita Fraternidade",
-    "tema": "Mediunidade e Evolução",
-    "palestrante": "Maria Santos",
-    "descricao": "Estudo sobre o papel da mediunidade no processo evolutivo do espírito."
-  },
-  {
-    "id": 3,
-    "data": "27/06/2025",
-    "local": "Centro Espírita Amor e Luz",
-    "tema": "O Evangelho Segundo o Espiritismo",
-    "palestrante": "João Pereira",
-    "descricao": "Análise dos ensinamentos morais de Jesus à luz da doutrina espírita."
-  },
-  {
-    "id": 4,
-    "data": "29/06/2025",
-    "local": "Casa Espírita Paz e Harmonia",
-    "tema": "Reencarnação e Propósito de Vida",
-    "palestrante": "Ana Oliveira",
-    "descricao": "Reflexões sobre o planejamento reencarnatório e o propósito existencial."
-  },
-  {
-    "id": 5,
-    "data": "05/07/2025",
-    "local": "Centro Espírita Luz e Caridade",
-    "tema": "A Influência dos Espíritos em Nossa Vida",
-    "palestrante": "Roberto Mendes",
-    "descricao": "Estudo sobre como os espíritos influenciam nosso cotidiano e decisões."
+    "data": "18/07/2025",
+    "local": "CEAK - Rua Fernando Cortez, 66 - São Paulo/SP",
+    "tema": "Eficácia da Prece",
+    "palestrante": "Denis Graciano",
+    "descricao": "Palestra sobre os benefício que a prece traz na vida espiritual e no dia a dia."
   }
 ]
