@@ -63,8 +63,11 @@ export class LivroEspiritosComponent {
       const diaDoAno = this.getDiaDoAno(hoje);
       const ano = hoje.getFullYear();
 
+      const fatorAleatorio = Math.floor(Math.random() * 1100);
+
+
       // Usar uma combinação de dia do ano e ano para garantir variação anual
-      const seed = diaDoAno + (ano * 1100);
+      const seed = diaDoAno + (ano * fatorAleatorio);
 
       // Usar o seed para determinar o índice da pergunta do dia
       const indice = seed % this.perguntas.length;
