@@ -9,6 +9,7 @@ import { InscricaoCursoComponent } from './inscricao-curso/inscricao-curso.compo
 import { PedidoVibracoesComponent } from './pedido-vibracoes/pedido-vibracoes.component';
 import { ObrasBasicasComponent } from './obras-basicas/obras-basicas.component';
 import { BlogComponent } from './blog/blog.component';
+import { authGuard } from './area-aluno/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -22,5 +23,31 @@ export const routes: Routes = [
   { path: 'inscricao/:id', component: InscricaoCursoComponent },
   { path: 'pedidos-vibracoes', component: PedidoVibracoesComponent },
   { path: 'blog', component: BlogComponent },
+  {
+  path: 'login',
+  loadComponent: () =>
+    import('./area-aluno/login/login.component').then(m => m.LoginComponent)
+},
+{
+  path: 'area-aluno',
+  canActivate: [authGuard],
+  children: [
+    {
+      path: '',
+      loadComponent: () =>
+        import('./area-aluno/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    },
+    {
+      path: 'player/:cursoId/:aulaId',
+      loadComponent: () =>
+        import('./area-aluno/player-aula/player-aula.component').then(m => m.PlayerAulaComponent),
+    },
+    {
+      path: 'certificado/:cursoId',
+      loadComponent: () =>
+        import('./area-aluno/certificado/certificado.component').then(m => m.CertificadoComponent),
+    },
+  ],
+},
   { path: '**', redirectTo: '' }
 ];

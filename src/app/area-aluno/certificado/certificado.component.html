@@ -1,0 +1,65 @@
+<!-- src/app/area-aluno/certificado/certificado.component.html -->
+<div class="cert-page">
+
+  <!-- Ação de emissão -->
+  <div *ngIf="podEmitir && !certificado" class="cert-page__emitir">
+    <h2>🎉 Parabéns! Você concluiu o curso!</h2>
+    <p>Clique abaixo para gerar seu certificado oficial.</p>
+    <button class="btn-emitir" (click)="emitirCertificado()">
+      🏆 Emitir Certificado
+    </button>
+  </div>
+
+  <!-- Aviso curso incompleto -->
+  <div *ngIf="!podEmitir && !certificado" class="cert-page__incompleto">
+    <p>Você ainda não concluiu todas as aulas para gerar o certificado.</p>
+    <a [routerLink]="['/area-aluno']" class="btn-voltar">← Voltar aos Cursos</a>
+  </div>
+
+  <!-- Certificado visual -->
+  <div *ngIf="certificado" class="certificado-wrapper" id="certificado-para-impressao" role="region" aria-label="Certificado de conclusão">
+
+    <div class="certificado">
+      <div class="certificado__borda" aria-hidden="true"></div>
+
+      <div class="certificado__conteudo">
+        <div class="certificado__topo">
+          <img src="assets/images/logo.png" alt="Logo Coração do Evangelho" class="certificado__logo" />
+          <h1 class="certificado__titulo-inst">Coração do Evangelho</h1>
+        </div>
+
+        <h2 class="certificado__titulo-cert">Certificado de Conclusão</h2>
+
+        <p class="certificado__texto">Certificamos que</p>
+        <p class="certificado__aluno">{{ nomeAluno }}</p>
+        <p class="certificado__texto">concluiu com êxito o curso</p>
+        <p class="certificado__curso">{{ certificado.cursoTitulo }}</p>
+
+        <p class="certificado__carga">
+          Carga horária: {{ certificado.cargaHoraria | number:'1.0-1' }} horas
+        </p>
+        <p class="certificado__data">
+          Emitido em {{ certificado.dataEmissao | date:'dd \'de\' MMMM \'de\' yyyy':'':'pt-BR' }}
+        </p>
+
+        <div class="certificado__assinatura" aria-hidden="true">
+          <div class="certificado__assinatura-linha"></div>
+          <p>Coordenação — Coração do Evangelho</p>
+        </div>
+
+        <p class="certificado__id">Código: {{ certificado.id }}</p>
+      </div>
+    </div>
+
+    <!-- Ações pós-emissão (ocultas na impressão) -->
+    <div class="cert-page__acoes no-print">
+      <button class="btn-imprimir" (click)="imprimir()" aria-label="Imprimir certificado">
+        🖨️ Imprimir / Salvar PDF
+      </button>
+      <a [routerLink]="['/area-aluno']" class="btn-voltar" aria-label="Voltar ao dashboard">
+        ← Meus Cursos
+      </a>
+    </div>
+  </div>
+
+</div>

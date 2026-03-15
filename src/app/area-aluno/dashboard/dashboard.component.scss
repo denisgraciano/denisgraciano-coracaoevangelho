@@ -1,0 +1,265 @@
+// src/app/area-aluno/dashboard/dashboard.component.scss
+:host {
+  display: block;
+}
+
+.dashboard {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+
+  // ── Header ──────────────────────────────────────────────
+  &__header {
+    background: linear-gradient(135deg, #2c5aa0 0%, #1e3d6f 100%);
+    color: #fff;
+    border-radius: 0 0 1rem 1rem;
+    margin: 0 -1.5rem 2rem;
+    padding: 2rem 1.5rem;
+  }
+
+  &__header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__boas-vindas {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__avatar {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.6);
+    object-fit: cover;
+  }
+
+  &__titulo {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  &__subtitulo {
+    margin: 0.25rem 0 0;
+    opacity: 0.85;
+    font-size: 0.95rem;
+  }
+
+  // ── Abas ────────────────────────────────────────────────
+  &__abas {
+    display: flex;
+    gap: 0.5rem;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+
+    button {
+      background: none;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      font-size: 1rem;
+      color: #555;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      white-space: nowrap;
+      transition: color 0.2s, border-color 0.2s;
+      border-radius: 4px 4px 0 0;
+
+      &:hover { color: #2c5aa0; }
+
+      &.ativo {
+        color: #2c5aa0;
+        border-bottom-color: #2c5aa0;
+        font-weight: 600;
+      }
+
+      // Foco visível para navegação por teclado (WCAG 2.1)
+      &:focus-visible {
+        outline: 3px solid #2c5aa0;
+        outline-offset: 2px;
+      }
+    }
+  }
+
+  &__painel { animation: fadeIn 0.2s ease; }
+
+  &__vazio {
+    text-align: center;
+    color: #666;
+    padding: 3rem 1rem;
+    font-size: 1.1rem;
+  }
+
+  &__sugestao-texto {
+    color: #555;
+    margin-bottom: 1.5rem;
+  }
+}
+
+// ── Grid de cursos ───────────────────────────────────────────
+.cursos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+// ── Card de curso ────────────────────────────────────────────
+.curso-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+
+  &--sugestao { border-top: 4px solid #f0a500; }
+
+  &__imagem {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+  }
+
+  &__corpo {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+
+  &__categoria {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #2c5aa0;
+  }
+
+  &__titulo {
+    font-size: 1.05rem;
+    margin: 0;
+    color: #1a1a2e;
+  }
+
+  &__instrutor {
+    font-size: 0.85rem;
+    color: #777;
+    margin: 0;
+  }
+
+  &__acoes {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+}
+
+// ── Progresso ────────────────────────────────────────────────
+.progresso {
+  &__barra-fundo {
+    height: 8px;
+    background: #e8edf5;
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  &__barra-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #2c5aa0, #4a90d9);
+    border-radius: 99px;
+    transition: width 0.5s ease;
+  }
+
+  &__texto {
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 0.25rem;
+    display: block;
+  }
+}
+
+// ── Botões ────────────────────────────────────────────────────
+.btn-continuar,
+.btn-certificado,
+.btn-ver-cert,
+.btn-logout {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+
+  &:focus-visible {
+    outline: 3px solid #2c5aa0;
+    outline-offset: 2px;
+  }
+
+  &:active { transform: scale(0.97); }
+}
+
+.btn-continuar {
+  background: #2c5aa0;
+  color: #fff;
+  flex: 1;
+  &:hover { background: #1e3d6f; }
+}
+
+.btn-certificado, .btn-ver-cert {
+  background: #f0a500;
+  color: #fff;
+  &:hover { background: #c98700; }
+}
+
+.btn-logout {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.5);
+  &:hover { background: rgba(255,255,255,0.35); }
+}
+
+// ── Certificados ──────────────────────────────────────────────
+.certificados-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+}
+
+.cert-card {
+  background: linear-gradient(145deg, #fffdf5, #fff8e1);
+  border: 1px solid #e8d5a0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 3px 12px rgba(240, 165, 0, 0.12);
+
+  &__icone { font-size: 3rem; margin-bottom: 0.75rem; }
+
+  h3 { color: #1a1a2e; font-size: 1rem; margin-bottom: 0.5rem; }
+  p  { color: #666; font-size: 0.85rem; margin: 0.2rem 0; }
+}
+
+// ── Animação ─────────────────────────────────────────────────
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+// ── Responsivo ───────────────────────────────────────────────
+@media (max-width: 600px) {
+  .dashboard__abas button { padding: 0.6rem 0.85rem; font-size: 0.9rem; }
+  .cursos-grid { grid-template-columns: 1fr; }
+}

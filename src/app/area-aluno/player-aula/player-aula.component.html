@@ -1,0 +1,122 @@
+<!-- src/app/area-aluno/player-aula/player-aula.component.html -->
+<div class="player-layout">
+
+  <!-- Sidebar com lista de aulas -->
+  <aside class="player-sidebar" aria-label="Lista de aulas do curso">
+    <div class="player-sidebar__cabecalho">
+      <a [routerLink]="['/area-aluno']" class="player-sidebar__voltar" aria-label="Voltar para o dashboard">
+        ← Dashboard
+      </a>
+
+      <!-- curso. (sem ?.) — curso nunca é undefined graças ao valor padrão -->
+      <h2 class="player-sidebar__titulo">{{ curso.titulo }}</h2>
+
+      <div class="player-sidebar__progresso">
+        <div
+          class="mini-barra"
+          role="progressbar"
+          [attr.aria-valuenow]="progresso.percentualConcluido"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          [attr.aria-label]="progresso.percentualConcluido + '% concluído'"
+        >
+          <div
+            class="mini-barra__fill"
+            [style.width.%]="progresso.percentualConcluido"
+          ></div>
+        </div>
+        <span>{{ progresso.percentualConcluido }}% concluído</span>
+      </div>
+    </div>
+
+    <ul class="aulas-lista" role="list">
+      <li
+        *ngFor="let aula of aulasOrdenadas; let i = index"
+        class="aulas-lista__item"
+        [class.ativo]="aula.id === aulaAtual.id"
+        [class.concluida]="aulaConcluida(aula.id)"
+        role="listitem"
+      >
+        <button
+          class="aulas-lista__btn"
+          (click)="irParaAula(aula)"
+          [attr.aria-label]="'Aula ' + (i + 1) + ': ' + aula.titulo + (aulaConcluida(aula.id) ? ' - concluída' : '')"
+          [attr.aria-current]="aula.id === aulaAtual.id ? 'true' : null"
+        >
+          <span class="aulas-lista__icone" aria-hidden="true">
+            {{ aulaConcluida(aula.id) ? '✅' : (aula.id === aulaAtual.id ? '▶' : '○') }}
+          </span>
+          <span class="aulas-lista__info">
+            <span class="aulas-lista__num">Aula {{ i + 1 }}</span>
+            <span class="aulas-lista__nome">{{ aula.titulo }}</span>
+            <span class="aulas-lista__dur">{{ aula.duracaoMinutos }} min</span>
+          </span>
+        </button>
+      </li>
+    </ul>
+  </aside>
+
+  <!-- Área principal do player -->
+  <main class="player-main" role="main">
+
+    <div class="player-video-wrap">
+      <div
+        *ngIf="carregando"
+        class="player-skeleton"
+        aria-label="Carregando vídeo..."
+        role="status"
+      >
+        <div class="player-skeleton__spinner"></div>
+      </div>
+
+      <iframe
+        *ngIf="!carregando && embedUrl"
+        [src]="embedUrl"
+        class="player-iframe"
+        title="Aula: {{ aulaAtual.titulo }}"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        loading="lazy"
+      ></iframe>
+    </div>
+
+    <!-- Info e controles da aula -->
+    <div class="player-info">
+      <div class="player-info__texto">
+        <!-- aulaAtual. (sem ?.) -->
+        <h1 class="player-info__titulo">{{ aulaAtual.titulo }}</h1>
+        <p  class="player-info__desc">{{ aulaAtual.descricao }}</p>
+      </div>
+
+      <div class="player-info__controles">
+        <button
+          class="btn-nav btn-nav--anterior"
+          [disabled]="!temAnterior"
+          (click)="irParaAnterior()"
+          aria-label="Aula anterior"
+        >
+          ← Anterior
+        </button>
+
+        <!-- aulaAtualId getter — string garantida, sem ?. -->
+        <button
+          class="btn-concluir"
+          (click)="marcarConcluida()"
+          [disabled]="aulaConcluida(aulaAtualId)"
+          [attr.aria-label]="aulaConcluida(aulaAtualId) ? 'Aula já marcada como concluída' : 'Marcar aula como concluída'"
+        >
+          {{ aulaConcluida(aulaAtualId) ? '✅ Aula concluída' : '✔ Marcar como concluída' }}
+        </button>
+
+        <button
+          class="btn-nav btn-nav--proxima"
+          (click)="irParaProximaAula()"
+          [attr.aria-label]="temProxima ? 'Próxima aula' : 'Finalizar curso'"
+        >
+          {{ temProxima ? 'Próxima →' : '🎓 Finalizar Curso' }}
+        </button>
+      </div>
+    </div>
+
+  </main>
+</div>

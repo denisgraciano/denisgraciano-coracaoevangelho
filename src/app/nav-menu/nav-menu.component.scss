@@ -44,6 +44,16 @@
       position: relative;
   }
 
+/* Destaque para o link da Área do Aluno */
+.nav-link--destaque {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.nav-link--destaque:hover {
+    background: rgba(255, 255, 255, 0.28);
+} 
+
   .nav-link:hover {
       background: rgba(255, 255, 255, 0.1);
       transform: translateY(-2px);

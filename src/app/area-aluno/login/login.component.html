@@ -1,0 +1,121 @@
+<!-- src/app/area-aluno/login/login.component.html -->
+<div class="login-page">
+
+  <div class="login-card" role="main">
+
+    <!-- Topo com identidade visual -->
+    <div class="login-card__topo" aria-hidden="true">
+      <div class="login-card__icone">✝️</div>
+    </div>
+
+    <div class="login-card__corpo">
+      <h1 class="login-card__titulo">Área do Aluno</h1>
+      <p class="login-card__subtitulo">
+        Acesse seus cursos, acompanhe seu progresso e emita seus certificados.
+      </p>
+
+      <!-- Mensagem de erro global -->
+      <div
+        *ngIf="erro"
+        class="login-erro"
+        role="alert"
+        aria-live="assertive"
+      >
+        ⚠️ {{ erro }}
+      </div>
+
+      <form
+        [formGroup]="formulario"
+        (ngSubmit)="entrar()"
+        novalidate
+        aria-label="Formulário de login"
+      >
+
+        <!-- Campo E-mail -->
+        <div class="campo-grupo">
+          <label for="email" class="campo-grupo__label">E-mail</label>
+          <input
+            id="email"
+            type="email"
+            formControlName="email"
+            class="campo-grupo__input"
+            [class.campo-grupo__input--erro]="emailCtrl?.invalid && emailCtrl?.touched"
+            placeholder="seu@email.com"
+            autocomplete="email"
+            aria-required="true"
+            [attr.aria-invalid]="emailCtrl?.invalid && emailCtrl?.touched ? 'true' : null"
+            aria-describedby="email-erro"
+          />
+          <span
+            id="email-erro"
+            class="campo-grupo__erro"
+            role="alert"
+            *ngIf="emailCtrl?.invalid && emailCtrl?.touched"
+          >
+            <span *ngIf="emailCtrl?.errors?.['required']">E-mail é obrigatório.</span>
+            <span *ngIf="emailCtrl?.errors?.['email']">Informe um e-mail válido.</span>
+          </span>
+        </div>
+
+        <!-- Campo Senha -->
+        <div class="campo-grupo">
+          <label for="senha" class="campo-grupo__label">Senha</label>
+          <div class="campo-grupo__senha-wrap">
+            <input
+              id="senha"
+              [type]="senhaVisivel ? 'text' : 'password'"
+              formControlName="senha"
+              class="campo-grupo__input"
+              [class.campo-grupo__input--erro]="senhaCtrl?.invalid && senhaCtrl?.touched"
+              placeholder="••••••"
+              autocomplete="current-password"
+              aria-required="true"
+              [attr.aria-invalid]="senhaCtrl?.invalid && senhaCtrl?.touched ? 'true' : null"
+              aria-describedby="senha-erro"
+            />
+            <button
+              type="button"
+              class="campo-grupo__toggle-senha"
+              (click)="alternarSenha()"
+              [attr.aria-label]="senhaVisivel ? 'Ocultar senha' : 'Mostrar senha'"
+            >
+              {{ senhaVisivel ? '🙈' : '👁️' }}
+            </button>
+          </div>
+          <span
+            id="senha-erro"
+            class="campo-grupo__erro"
+            role="alert"
+            *ngIf="senhaCtrl?.invalid && senhaCtrl?.touched"
+          >
+            <span *ngIf="senhaCtrl?.errors?.['required']">Senha é obrigatória.</span>
+            <span *ngIf="senhaCtrl?.errors?.['minlength']">A senha deve ter pelo menos 6 caracteres.</span>
+          </span>
+        </div>
+
+        <!-- Botão de submit -->
+        <button
+          type="submit"
+          class="btn-entrar"
+          [disabled]="carregando"
+          aria-label="Entrar na área do aluno"
+        >
+          <span *ngIf="!carregando">Entrar</span>
+          <span *ngIf="carregando" class="btn-entrar__spinner" aria-hidden="true"></span>
+          <span *ngIf="carregando" class="sr-only">Entrando...</span>
+        </button>
+
+      </form>
+
+      <!-- Dica de acesso (remover em produção) -->
+      <p class="login-card__dica">
+        💡 <strong>Acesso de demonstração:</strong> qualquer e-mail + senha <code>123456</code>
+      </p>
+
+      <div class="login-card__rodape">
+        <a routerLink="/" class="login-card__link-voltar">← Voltar para o site</a>
+      </div>
+    </div>
+  </div>
+
+</div>

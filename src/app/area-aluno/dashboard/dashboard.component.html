@@ -1,0 +1,180 @@
+<!-- src/app/area-aluno/dashboard/dashboard.component.html -->
+<div class="dashboard" role="main">
+
+  <!-- Cabeçalho da área logada -->
+  <header class="dashboard__header" role="banner">
+    <div class="dashboard__header-inner">
+      <div class="dashboard__boas-vindas">
+        <img
+          [src]="usuario?.avatarUrl || 'assets/images/avatar-default.png'"
+          [alt]="'Avatar de ' + usuario?.nome"
+          class="dashboard__avatar"
+          aria-hidden="true"
+        />
+        <div>
+          <h1 class="dashboard__titulo">Olá, {{ usuario?.nome }} 👋</h1>
+          <p class="dashboard__subtitulo">Continue sua jornada espiritual</p>
+        </div>
+      </div>
+      <button
+        class="btn-logout"
+        (click)="logout()"
+        aria-label="Sair da conta"
+      >
+        Sair
+      </button>
+    </div>
+  </header>
+
+  <!-- Abas de navegação -->
+  <nav class="dashboard__abas" role="tablist" aria-label="Seções da área do aluno">
+    <button
+      role="tab"
+      [attr.aria-selected]="abaSelecionada === 'cursos'"
+      [class.ativo]="abaSelecionada === 'cursos'"
+      (click)="selecionarAba('cursos')"
+    >
+      Meus Cursos
+    </button>
+    <button
+      role="tab"
+      [attr.aria-selected]="abaSelecionada === 'certificados'"
+      [class.ativo]="abaSelecionada === 'certificados'"
+      (click)="selecionarAba('certificados')"
+    >
+      Certificados
+    </button>
+    <button
+      role="tab"
+      [attr.aria-selected]="abaSelecionada === 'sugestoes'"
+      [class.ativo]="abaSelecionada === 'sugestoes'"
+      (click)="selecionarAba('sugestoes')"
+    >
+      Sugestões para você
+    </button>
+  </nav>
+
+  <!-- ABA: Meus Cursos -->
+  <section
+    *ngIf="abaSelecionada === 'cursos'"
+    role="tabpanel"
+    aria-label="Meus cursos"
+    class="dashboard__painel"
+  >
+    <div class="cursos-grid">
+      <article
+        *ngFor="let curso of cursosMatriculados"
+        class="curso-card"
+        [attr.aria-label]="'Curso: ' + curso.titulo"
+      >
+        <img [src]="curso.imagemUrl" [alt]="curso.titulo" class="curso-card__imagem" />
+
+        <div class="curso-card__corpo">
+          <span class="curso-card__categoria">{{ curso.categoria }}</span>
+          <h2 class="curso-card__titulo">{{ curso.titulo }}</h2>
+          <p class="curso-card__instrutor">Por {{ curso.instrutor }}</p>
+
+          <!-- Barra de progresso acessível -->
+          <div class="progresso" aria-label="Progresso do curso">
+            <div class="progresso__barra-fundo" role="progressbar"
+              [attr.aria-valuenow]="obterProgresso(curso.id).percentualConcluido"
+              aria-valuemin="0" aria-valuemax="100">
+              <div
+                class="progresso__barra-fill"
+                [style.width.%]="obterProgresso(curso.id).percentualConcluido"
+              ></div>
+            </div>
+            <span class="progresso__texto">
+              {{ obterProgresso(curso.id).percentualConcluido }}% concluído
+            </span>
+          </div>
+
+          <div class="curso-card__acoes">
+            <button
+              class="btn-continuar"
+              (click)="irParaCurso(curso.id, proximaAula(curso))"
+              [attr.aria-label]="'Continuar curso ' + curso.titulo"
+            >
+              {{ obterProgresso(curso.id).percentualConcluido === 0 ? '▶ Começar' : '▶ Continuar' }}
+            </button>
+
+            <button
+              *ngIf="obterProgresso(curso.id).percentualConcluido === 100"
+              class="btn-certificado"
+              (click)="irParaCertificado(curso.id)"
+              [attr.aria-label]="'Ver certificado de ' + curso.titulo"
+            >
+              🎓 Certificado
+            </button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ABA: Certificados -->
+  <section
+    *ngIf="abaSelecionada === 'certificados'"
+    role="tabpanel"
+    aria-label="Meus certificados"
+    class="dashboard__painel"
+  >
+    <p *ngIf="certificados.length === 0" class="dashboard__vazio">
+      Você ainda não possui certificados. Conclua um curso para emitir o seu! 🎓
+    </p>
+
+    <div class="certificados-grid">
+      <article
+        *ngFor="let cert of certificados"
+        class="cert-card"
+        [attr.aria-label]="'Certificado de ' + cert.cursoTitulo"
+      >
+        <div class="cert-card__icone" aria-hidden="true">🏆</div>
+        <h3>{{ cert.cursoTitulo }}</h3>
+        <p>Emitido em {{ cert.dataEmissao | date:'dd/MM/yyyy' }}</p>
+        <p>Carga horária: {{ cert.cargaHoraria | number:'1.0-1' }}h</p>
+        <button
+          class="btn-ver-cert"
+          [routerLink]="['/area-aluno/certificado', cert.cursoId]"
+          [attr.aria-label]="'Visualizar certificado de ' + cert.cursoTitulo"
+        >
+          Visualizar
+        </button>
+      </article>
+    </div>
+  </section>
+
+  <!-- ABA: Sugestões -->
+  <section
+    *ngIf="abaSelecionada === 'sugestoes'"
+    role="tabpanel"
+    aria-label="Sugestões de cursos"
+    class="dashboard__painel"
+  >
+    <p class="dashboard__sugestao-texto">
+      Baseado no seu perfil, separamos esses cursos especialmente para você:
+    </p>
+    <div class="cursos-grid">
+      <article
+        *ngFor="let curso of sugestoes"
+        class="curso-card curso-card--sugestao"
+        [attr.aria-label]="'Sugestão: ' + curso.titulo"
+      >
+        <img [src]="curso.imagemUrl" [alt]="curso.titulo" class="curso-card__imagem" />
+        <div class="curso-card__corpo">
+          <span class="curso-card__categoria">{{ curso.categoria }}</span>
+          <h2 class="curso-card__titulo">{{ curso.titulo }}</h2>
+          <p>{{ curso.descricao }}</p>
+          <button
+            class="btn-continuar"
+            (click)="irParaCurso(curso.id, proximaAula(curso))"
+            [attr.aria-label]="'Iniciar curso ' + curso.titulo"
+          >
+            ▶ Iniciar Curso
+          </button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+</div>

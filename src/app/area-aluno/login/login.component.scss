@@ -1,0 +1,260 @@
+// src/app/area-aluno/login/login.component.scss
+:host {
+  display: block;
+}
+
+// ── Página centralizada ────────────────────────────────────────
+.login-page {
+  min-height: calc(100vh - 130px); // desconta nav + footer
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(160deg, #f0f4fc 0%, #e8edf8 100%);
+}
+
+// ── Card ───────────────────────────────────────────────────────
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 40px rgba(44, 90, 160, 0.12);
+  overflow: hidden;
+  animation: slideUp 0.3s ease;
+
+  // Topo com gradiente (identidade visual do projeto)
+  &__topo {
+    background: linear-gradient(135deg, #2c5aa0 0%, #1e3d6f 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+
+  &__icone {
+    font-size: 3rem;
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+  }
+
+  &__corpo {
+    padding: 2rem;
+  }
+
+  &__titulo {
+    font-size: 1.6rem;
+    color: #1a1a2e;
+    margin: 0 0 0.4rem;
+    text-align: center;
+  }
+
+  &__subtitulo {
+    color: #666;
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 0 0 1.75rem;
+    line-height: 1.5;
+  }
+
+  &__dica {
+    margin-top: 1.25rem;
+    font-size: 0.8rem;
+    color: #888;
+    background: #f8f9fa;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    padding: 0.65rem 0.9rem;
+    text-align: center;
+    line-height: 1.5;
+
+    code {
+      background: #e8edf5;
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85em;
+      color: #2c5aa0;
+    }
+  }
+
+  &__rodape {
+    margin-top: 1.5rem;
+    text-align: center;
+  }
+
+  &__link-voltar {
+    font-size: 0.85rem;
+    color: #2c5aa0;
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+
+    &:focus-visible {
+      outline: 2px solid #2c5aa0;
+      outline-offset: 2px;
+      border-radius: 3px;
+    }
+  }
+}
+
+// ── Mensagem de erro global ────────────────────────────────────
+.login-erro {
+  background: #fff2f2;
+  border: 1px solid #ffcdd2;
+  color: #c62828;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.45;
+}
+
+// ── Campos de formulário ───────────────────────────────────────
+.campo-grupo {
+  margin-bottom: 1.25rem;
+
+  &__label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.4rem;
+  }
+
+  &__input {
+    width: 100%;
+    padding: 0.7rem 0.9rem;
+    border: 1.5px solid #dde2ee;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #1a1a2e;
+    background: #fafbfd;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
+
+    &::placeholder { color: #bbb; }
+
+    &:focus {
+      outline: none;
+      border-color: #2c5aa0;
+      box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.15);
+      background: #fff;
+    }
+
+    // Estado de erro (contraste ≥ 4.5:1 garantido com #c62828)
+    &--erro {
+      border-color: #e53935;
+      background: #fff8f8;
+
+      &:focus {
+        border-color: #c62828;
+        box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.15);
+      }
+    }
+  }
+
+  // Wrapper do campo de senha (input + botão olho)
+  &__senha-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__senha-wrap &__input {
+    padding-right: 2.75rem; // espaço para o botão
+  }
+
+  &__toggle-senha {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0.25rem;
+    line-height: 1;
+    border-radius: 4px;
+
+    &:focus-visible {
+      outline: 2px solid #2c5aa0;
+      outline-offset: 1px;
+    }
+  }
+
+  &__erro {
+    display: block;
+    margin-top: 0.35rem;
+    font-size: 0.8rem;
+    color: #c62828; // contraste 4.5:1 garantido sobre fundo branco
+  }
+}
+
+// ── Botão de entrar ────────────────────────────────────────────
+.btn-entrar {
+  width: 100%;
+  padding: 0.85rem;
+  background: linear-gradient(135deg, #2c5aa0 0%, #1e3d6f 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: opacity 0.2s, transform 0.1s;
+  margin-top: 0.5rem;
+
+  &:hover:not(:disabled) { opacity: 0.92; }
+  &:active:not(:disabled) { transform: scale(0.98); }
+
+  &:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    outline: 3px solid #2c5aa0;
+    outline-offset: 3px;
+  }
+
+  // Spinner inline no botão
+  &__spinner {
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.35);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+}
+
+// ── Acessibilidade: texto só para leitores de tela ─────────────
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ── Animações ──────────────────────────────────────────────────
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// ── Responsivo ─────────────────────────────────────────────────
+@media (max-width: 480px) {
+  .login-card { border-radius: 12px; }
+  .login-card__corpo { padding: 1.5rem; }
+}
