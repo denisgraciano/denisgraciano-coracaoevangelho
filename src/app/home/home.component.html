@@ -1,5 +1,4 @@
 <div class="home-container">
-    <!-- Hero Section -->
     <section class="hero-section">
         <div class="hero-content">
             <div class="hero-text">
@@ -16,7 +15,6 @@
         </div>
     </section>
 
-    <!-- Cursos em Destaque -->
     <section class="cursos-destaque" id="cursos">
         <div class="section-header">
             <h2>Cursos em Destaque</h2>
@@ -41,12 +39,7 @@
                     </div>
 
                     <div class="curso-preco">
-                        <span class="preco-promocional" *ngIf="curso.precoPromocional">
-                            R$ {{ curso.precoPromocional | number:'1.2-2' }}
-                        </span>
-                        <span class="preco-original" [class.riscado]="curso.precoPromocional">
-                            R$ {{ curso.preco | number:'1.2-2' }}
-                        </span>
+                        <span class="badge-gratuito" *ngIf="curso.gratuito">Gratuito</span>
                     </div>
 
                     <a [routerLink]="['/curso', curso.id]" class="btn-curso">Ver Detalhes</a>
@@ -55,7 +48,6 @@
         </div>
     </section>
 
-    <!-- Categorias de Cursos -->
     <section class="categorias-section">
         <div class="section-header">
             <h2>Categorias de Cursos</h2>
@@ -74,53 +66,31 @@
         </div>
     </section>
 
-    <!-- Próximos Cursos -->
-    <section class="proximos-cursos">
+    <section class="palestras-section">
         <div class="section-header">
-            <h2>Próximos Cursos</h2>
-            <p>Não perca as próximas oportunidades de aprendizado</p>
+            <h2>{{ tituloPalestras }}</h2>
+            <p>{{ subtituloPalestras }}</p>
         </div>
 
         <div class="timeline">
-            <div class="timeline-item" *ngFor="let curso of proximosCursos">
+            <div class="timeline-item" *ngFor="let palestra of palestrasExibicao">
                 <div class="timeline-date">
-                    <span class="dia">{{ extrairDia(curso.dataInicio) }}</span>
-                    <span class="mes">{{ extrairMes(curso.dataInicio) }}</span>
+                    <span class="dia">{{ extrairDia(palestra.data) }}</span>
+                    <span class="mes">{{ extrairMes(palestra.data) }}</span>
                 </div>
                 <div class="timeline-content">
-                    <h4>{{ curso.titulo }}</h4>
-                    <p>{{ curso.horario }} - {{ curso.modalidade }}</p>
-                    <a [routerLink]="['/curso', curso.id]" class="timeline-link">Saiba mais →</a>
+                    <h4>{{ palestra.titulo }}</h4>
+                    <p>{{ palestra.horario || 'Horário sob consulta' }} - {{ palestra.modalidade || palestra.local }}</p>
+                    <a [routerLink]="['/palestra', palestra.id]" class="timeline-link" *ngIf="palestra.id">Saiba mais →</a>
                 </div>
+            </div>
+            
+            <div class="empty-state" *ngIf="palestrasExibicao.length === 0">
+                <p>Nenhuma palestra encontrada no momento.</p>
             </div>
         </div>
     </section>
 
-    <!-- Depoimentos -->
-    <section class="depoimentos-section">
-        <div class="section-header">
-            <h2>O que nossos alunos dizem</h2>
-            <p>Experiências reais de transformação e aprendizado</p>
-        </div>
-
-        <div class="depoimentos-grid">
-            <div class="depoimento-card" *ngFor="let depoimento of depoimentos">
-                <div class="depoimento-content">
-                    <div class="aspas">"</div>
-                    <p>{{ depoimento.texto }}</p>
-                </div>
-                <div class="depoimento-autor">
-                    <img [src]="depoimento.avatar" [alt]="depoimento.nome" />
-                    <div class="autor-info">
-                        <h4>{{ depoimento.nome }}</h4>
-                        <span>{{ depoimento.curso }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Newsletter -->
     <section class="newsletter-section">
         <div class="newsletter-content">
             <h2>Mantenha-se atualizado</h2>
@@ -133,4 +103,3 @@
         </div>
     </section>
 </div>
-`,

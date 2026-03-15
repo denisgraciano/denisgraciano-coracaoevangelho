@@ -1,303 +1,326 @@
-    .inscricao-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+// Variáveis locais — idealmente centralizadas em styles.scss (padrão do projeto)
+$cor-primaria:   #2c5aa0;
+$cor-primaria-dark: #1e3d6f;
+$cor-erro:       #d32f2f;   // aumentado de #ff4757 para atingir contraste 4.5:1 (WCAG AA)
+$cor-texto:      #333;
+$cor-texto-suave:#555;      // aumentado de #666 para contraste mínimo em fundo branco
+$cor-borda:      #e0e0e0;
+$cor-fundo-card: #ffffff;
+$raio-borda:     10px;
+$sombra-card:    0 2px 4px rgba(0, 0, 0, 0.1);
+
+// Utilitário de acessibilidade — esconde visualmente mas mantém para leitores de tela
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.inscricao-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+// ── Cabeçalho ────────────────────────────────────────────────────
+.inscricao-header {
+  margin-bottom: 30px;
+}
+
+.btn-voltar {
+  background: $cor-primaria;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 14px;
+  transition: background-color 0.3s;
+
+  &:hover,
+  &:focus-visible {
+    background: $cor-primaria-dark;
+    outline: 2px solid $cor-primaria-dark;
+    outline-offset: 2px;
+  }
+}
+
+.curso-info h1 {
+  color: $cor-primaria;
+  margin-bottom: 15px;
+  font-size: 2em;
+}
+
+.curso-resumo {
+  background: $cor-fundo-card;
+  padding: 20px;
+  border-radius: $raio-borda;
+  box-shadow: $sombra-card;
+
+  h2 {
+    color: $cor-texto;
+    margin-bottom: 10px;
+  }
+}
+
+.curso-detalhes {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.detalhe {
+  color: $cor-texto-suave;
+  font-size: 14px;
+
+  // Badge de destaque para "Curso Gratuito"
+  &--destaque {
+    color: #1b5e20;           // verde escuro — contraste > 4.5:1 em fundo branco
+    font-weight: 600;
+    background: #e8f5e9;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+}
+
+// ── Layout principal ──────────────────────────────────────────────
+.formulario-inscricao {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 30px;
+}
+
+.secoes-formulario {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+// ── Seções ────────────────────────────────────────────────────────
+.secao-formulario {
+  background: $cor-fundo-card;
+  padding: 25px;
+  border-radius: $raio-borda;
+  box-shadow: $sombra-card;
+
+  h3 {
+    color: $cor-primaria;
+    margin-bottom: 20px;
+    font-size: 1.3em;
+    border-bottom: 2px solid #e8f4fd;
+    padding-bottom: 10px;
+  }
+
+  &--termos {
+    // Seção de termos sem título visível — usa .sr-only no h3
+    padding-top: 20px;
+  }
+}
+
+// ── Campos ────────────────────────────────────────────────────────
+.campo-grupo {
+  margin-bottom: 20px;
+
+  label {
+    display: block;
+    margin-bottom: 5px;
+    color: $cor-texto;
+    font-weight: 500;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid $cor-borda;
+    border-radius: 5px;
+    font-size: 14px;
+    color: $cor-texto;
+    transition: border-color 0.3s;
+    box-sizing: border-box;
+
+    &:focus,
+    &:focus-visible {
+      outline: none;
+      border-color: $cor-primaria;
+      box-shadow: 0 0 0 3px rgba($cor-primaria, 0.2); // indicador de foco visível
     }
 
-    .inscricao-header {
-        margin-bottom: 30px;
+    &.erro {
+      border-color: $cor-erro;
     }
+  }
+}
 
-    .btn-voltar {
-        background: #2c5aa0;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-bottom: 20px;
-        font-size: 14px;
-        transition: background-color 0.3s;
+.campos-linha {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+
+  // Variante de três colunas (bairro / cidade / estado)
+  &--tres {
+    grid-template-columns: 1fr 1fr auto;
+  }
+}
+
+.campo-pequeno {
+  grid-column: span 1;
+}
+
+.mensagem-erro {
+  color: $cor-erro;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+// ── Checkboxes ────────────────────────────────────────────────────
+.checkbox-grupo {
+  margin-bottom: 15px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 14px;
+  color: $cor-texto;
+
+  input[type="checkbox"] {
+    margin-right: 10px;
+    width: auto;
+    accent-color: $cor-primaria;
+  }
+
+  a {
+    color: $cor-primaria;
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible {
+      text-decoration: underline;
     }
+  }
+}
 
-    .btn-voltar:hover {
-        background: #1e3d6f;
-    }
+// ── Card de resumo (lateral) ──────────────────────────────────────
+// Seção "Forma de pagamento" REMOVIDA — não há mais .opcoes-pagamento
+.resumo-inscricao {
+  position: sticky;
+  top: 20px;
+  height: fit-content;
+}
 
-    .curso-info h1 {
-        color: #2c5aa0;
-        margin-bottom: 15px;
-        font-size: 2em;
-    }
+.resumo-card {
+  background: $cor-fundo-card;
+  padding: 25px;
+  border-radius: $raio-borda;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-    .curso-resumo {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+  h3 {
+    color: $cor-primaria;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+}
 
-    .curso-resumo h2 {
-        color: #333;
-        margin-bottom: 10px;
-    }
+.resumo-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #f0f0f0;
+  gap: 8px;
+}
 
-    .curso-detalhes {
-        display: flex;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
+.resumo-label {
+  color: $cor-texto-suave;
+  font-weight: 500;
+}
 
-    .detalhe {
-        color: #666;
-        font-size: 14px;
-    }
+.resumo-valor {
+  color: $cor-texto;
+  font-weight: bold;
+  text-align: right;
+}
 
-    .formulario-inscricao {
-        display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 30px;
-    }
+// Substituiu .resumo-total — destaque de gratuidade
+.resumo-gratuito {
+  text-align: center;
+  margin: 20px 0;
+  padding: 12px;
+  background: #e8f5e9;
+  border-radius: 8px;
+  border: 2px solid #a5d6a7;
+}
 
-    .secoes-formulario {
-        display: flex;
-        flex-direction: column;
-        gap: 30px;
-    }
+.gratuito-label {
+  font-size: 1.1em;
+  font-weight: bold;
+  color: #1b5e20;
+}
 
-    .secao-formulario {
-        background: white;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+// ── Botão de envio ────────────────────────────────────────────────
+.btn-finalizar {
+  background: $cor-primaria;
+  color: #fff;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+  margin-top: 8px;
 
-    .secao-formulario h3 {
-        color: #2c5aa0;
-        margin-bottom: 20px;
-        font-size: 1.3em;
-        border-bottom: 2px solid #e8f4fd;
-        padding-bottom: 10px;
-    }
+  &:hover:not(:disabled),
+  &:focus-visible:not(:disabled) {
+    background: $cor-primaria-dark;
+    outline: 2px solid $cor-primaria-dark;
+    outline-offset: 2px;
+  }
 
-    .campo-grupo {
-        margin-bottom: 20px;
-    }
+  &:disabled {
+    background: #bdbdbd;
+    cursor: not-allowed;
+    color: #fff;
+  }
+}
 
-    .campo-grupo label {
-        display: block;
-        margin-bottom: 5px;
-        color: #333;
-        font-weight: 500;
-    }
+// ── Responsivo ────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .inscricao-container {
+    padding: 15px;
+  }
 
-    .campo-grupo input,
-    .campo-grupo select,
-    .campo-grupo textarea {
-        width: 100%;
-        padding: 12px;
-        border: 2px solid #e0e0e0;
-        border-radius: 5px;
-        font-size: 14px;
-        transition: border-color 0.3s;
-    }
+  .formulario-inscricao {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 
-    .campo-grupo input:focus,
-    .campo-grupo select:focus,
-    .campo-grupo textarea:focus {
-        outline: none;
-        border-color: #2c5aa0;
-    }
+  .campos-linha,
+  .campos-linha--tres {
+    grid-template-columns: 1fr;
+  }
 
-    .campo-grupo input.erro,
-    .campo-grupo select.erro {
-        border-color: #ff4757;
-    }
+  .curso-detalhes {
+    flex-direction: column;
+    gap: 10px;
+  }
 
-    .campos-linha {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-    }
-
-    .campo-pequeno {
-        grid-column: span 1;
-    }
-
-    .mensagem-erro {
-        color: #ff4757;
-        font-size: 12px;
-        margin-top: 5px;
-    }
-
-    .opcoes-pagamento {
-        display: flex;
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .opcao-pagamento {
-        display: flex;
-        align-items: center;
-        padding: 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-
-    .opcao-pagamento:hover {
-        border-color: #2c5aa0;
-        background: #f8f9fa;
-    }
-
-    .opcao-pagamento input[type="radio"] {
-        margin-right: 15px;
-        width: auto;
-    }
-
-    .opcao-conteudo {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .opcao-titulo {
-        font-weight: bold;
-        color: #333;
-    }
-
-    .opcao-descricao {
-        font-size: 12px;
-        color: #666;
-    }
-
-    .checkbox-grupo {
-        margin-bottom: 15px;
-    }
-
-    .checkbox-label {
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-        font-size: 14px;
-    }
-
-    .checkbox-label input[type="checkbox"] {
-        margin-right: 10px;
-        width: auto;
-    }
-
-    .checkbox-label a {
-        color: #2c5aa0;
-        text-decoration: none;
-    }
-
-    .checkbox-label a:hover {
-        text-decoration: underline;
-    }
-
-    .resumo-inscricao {
-        position: sticky;
-        top: 20px;
-        height: fit-content;
-    }
-
-    .resumo-card {
-        background: white;
-        padding: 25px;
-        border-radius: 10px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .resumo-card h3 {
-        color: #2c5aa0;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .resumo-item {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 15px;
-        padding-bottom: 15px;
-        border-bottom: 1px solid #f0f0f0;
-    }
-
-    .resumo-label {
-        color: #666;
-        font-weight: 500;
-    }
-
-    .resumo-valor {
-        color: #333;
-        font-weight: bold;
-    }
-
-    .resumo-total {
-        display: flex;
-        justify-content: space-between;
-        margin: 20px 0;
-        padding: 15px 0;
-        border-top: 2px solid #2c5aa0;
-        border-bottom: 2px solid #2c5aa0;
-    }
-
-    .total-label {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: #2c5aa0;
-    }
-
-    .total-valor {
-        font-size: 1.2em;
-        font-weight: bold;
-        color: #2c5aa0;
-    }
-
-    .btn-finalizar {
-        background: #2c5aa0;
-        color: white;
-        border: none;
-        padding: 15px 25px;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        width: 100%;
-        transition: background-color 0.3s;
-    }
-
-    .btn-finalizar:hover:not(:disabled) {
-        background: #1e3d6f;
-    }
-
-    .btn-finalizar:disabled {
-        background: #ccc;
-        cursor: not-allowed;
-    }
-
-    @media (max-width: 768px) {
-        .inscricao-container {
-            padding: 15px;
-        }
-
-        .formulario-inscricao {
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        .campos-linha {
-            grid-template-columns: 1fr;
-        }
-
-        .curso-detalhes {
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .resumo-inscricao {
-            position: static;
-            order: -1;
-        }
-    }
+  // No mobile o resumo sobe para o topo (antes do formulário)
+  .resumo-inscricao {
+    position: static;
+    order: -1;
+  }
+}
