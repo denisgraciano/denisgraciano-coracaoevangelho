@@ -47,6 +47,12 @@ export const routes: Routes = [
       loadComponent: () =>
         import('./area-aluno/certificado/certificado.component').then(m => m.CertificadoComponent),
     },
+    {
+      path: 'perfil',
+      loadComponent: () =>
+        import('./area-aluno/perfil-aluno/perfil-aluno.component')
+          .then(m => m.PerfilAlunoComponent),
+    },
   ],
 },
   { path: '**', redirectTo: '' }

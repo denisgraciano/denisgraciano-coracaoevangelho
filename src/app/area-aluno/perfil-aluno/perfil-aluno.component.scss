@@ -1,0 +1,389 @@
+// src/app/area-aluno/perfil-aluno/perfil-aluno.component.scss
+:host { display: block; }
+
+// ── Página ────────────────────────────────────────────────────
+.perfil-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+
+  &__header {
+    background: linear-gradient(135deg, #2c5aa0 0%, #1e3d6f 100%);
+    color: #fff;
+    border-radius: 0 0 1rem 1rem;
+    margin: 0 -1.5rem 2rem;
+    padding: 2rem 1.5rem;
+  }
+
+  &__voltar {
+    display: inline-block;
+    color: #a8c8f8;
+    font-size: 0.875rem;
+    text-decoration: none;
+    margin-bottom: 0.75rem;
+    &:hover  { text-decoration: underline; }
+    &:focus-visible { outline: 2px solid #a8c8f8; border-radius: 3px; }
+  }
+
+  &__titulo    { font-size: 1.6rem; margin: 0 0 0.25rem; }
+  &__subtitulo { margin: 0; opacity: 0.85; font-size: 0.95rem; }
+}
+
+// ── Layout de duas colunas ────────────────────────────────────
+.perfil-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 2rem;
+  align-items: start;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Coluna do avatar ──────────────────────────────────────────
+.perfil-avatar-col {
+  position: sticky;
+  top: 80px; // abaixo do nav-menu
+}
+
+.avatar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.5rem 1rem;
+  box-shadow: 0 3px 12px rgba(44, 90, 160, 0.08);
+  text-align: center;
+}
+
+.avatar-img-wrap {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.avatar-img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e0e8f5;
+  display: block;
+}
+
+.avatar-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2c5aa0, #4a90d9);
+  color: #fff;
+  font-size: 3rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #e0e8f5;
+  user-select: none;
+}
+
+// Botão câmera sobreposto ao avatar
+.avatar-camera-btn {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #2c5aa0;
+  color: #fff;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid #fff;
+  transition: background 0.2s;
+
+  &:hover { background: #1e3d6f; }
+
+  &:focus-visible {
+    outline: 3px solid #2c5aa0;
+    outline-offset: 2px;
+  }
+}
+
+// Input file visualmente oculto mas acessível
+.avatar-input-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+}
+
+.avatar-nome {
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.avatar-dica {
+  font-size: 0.75rem;
+  color: #aaa;
+  margin: 0;
+}
+
+.avatar-erro {
+  font-size: 0.8rem;
+  color: #c62828;
+  margin: 0;
+}
+
+.btn-remover-avatar {
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0.35rem 0.75rem;
+  font-size: 0.78rem;
+  color: #c62828;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover { background: #fff2f2; }
+
+  &:focus-visible {
+    outline: 2px solid #c62828;
+    outline-offset: 2px;
+  }
+}
+
+// ── Coluna do formulário ──────────────────────────────────────
+.perfil-form-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.perfil-sucesso {
+  background: #e8f7ee;
+  border: 1px solid #a5d6b7;
+  color: #1e7e34;
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  font-size: 0.9rem;
+  margin-bottom: 1.25rem;
+  animation: fadeIn 0.3s ease;
+}
+
+// ── Seções do formulário ──────────────────────────────────────
+.perfil-secao {
+  border: 1px solid #e8edf5;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(44, 90, 160, 0.05);
+
+  // Remove o estilo padrão de fieldset
+  min-width: 0;
+
+  &__titulo {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2c5aa0;
+    margin: 0 0 1.25rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid #e8edf5;
+    display: block;
+    width: 100%;
+  }
+}
+
+// ── Campos ────────────────────────────────────────────────────
+.campos-linha {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.campo-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  &--full    { grid-column: 1 / -1; }
+  &--cep     { max-width: 140px; }
+  &--numero  { max-width: 100px; }
+  &--estado  { max-width: 110px; }
+
+  &__label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #444;
+  }
+
+  &__input {
+    padding: 0.65rem 0.85rem;
+    border: 1.5px solid #dde2ee;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #1a1a2e;
+    background: #fafbfd;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    box-sizing: border-box;
+
+    &::placeholder { color: #bbb; }
+
+    &:focus {
+      outline: none;
+      border-color: #2c5aa0;
+      box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.12);
+      background: #fff;
+    }
+
+    &--erro {
+      border-color: #e53935;
+      background: #fff8f8;
+      &:focus { border-color: #c62828; box-shadow: 0 0 0 3px rgba(229,57,53,0.12); }
+    }
+  }
+
+  &__textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+
+  &__erro {
+    font-size: 0.78rem;
+    color: #c62828; // contraste 4.5:1 sobre branco (WCAG AA)
+    min-height: 1rem;
+  }
+
+  // Wrapper CEP com spinner
+  &__cep-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  &__cep-spinner {
+    position: absolute;
+    right: 0.75rem;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(44, 90, 160, 0.2);
+    border-top-color: #2c5aa0;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+
+  &--checkbox { margin-top: 0.5rem; }
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #444;
+  cursor: pointer;
+  line-height: 1.45;
+
+  input[type="checkbox"] {
+    margin-top: 2px;
+    accent-color: #2c5aa0;
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+}
+
+// ── Ações ─────────────────────────────────────────────────────
+.perfil-acoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-salvar,
+.btn-cancelar {
+  padding: 0.75rem 1.75rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: background 0.2s, opacity 0.2s;
+  text-decoration: none;
+
+  &:focus-visible { outline: 3px solid #2c5aa0; outline-offset: 2px; }
+}
+
+.btn-salvar {
+  background: linear-gradient(135deg, #2c5aa0, #1e3d6f);
+  color: #fff;
+  min-width: 170px;
+  justify-content: center;
+
+  &:hover:not(:disabled) { opacity: 0.9; }
+  &:disabled { opacity: 0.65; cursor: not-allowed; }
+
+  &__spinner {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+  }
+}
+
+.btn-cancelar {
+  background: #e8edf5;
+  color: #2c5aa0;
+  &:hover { background: #d0daea; }
+}
+
+// ── Utilitários ───────────────────────────────────────────────
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ── Animações ─────────────────────────────────────────────────
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// ── Responsivo ─────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .perfil-avatar-col { position: static; }
+  .perfil-acoes { justify-content: stretch; }
+  .btn-salvar, .btn-cancelar { flex: 1; justify-content: center; }
+  .campo-grupo--cep, .campo-grupo--numero, .campo-grupo--estado { max-width: 100%; }
+}

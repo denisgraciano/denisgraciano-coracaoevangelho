@@ -16,6 +16,13 @@
           <p class="dashboard__subtitulo">Continue sua jornada espiritual</p>
         </div>
       </div>
+      <a
+        [routerLink]="['/area-aluno/perfil']"
+        class="btn-perfil"
+        aria-label="Editar meu perfil"
+      >
+      ✏️ Meu Perfil
+      </a>
       <button
         class="btn-logout"
         (click)="logout()"
@@ -23,6 +30,7 @@
       >
         Sair
       </button>
+
     </div>
   </header>
 

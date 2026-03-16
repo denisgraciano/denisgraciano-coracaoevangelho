@@ -1,0 +1,377 @@
+<!-- src/app/area-aluno/perfil-aluno/perfil-aluno.component.html -->
+<div class="perfil-page" role="main">
+
+  <!-- Cabeçalho -->
+  <header class="perfil-page__header">
+    <a [routerLink]="['/area-aluno']" class="perfil-page__voltar" aria-label="Voltar ao dashboard">
+      ← Dashboard
+    </a>
+    <h1 class="perfil-page__titulo">Meu Perfil</h1>
+    <p class="perfil-page__subtitulo">Mantenha seus dados atualizados</p>
+  </header>
+
+  <div class="perfil-layout">
+
+    <!-- ── Coluna do avatar ─────────────────────────────────── -->
+    <aside class="perfil-avatar-col" aria-label="Foto de perfil">
+
+      <div class="avatar-wrap">
+        <div class="avatar-img-wrap">
+          <img
+            *ngIf="avatarPreview; else avatarPlaceholder"
+            [src]="avatarPreview"
+            alt="Foto de perfil de {{ nomeUsuario }}"
+            class="avatar-img"
+          />
+          <ng-template #avatarPlaceholder>
+            <div class="avatar-placeholder" aria-hidden="true">
+              {{ nomeUsuario.charAt(0).toUpperCase() }}
+            </div>
+          </ng-template>
+
+          <!-- Botão de câmera sobreposto -->
+          <label
+            class="avatar-camera-btn"
+            for="input-avatar"
+            aria-label="Alterar foto de perfil"
+            title="Alterar foto"
+          >
+            📷
+          </label>
+        </div>
+
+        <!-- Input file oculto -->
+        <input
+          id="input-avatar"
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          class="avatar-input-hidden"
+          aria-label="Selecionar imagem de perfil"
+          (change)="onArquivoSelecionado($event)"
+        />
+
+        <p class="avatar-nome">{{ nomeUsuario }}</p>
+
+        <!-- Erro de avatar -->
+        <p *ngIf="erroAvatar" class="avatar-erro" role="alert">
+          ⚠️ {{ erroAvatar }}
+        </p>
+
+        <!-- Botão remover avatar -->
+        <button
+          *ngIf="avatarPreview"
+          class="btn-remover-avatar"
+          type="button"
+          (click)="removerAvatar()"
+          aria-label="Remover foto de perfil"
+        >
+          🗑️ Remover foto
+        </button>
+
+        <p class="avatar-dica">JPG, PNG ou WEBP · Máx. 2 MB</p>
+      </div>
+
+    </aside>
+
+    <!-- ── Formulário ──────────────────────────────────────── -->
+    <section class="perfil-form-col" aria-label="Dados do perfil">
+
+      <!-- Feedback de sucesso -->
+      <div
+        *ngIf="salvoComSucesso"
+        class="perfil-sucesso"
+        role="status"
+        aria-live="polite"
+      >
+        ✅ Perfil atualizado com sucesso!
+      </div>
+
+      <form
+        [formGroup]="formulario"
+        (ngSubmit)="salvar()"
+        novalidate
+        aria-label="Formulário de perfil"
+      >
+
+        <!-- ── Dados Pessoais ─────────────────────────────── -->
+        <fieldset class="perfil-secao">
+          <legend class="perfil-secao__titulo">Dados Pessoais</legend>
+
+          <div class="campo-grupo campo-grupo--full">
+            <label for="nomeCompleto" class="campo-grupo__label">Nome Completo *</label>
+            <input
+              id="nomeCompleto" type="text"
+              formControlName="nomeCompleto"
+              class="campo-grupo__input"
+              [class.campo-grupo__input--erro]="invalido('nomeCompleto')"
+              placeholder="Seu nome completo"
+              autocomplete="name"
+              aria-required="true"
+              [attr.aria-invalid]="invalido('nomeCompleto') ? 'true' : null"
+              aria-describedby="nomeCompleto-erro"
+            />
+            <span id="nomeCompleto-erro" class="campo-grupo__erro" role="alert" *ngIf="invalido('nomeCompleto')">
+              <span *ngIf="campo('nomeCompleto')?.errors?.['required']">Nome é obrigatório.</span>
+              <span *ngIf="campo('nomeCompleto')?.errors?.['minlength']">Mínimo de 3 caracteres.</span>
+            </span>
+          </div>
+
+          <div class="campos-linha">
+            <div class="campo-grupo">
+              <label for="email" class="campo-grupo__label">E-mail *</label>
+              <input
+                id="email" type="email"
+                formControlName="email"
+                class="campo-grupo__input"
+                [class.campo-grupo__input--erro]="invalido('email')"
+                placeholder="seu@email.com"
+                autocomplete="email"
+                aria-required="true"
+                [attr.aria-invalid]="invalido('email') ? 'true' : null"
+                aria-describedby="email-erro"
+              />
+              <span id="email-erro" class="campo-grupo__erro" role="alert" *ngIf="invalido('email')">
+                <span *ngIf="campo('email')?.errors?.['required']">E-mail é obrigatório.</span>
+                <span *ngIf="campo('email')?.errors?.['email']">E-mail inválido.</span>
+              </span>
+            </div>
+
+            <div class="campo-grupo">
+              <label for="telefone" class="campo-grupo__label">Telefone *</label>
+              <input
+                id="telefone" type="tel"
+                formControlName="telefone"
+                class="campo-grupo__input"
+                [class.campo-grupo__input--erro]="invalido('telefone')"
+                placeholder="(11) 99999-9999"
+                autocomplete="tel"
+                aria-required="true"
+                [attr.aria-invalid]="invalido('telefone') ? 'true' : null"
+                aria-describedby="telefone-erro"
+              />
+              <span id="telefone-erro" class="campo-grupo__erro" role="alert" *ngIf="invalido('telefone')">
+                Telefone é obrigatório.
+              </span>
+            </div>
+          </div>
+
+          <div class="campos-linha">
+            <div class="campo-grupo">
+              <label for="cpf" class="campo-grupo__label">CPF *</label>
+              <input
+                id="cpf" type="text"
+                formControlName="cpf"
+                class="campo-grupo__input"
+                [class.campo-grupo__input--erro]="invalido('cpf')"
+                placeholder="000.000.000-00"
+                autocomplete="off"
+                aria-required="true"
+                [attr.aria-invalid]="invalido('cpf') ? 'true' : null"
+                aria-describedby="cpf-erro"
+              />
+              <span id="cpf-erro" class="campo-grupo__erro" role="alert" *ngIf="invalido('cpf')">
+                CPF é obrigatório.
+              </span>
+            </div>
+
+            <div class="campo-grupo">
+              <label for="dataNascimento" class="campo-grupo__label">Data de Nascimento *</label>
+              <input
+                id="dataNascimento" type="date"
+                formControlName="dataNascimento"
+                class="campo-grupo__input"
+                [class.campo-grupo__input--erro]="invalido('dataNascimento')"
+                aria-required="true"
+                [attr.aria-invalid]="invalido('dataNascimento') ? 'true' : null"
+                aria-describedby="dataNascimento-erro"
+              />
+              <span id="dataNascimento-erro" class="campo-grupo__erro" role="alert" *ngIf="invalido('dataNascimento')">
+                Data de nascimento é obrigatória.
+              </span>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ── Endereço ───────────────────────────────────── -->
+        <fieldset class="perfil-secao" formGroupName="endereco">
+          <legend class="perfil-secao__titulo">Endereço</legend>
+
+          <div class="campos-linha">
+            <!-- CEP com busca automática -->
+            <div class="campo-grupo campo-grupo--cep">
+              <label for="cep" class="campo-grupo__label">CEP *</label>
+              <div class="campo-grupo__cep-wrap">
+                <input
+                  id="cep" type="text"
+                  formControlName="cep"
+                  class="campo-grupo__input"
+                  [class.campo-grupo__input--erro]="invalido('endereco.cep')"
+                  placeholder="00000-000"
+                  maxlength="9"
+                  (blur)="buscarCep()"
+                  aria-required="true"
+                  [attr.aria-invalid]="invalido('endereco.cep') ? 'true' : null"
+                  aria-describedby="cep-erro"
+                />
+                <span
+                  *ngIf="buscandoCep"
+                  class="campo-grupo__cep-spinner"
+                  aria-label="Buscando CEP..."
+                  role="status"
+                ></span>
+              </div>
+              <span id="cep-erro" class="campo-grupo__erro" role="alert">
+                <span *ngIf="invalido('endereco.cep')">CEP é obrigatório.</span>
+                <span *ngIf="erroCep && !buscandoCep">CEP não encontrado.</span>
+              </span>
+            </div>
+
+            <div class="campo-grupo campo-grupo--logradouro">
+              <label for="logradouro" class="campo-grupo__label">Logradouro *</label>
+              <input
+                id="logradouro" type="text"
+                formControlName="logradouro"
+                class="campo-grupo__input"
+                [class.campo-grupo__input--erro]="invalido('endereco.logradouro')"
+                placeholder="Rua, Avenida..."
+                aria-required="true"
+                [attr.aria-invalid]="invalido('endereco.logradouro') ? 'true' : null"
+              />
+              <span class="campo-grupo__erro" role="alert" *ngIf="invalido('endereco.logradouro')">
+                Logradouro é obrigatório.
+              </span>
+            </div>
+          </div>
+
+          <div class="campos-linha">
+            <div class="campo-grupo campo-grupo--numero">
+              <label for="numero" class="campo-grupo__label">Número *</label>
+              <input
+                id="numero" type="text"
+                formControlName="numero"
+                class="campo-grupo__input"
+                [class.campo-grupo__input--erro]="invalido('endereco.numero')"
+                placeholder="123"
+                aria-required="true"
+                [attr.aria-invalid]="invalido('endereco.numero') ? 'true' : null"
+              />
+              <span class="campo-grupo__erro" role="alert" *ngIf="invalido('endereco.numero')">
+                Número é obrigatório.
+              </span>
+            </div>
+
+            <div class="campo-grupo">
+              <label for="complemento" class="campo-grupo__label">Complemento</label>
+              <input
+                id="complemento" type="text"
+                formControlName="complemento"
+                class="campo-grupo__input"
+                placeholder="Apto, Bloco..."
+              />
+            </div>
+
+            <div class="campo-grupo">
+              <label for="bairro" class="campo-grupo__label">Bairro *</label>
+              <input
+                id="bairro" type="text"
+                formControlName="bairro"
+                class="campo-grupo__input"
+                [class.campo-grupo__input--erro]="invalido('endereco.bairro')"
+                placeholder="Nome do bairro"
+                aria-required="true"
+                [attr.aria-invalid]="invalido('endereco.bairro') ? 'true' : null"
+              />
+              <span class="campo-grupo__erro" role="alert" *ngIf="invalido('endereco.bairro')">
+                Bairro é obrigatório.
+              </span>
+            </div>
+          </div>
+
+          <div class="campos-linha">
+            <div class="campo-grupo">
+              <label for="cidade" class="campo-grupo__label">Cidade *</label>
+              <input
+                id="cidade" type="text"
+                formControlName="cidade"
+                class="campo-grupo__input"
+                [class.campo-grupo__input--erro]="invalido('endereco.cidade')"
+                placeholder="Nome da cidade"
+                aria-required="true"
+                [attr.aria-invalid]="invalido('endereco.cidade') ? 'true' : null"
+              />
+              <span class="campo-grupo__erro" role="alert" *ngIf="invalido('endereco.cidade')">
+                Cidade é obrigatória.
+              </span>
+            </div>
+
+            <div class="campo-grupo campo-grupo--estado">
+              <label for="estado" class="campo-grupo__label">Estado *</label>
+              <select
+                id="estado"
+                formControlName="estado"
+                class="campo-grupo__input"
+                [class.campo-grupo__input--erro]="invalido('endereco.estado')"
+                aria-required="true"
+                [attr.aria-invalid]="invalido('endereco.estado') ? 'true' : null"
+              >
+                <option value="">Selecione</option>
+                <option *ngFor="let uf of estados" [value]="uf">{{ uf }}</option>
+              </select>
+              <span class="campo-grupo__erro" role="alert" *ngIf="invalido('endereco.estado')">
+                Estado é obrigatório.
+              </span>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- ── Preferências ───────────────────────────────── -->
+        <fieldset class="perfil-secao">
+          <legend class="perfil-secao__titulo">Preferências</legend>
+
+          <div class="campo-grupo campo-grupo--full">
+            <label for="observacoes" class="campo-grupo__label">Observações</label>
+            <textarea
+              id="observacoes"
+              formControlName="observacoes"
+              class="campo-grupo__input campo-grupo__textarea"
+              placeholder="Alguma informação adicional que queira compartilhar..."
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="campo-grupo campo-grupo--checkbox">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="receberEmails" />
+              <span>Desejo receber novidades e informações sobre novos cursos por e-mail</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- ── Ações ──────────────────────────────────────── -->
+        <div class="perfil-acoes">
+          <button
+            type="button"
+            class="btn-cancelar"
+            [routerLink]="['/area-aluno']"
+            aria-label="Cancelar e voltar ao dashboard"
+          >
+            Cancelar
+          </button>
+
+          <button
+            type="submit"
+            class="btn-salvar"
+            [disabled]="salvando"
+            aria-label="Salvar alterações do perfil"
+          >
+            <span *ngIf="!salvando">💾 Salvar Alterações</span>
+            <span *ngIf="salvando" class="btn-salvar__spinner" aria-hidden="true"></span>
+            <span *ngIf="salvando" class="sr-only">Salvando...</span>
+          </button>
+        </div>
+
+      </form>
+    </section>
+
+  </div>
+</div>

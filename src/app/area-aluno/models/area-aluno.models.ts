@@ -50,3 +50,34 @@ export interface Certificado {
   dataEmissao: string; // ISO string
   cargaHoraria: number;
 }
+
+export interface EnderecoAluno {
+  cep: string;
+  logradouro: string;
+  numero: string;
+  complemento?: string;
+  bairro: string;
+  cidade: string;
+  estado: string;
+}
+
+export interface PerfilAluno {
+  // Dados de sessão (espelho de Usuario)
+  id: string;
+  nome: string;
+  email: string;
+  avatarBase64?: string;        // data:image/...;base64,...
+
+  // Dados pessoais (mesmos campos de DadosInscricao)
+  nomeCompleto: string;
+  telefone: string;
+  cpf: string;
+  dataNascimento: string;       // YYYY-MM-DD
+
+  // Endereço
+  endereco: EnderecoAluno;
+
+  // Preferências
+  receberEmails: boolean;
+  observacoes?: string;
+}
