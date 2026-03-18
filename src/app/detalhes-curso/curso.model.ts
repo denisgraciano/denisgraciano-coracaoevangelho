@@ -4,8 +4,6 @@ export interface Curso {
     categoria: string;
     instrutor: string;
     duracao: string;
-    preco: number;
-    precoPromocional?: number;
     descricao: string;
     objetivos: string[];
     conteudoProgramatico: string[];

@@ -63,7 +63,7 @@ export class LivroEspiritosComponent {
       const diaDoAno = this.getDiaDoAno(hoje);
       const ano = hoje.getFullYear();
 
-      const seed = (diaDoAno * 31 + ano * 367) % this.perguntas.length;
+      const seed = diaDoAno + ano * 1000;
 
 
 

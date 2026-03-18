@@ -33,14 +33,8 @@
                 </div>
 
                 <div class="preco-container">
-                    <div class="preco-atual" *ngIf="curso.precoPromocional">
-                        R$ {{ curso.precoPromocional | number:'1.2-2' }}
-                    </div>
-                    <div class="preco-original" [class.riscado]="curso.precoPromocional">
-                        R$ {{ curso.preco | number:'1.2-2' }}
-                    </div>
-                    <div class="desconto" *ngIf="curso.precoPromocional">
-                        {{ calcularDesconto() }}% OFF
+                    <div class="preco-gratuito" aria-label="Curso gratuito">
+                        Gratuito
                     </div>
                 </div>
 

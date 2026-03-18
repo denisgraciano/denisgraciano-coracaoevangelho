@@ -18,8 +18,6 @@ export class DetalhesCursoComponent {
     categoria: 'Doutrina Espírita',
     instrutor: 'Prof. João Silva',
     duracao: '8 semanas',
-    preco: 150.00,
-    precoPromocional: 99.00,
     descricao: 'Um curso completo sobre os fundamentos da Doutrina Espírita, abordando os principais conceitos e ensinamentos de Allan Kardec. Ideal para iniciantes que desejam compreender os princípios básicos do Espiritismo.',
     objetivos: [
       'Compreender os princípios fundamentais da Doutrina Espírita',
@@ -97,12 +95,6 @@ export class DetalhesCursoComponent {
     this.router.navigate(['/inscricao', this.curso.id]);
   }
 
-  calcularDesconto(): number {
-    if (this.curso.precoPromocional) {
-      return Math.round(((this.curso.preco - this.curso.precoPromocional) / this.curso.preco) * 100);
-    }
-    return 0;
-  }
 
   formatarData(data: string): string {
     const date = new Date(data);

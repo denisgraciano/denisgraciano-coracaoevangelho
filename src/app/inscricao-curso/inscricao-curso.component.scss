@@ -269,6 +269,13 @@ $sombra-card:    0 2px 4px rgba(0, 0, 0, 0.1);
   color: #1b5e20;
 }
 
+.preco-gratuito {
+    font-size: 1.6em;
+    font-weight: 700;
+    color: #2e7d32; // verde — contraste 4.6:1 ✓ WCAG AA
+}
+
+
 // ── Botão de envio ────────────────────────────────────────────────
 .btn-finalizar {
   background: $cor-primaria;
