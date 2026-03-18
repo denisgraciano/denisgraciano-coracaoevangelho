@@ -25,21 +25,23 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public",
-                "output": "/"
-              },
-              {
-                "glob": "**/*",
-                "input": "src/assets",
-                "output": "assets"
-              }
-            ],
-            "styles": [
-              "src/styles.scss"
-            ],
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "public",
+                  "output": "/"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "src/assets",
+                  "output": "assets"
+                },
+                {
+                  "glob": "static.json",
+                  "input": ".",        
+                  "output": "/"        
+                }
+              ],
             "scripts": []
           },
           "configurations": {
