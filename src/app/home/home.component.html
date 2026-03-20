@@ -81,7 +81,9 @@
                 <div class="timeline-content">
                     <h4>{{ palestra.titulo }}</h4>
                     <p>{{ palestra.horario || 'Horário sob consulta' }} - {{ palestra.modalidade || palestra.local }}</p>
-                    <a [routerLink]="['/palestra', palestra.id]" class="timeline-link" *ngIf="palestra.id">Saiba mais →</a>
+                       <a routerLink="/agenda" class="timeline-link" aria-label="Ver agenda completa de palestras">
+                                Saiba mais →
+                       </a>
                 </div>
             </div>
             
