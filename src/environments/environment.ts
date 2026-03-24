@@ -2,5 +2,6 @@
 // Ambiente de DESENVOLVIMENTO — nunca commitar chaves reais aqui
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api', // URL do back-end local
+  apiUrl: 'https://localhost:59180/api', // URL do back-end local
 };
+

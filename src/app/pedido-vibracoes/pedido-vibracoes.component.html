@@ -35,6 +35,11 @@
                             Nome é obrigatório
                         </div>
                     </div>
+                    <div class="campo-grupo">
+                        <label for="nome">Email *</label>
+                        <input type="text" id="email" formControlName="email" placeholder="Digite seu email"
+                            [class.erro]="formularioPedido.get('email')?.invalid && formularioPedido.get('email')?.touched">
+                    </div>
                 </div>
 
                 <!-- Endereço -->

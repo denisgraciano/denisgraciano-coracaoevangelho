@@ -5,7 +5,7 @@ import { PedidoVibracao } from './pedido-vibracao.model';
 import { HttpClient } from '@angular/common/http';
 import { CepService, Endereco } from '../services/cep.service';
 import { HttpClientModule } from '@angular/common/http';
-
+import { PedidoVibracaoService } from '../services/pedido-vibracao.service';
 
 @Component({
   selector: 'app-pedido-vibracoes',
@@ -20,7 +20,7 @@ export class PedidoVibracoesComponent {
   enviandoPedido = false;
   erro?: string;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private cepService: CepService) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private cepService: CepService,  private pedidoVibracaoService: PedidoVibracaoService) {
     this.formularioPedido = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
       endereco: this.fb.group({
@@ -75,8 +75,8 @@ export class PedidoVibracoesComponent {
 
       // Aqui você faria a chamada para o backend
       // Exemplo de estrutura para chamada HTTP:
-      /*
-      this.pedidosService.enviarPedido(pedidoData).subscribe({
+      
+      this.pedidoVibracaoService.enviarPedido(pedidoData).subscribe({
         next: (response) => {
           this.enviandoPedido = false;
           this.pedidoEnviado = true;
@@ -87,7 +87,7 @@ export class PedidoVibracoesComponent {
           alert('Erro ao enviar pedido. Tente novamente.');
         }
       });
-      */
+     
 
       // Simulação de envio
       setTimeout(() => {
