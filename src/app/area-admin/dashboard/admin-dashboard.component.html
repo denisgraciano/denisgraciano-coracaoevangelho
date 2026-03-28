@@ -1,0 +1,91 @@
+<!-- src/app/area-admin/dashboard/admin-dashboard.component.html -->
+<div class="admin-dashboard">
+
+  <div class="admin-page-header">
+    <h1 class="admin-page-titulo">Dashboard</h1>
+    <p class="admin-page-subtitulo">Visão geral da plataforma</p>
+  </div>
+
+  <!-- Loading state -->
+  <div *ngIf="carregando" class="admin-loading" role="status" aria-label="Carregando dados">
+    <div class="admin-loading__spinner"></div>
+    <p>Carregando dados...</p>
+  </div>
+
+  <!--
+    Cards de estatísticas.
+
+    ATENÇÃO AO PADRÃO DE ACESSIBILIDADE:
+    aria-label="{{ valor }}" causa NG8002 no strict mode do Angular porque o
+    compilador interpreta o binding de interpolação como property binding em
+    atributos não reconhecidos. A forma correta para valores dinâmicos é
+    sempre [attr.aria-label]="expressao".
+  -->
+  <div *ngIf="!carregando" class="dashboard-stats" role="region" aria-label="Estatísticas gerais">
+
+    <a routerLink="/admin/cursos" class="stat-card stat-card--azul"
+       [attr.aria-label]="erros['cursos'] ? 'Cursos indisponível' : stats.totalCursos + ' cursos cadastrados'">
+      <div class="stat-card__icone" aria-hidden="true">🎓</div>
+      <div class="stat-card__info">
+        <span class="stat-card__valor">{{ erros['cursos'] ? '—' : stats.totalCursos }}</span>
+        <span class="stat-card__label">Cursos</span>
+        <span *ngIf="erros['cursos']" class="stat-card__aviso" aria-label="Endpoint não disponível">⚠️</span>
+      </div>
+    </a>
+
+    <a routerLink="/admin/usuarios" class="stat-card stat-card--verde"
+       [attr.aria-label]="erros['usuarios'] ? 'Alunos indisponível' : stats.totalAlunos + ' alunos cadastrados'">
+      <div class="stat-card__icone" aria-hidden="true">👥</div>
+      <div class="stat-card__info">
+        <span class="stat-card__valor">{{ erros['usuarios'] ? '—' : stats.totalAlunos }}</span>
+        <span class="stat-card__label">Alunos</span>
+        <span *ngIf="erros['usuarios']" class="stat-card__aviso" aria-label="Endpoint não disponível">⚠️</span>
+      </div>
+    </a>
+
+    <a routerLink="/admin/matriculas" class="stat-card stat-card--laranja"
+       [attr.aria-label]="erros['matriculas'] ? 'Matrículas indisponível' : stats.totalMatriculas + ' matrículas realizadas'">
+      <div class="stat-card__icone" aria-hidden="true">📋</div>
+      <div class="stat-card__info">
+        <span class="stat-card__valor">{{ erros['matriculas'] ? '—' : stats.totalMatriculas }}</span>
+        <span class="stat-card__label">Matrículas</span>
+        <span *ngIf="erros['matriculas']" class="stat-card__aviso" aria-label="Endpoint não disponível">⚠️</span>
+      </div>
+    </a>
+
+    <a routerLink="/admin/pedidos" class="stat-card stat-card--roxo"
+       [attr.aria-label]="erros['pedidos'] ? 'Pedidos indisponível' : stats.totalPedidos + ' pedidos não lidos'">
+      <div class="stat-card__icone" aria-hidden="true">🙏</div>
+      <div class="stat-card__info">
+        <span class="stat-card__valor">{{ erros['pedidos'] ? '—' : stats.totalPedidos }}</span>
+        <span class="stat-card__label">Pedidos não lidos</span>
+        <span *ngIf="erros['pedidos']" class="stat-card__aviso" aria-label="Endpoint não disponível">⚠️</span>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- Ações rápidas -->
+  <div *ngIf="!carregando" class="dashboard-acoes" role="region" aria-label="Ações rápidas">
+    <h2 class="dashboard-acoes__titulo">Ações rápidas</h2>
+    <div class="dashboard-acoes__grid">
+      <a routerLink="/admin/cursos/novo" class="acao-card" aria-label="Criar novo curso">
+        <span aria-hidden="true">➕</span>
+        <span>Novo Curso</span>
+      </a>
+      <a routerLink="/admin/matriculas" class="acao-card" aria-label="Ver todas as matrículas">
+        <span aria-hidden="true">📋</span>
+        <span>Ver Matrículas</span>
+      </a>
+      <a routerLink="/admin/pedidos" class="acao-card" aria-label="Ver pedidos de vibração">
+        <span aria-hidden="true">🙏</span>
+        <span>Ver Pedidos</span>
+      </a>
+      <a routerLink="/admin/usuarios" class="acao-card" aria-label="Gerenciar usuários">
+        <span aria-hidden="true">👥</span>
+        <span>Gerenciar Usuários</span>
+      </a>
+    </div>
+  </div>
+
+</div>

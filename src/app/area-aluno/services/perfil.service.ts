@@ -50,7 +50,15 @@ export class PerfilService {
       email: usuario.email,
     };
 
-    const atualizado: PerfilAluno = { ...atual, ...dados };
+    // CORREÇÃO TS2322: garantir email: string explicitamente.
+    // O spread de `dados` (Partial<PerfilAluno>) pode trazer email?: string,
+    // mas PerfilAluno exige email: string. O fallback para atual.email
+    // (que é sempre string) resolve o conflito.
+    const atualizado: PerfilAluno = {
+      ...atual,
+      ...dados,
+      email: dados.email ?? atual.email,
+    };
 
     // Persiste no localStorage
     localStorage.setItem(this.chave(), JSON.stringify(atualizado));

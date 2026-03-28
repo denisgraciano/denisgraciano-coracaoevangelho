@@ -1,0 +1,91 @@
+<!-- src/app/area-admin/cursos/form-curso/form-curso.component.html -->
+<div class="admin-page">
+
+  <div class="admin-page-header">
+    <div>
+      <h1 class="admin-page-titulo">{{ modoEdicao ? 'Editar Curso' : 'Novo Curso' }}</h1>
+      <p class="admin-page-subtitulo">{{ modoEdicao ? 'Altere os dados do curso' : 'Preencha os dados para criar um novo curso' }}</p>
+    </div>
+    <a routerLink="/admin/cursos" class="btn btn--secundario">← Voltar</a>
+  </div>
+
+  <div *ngIf="carregando" class="admin-loading" role="status">
+    <div class="admin-loading__spinner"></div>
+    <p>Carregando...</p>
+  </div>
+
+  <div *ngIf="erro" class="admin-alert admin-alert--erro" role="alert">⚠️ {{ erro }}</div>
+
+  <form *ngIf="!carregando" [formGroup]="form" (ngSubmit)="salvar()" class="admin-form" novalidate
+        [attr.aria-label]="modoEdicao ? 'Formulário de edição de curso' : 'Formulário de criação de curso'">
+
+    <div class="admin-card">
+      <div class="form-grupo">
+        <label for="titulo" class="form-label">Título <span aria-label="obrigatório">*</span></label>
+        <input id="titulo" type="text" formControlName="titulo" class="form-input"
+               [class.invalido]="f['titulo'].invalid && f['titulo'].touched"
+               placeholder="Ex: Fundamentos do Espiritismo"
+               aria-required="true" />
+        <span *ngIf="f['titulo'].invalid && f['titulo'].touched" class="form-erro" role="alert">
+          Título obrigatório (mínimo 3 caracteres)
+        </span>
+      </div>
+
+      <div class="form-grupo">
+        <label for="descricao" class="form-label">Descrição <span aria-label="obrigatório">*</span></label>
+        <textarea id="descricao" formControlName="descricao" class="form-input form-textarea"
+                  [class.invalido]="f['descricao'].invalid && f['descricao'].touched"
+                  rows="4" placeholder="Descreva o conteúdo do curso..."
+                  aria-required="true"></textarea>
+        <span *ngIf="f['descricao'].invalid && f['descricao'].touched" class="form-erro" role="alert">
+          Descrição obrigatória (mínimo 10 caracteres)
+        </span>
+      </div>
+
+      <div class="form-row">
+        <div class="form-grupo">
+          <label for="instrutor" class="form-label">Instrutor <span aria-label="obrigatório">*</span></label>
+          <input id="instrutor" type="text" formControlName="instrutor" class="form-input"
+                 [class.invalido]="f['instrutor'].invalid && f['instrutor'].touched"
+                 placeholder="Nome do instrutor" aria-required="true" />
+          <span *ngIf="f['instrutor'].invalid && f['instrutor'].touched" class="form-erro" role="alert">
+            Instrutor obrigatório
+          </span>
+        </div>
+
+        <div class="form-grupo">
+          <label for="categoriaId" class="form-label">Categoria</label>
+          <select id="categoriaId" formControlName="categoriaId" class="form-input form-select">
+            <option [ngValue]="null">Sem categoria</option>
+            <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nome }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-grupo">
+        <label for="imagemUrl" class="form-label">URL da Imagem <span aria-label="obrigatório">*</span></label>
+        <input id="imagemUrl" type="url" formControlName="imagemUrl" class="form-input"
+               [class.invalido]="f['imagemUrl'].invalid && f['imagemUrl'].touched"
+               placeholder="https://..." aria-required="true" />
+        <span *ngIf="f['imagemUrl'].invalid && f['imagemUrl'].touched" class="form-erro" role="alert">
+          URL da imagem obrigatória
+        </span>
+      </div>
+
+      <div class="form-grupo">
+        <label class="form-checkbox">
+          <input type="checkbox" formControlName="certificadoDisponivel" />
+          <span>Certificado disponível para este curso</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-acoes">
+      <a routerLink="/admin/cursos" class="btn btn--secundario">Cancelar</a>
+      <button type="submit" class="btn btn--primario" [disabled]="salvando">
+        {{ salvando ? 'Salvando...' : (modoEdicao ? 'Salvar alterações' : 'Criar curso') }}
+      </button>
+    </div>
+
+  </form>
+</div>
