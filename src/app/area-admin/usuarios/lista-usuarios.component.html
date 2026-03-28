@@ -64,6 +64,26 @@
         </div>
 
         <div class="form-grupo">
+          <label for="email-usuario" class="form-label">
+            E-mail <span aria-label="obrigatório">*</span>
+          </label>
+          <input id="email-usuario" type="email" formControlName="email" class="form-input"
+                 [class.invalido]="f['email'].invalid && f['email'].touched"
+                 placeholder="email@exemplo.com"
+                 aria-required="true" />
+          <span *ngIf="f['email'].invalid && f['email'].touched" class="form-erro" role="alert">
+            E-mail obrigatório e deve ser válido
+          </span>
+        </div>
+
+        <div class="form-grupo">
+          <label for="avatar-usuario" class="form-label">URL do Avatar</label>
+          <input id="avatar-usuario" type="url" formControlName="avatarUrl" class="form-input"
+                 placeholder="https://... (deixe vazio para remover)" />
+          <small class="form-dica">Deixe em branco para remover o avatar atual.</small>
+        </div>
+
+        <div class="form-grupo">
           <label for="role-usuario" class="form-label">
             Perfil de acesso <span aria-label="obrigatório">*</span>
           </label>

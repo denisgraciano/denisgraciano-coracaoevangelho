@@ -127,26 +127,8 @@ export class AdminService {
   }
 
   /**
-   * Edita nome e role de um usuário.
+   * Edita nome, email, avatarUrl e role de um usuário.
    * Endpoint: PUT /api/admin/usuarios/{id}
-   *
-   * ⚠️  Este endpoint ainda não existe no backend — ver GitHub Issue abaixo.
-   * Ao implementar no .NET:
-   *   [HttpPut("{id}")]
-   *   [Authorize(Roles = "admin")]
-   *   public async Task<IActionResult> EditarUsuario(string id,
-   *       [FromBody] EditarUsuarioAdminDto dto, CancellationToken ct)
-   *   {
-   *       var usuario = await _usuarioRepo.GetTrackedByIdAsync(id, ct)
-   *           ?? throw new KeyNotFoundException("Usuário não encontrado.");
-   *       usuario.Nome = dto.Nome.Trim();
-   *       usuario.Role = dto.Role; // "aluno" ou "admin"
-   *       await _usuarioRepo.SaveChangesAsync(ct);
-   *       return Ok(ApiResponse<UsuarioResponseDto>.Ok(Map(usuario)));
-   *   }
-   *
-   * DTO necessário no backend:
-   *   public record EditarUsuarioAdminDto(string Nome, string Role);
    */
   editarUsuario(id: string, payload: EditarUsuarioPayload): Observable<UsuarioAdmin> {
     return this.http

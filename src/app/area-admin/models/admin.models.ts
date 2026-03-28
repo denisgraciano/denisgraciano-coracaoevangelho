@@ -110,6 +110,8 @@ export interface UsuarioAdmin {
 /** Payload para edição de usuário pelo admin */
 export interface EditarUsuarioPayload {
   nome: string;
+  email: string;
+  avatarUrl: string | null;
   role: 'aluno' | 'admin';
 }
 

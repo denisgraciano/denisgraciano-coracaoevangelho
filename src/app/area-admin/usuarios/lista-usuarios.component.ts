@@ -37,6 +37,8 @@ export class ListaUsuariosComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.form = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.required, Validators.email]],
+      avatarUrl: [null as string | null],
       role: ['aluno', Validators.required],
     });
     this.carregar();
@@ -72,6 +74,8 @@ export class ListaUsuariosComponent implements OnInit, OnDestroy {
     this.sucesso = '';
     this.form.setValue({
       nome: usuario.nome,
+      email: usuario.email,
+      avatarUrl: usuario.avatarUrl ?? null,
       role: usuario.role,
     });
   }
@@ -90,8 +94,16 @@ export class ListaUsuariosComponent implements OnInit, OnDestroy {
     this.salvando = true;
     this.erro = '';
 
+    const { nome, email, avatarUrl, role } = this.form.value;
+    const payload = {
+      nome,
+      email,
+      avatarUrl: avatarUrl?.trim() || null,
+      role,
+    };
+
     this.adminService
-      .editarUsuario(this.usuarioEmEdicao.id, this.form.value)
+      .editarUsuario(this.usuarioEmEdicao.id, payload)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: usuarioAtualizado => {
