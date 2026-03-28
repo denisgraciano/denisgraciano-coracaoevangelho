@@ -19,7 +19,7 @@ export interface RespostaInscricao {
 export class InscricaoService {
 
   // URL base vem do environment — nunca hard-coded
-  private readonly endpoint = `${environment.apiUrl}/inscricoes`;
+  private readonly endpoint = `${environment.apiUrl}/api/inscricoes`;
 
   constructor(private http: HttpClient) {}
 
