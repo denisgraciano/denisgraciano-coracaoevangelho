@@ -1,0 +1,194 @@
+// src/app/area-admin/dashboard/admin-dashboard.component.scss
+// (importa os utilitários — em projeto real, estes viriam de _admin-utils.scss)
+
+// ── Variáveis ──────────────────────────────────────────────────
+$azul:    #4f9cf9;
+$verde:   #22c55e;
+$laranja: #f59e0b;
+$roxo:    #a78bfa;
+$erro:    #ef4444;
+
+// ── Dashboard ──────────────────────────────────────────────────
+.admin-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+// ── Page header ────────────────────────────────────────────────
+.admin-page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-page-titulo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1a1f2e;
+  margin: 0;
+}
+
+.admin-page-subtitulo {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+// ── Loading ────────────────────────────────────────────────────
+.admin-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 48px;
+  color: #666;
+
+  &__spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid #e2e8f0;
+    border-top-color: $azul;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+// ── Alert ──────────────────────────────────────────────────────
+.admin-alert {
+  padding: 14px 18px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &--erro {
+    background: rgba($erro, 0.08);
+    color: darken($erro, 10%);
+    border: 1px solid rgba($erro, 0.2);
+  }
+}
+
+// ── Stats cards ────────────────────────────────────────────────
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border-left: 4px solid transparent;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $azul;
+    outline-offset: 2px;
+  }
+
+  &--azul    { border-left-color: $azul;    .stat-card__icone { background: rgba($azul, 0.12); } }
+  &--verde   { border-left-color: $verde;   .stat-card__icone { background: rgba($verde, 0.12); } }
+  &--laranja { border-left-color: $laranja; .stat-card__icone { background: rgba($laranja, 0.12); } }
+  &--roxo    { border-left-color: $roxo;    .stat-card__icone { background: rgba($roxo, 0.12); } }
+
+  &__icone {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__valor {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #1a1f2e;
+    line-height: 1;
+  }
+
+  &__label {
+    font-size: 0.82rem;
+    color: #666;
+    font-weight: 500;
+  }
+}
+
+// ── Ações rápidas ──────────────────────────────────────────────
+.dashboard-acoes {
+  &__titulo {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1a1f2e;
+    margin: 0 0 14px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+}
+
+.acao-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px 16px;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e8ecf0;
+  text-decoration: none;
+  color: #333;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: center;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+
+  span:first-child {
+    font-size: 1.6rem;
+  }
+
+  &:hover {
+    background: #f0f6ff;
+    border-color: $azul;
+    transform: translateY(-1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $azul;
+    outline-offset: 2px;
+  }
+}
+
+@media (max-width: 600px) {
+  .dashboard-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}

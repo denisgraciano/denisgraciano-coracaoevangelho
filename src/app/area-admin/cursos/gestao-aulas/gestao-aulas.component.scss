@@ -1,0 +1,130 @@
+// src/app/area-admin/cursos/gestao-aulas/gestao-aulas.component.scss
+@import '../../_admin-utils';
+
+.titulo-curso {
+  color: $azul;
+  font-weight: 600;
+}
+
+.breadcrumb {
+  display: inline-block;
+  font-size: 0.82rem;
+  color: #666;
+  text-decoration: none;
+  margin-bottom: 4px;
+
+  &:hover { color: $azul; }
+}
+
+// ── Formulário inline ──────────────────────────────────────────
+.aula-form-card {
+  margin-bottom: 24px;
+  border: 2px solid $azul;
+
+  &__titulo {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #1a1f2e;
+    margin: 0 0 18px;
+  }
+}
+
+// ── Lista de aulas ─────────────────────────────────────────────
+.aulas-lista-admin {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aula-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 1px solid #e8ecf0;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &.editando {
+    border-color: $azul;
+    box-shadow: 0 0 0 3px rgba($azul, 0.12);
+  }
+
+  &:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  &__ordem {
+    width: 32px;
+    height: 32px;
+    background: #f0f6ff;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: $azul;
+    flex-shrink: 0;
+  }
+
+  &__info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  &__titulo {
+    font-size: 0.9rem;
+    color: #1a1f2e;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__meta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 0.78rem;
+    color: #888;
+
+    span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
+
+  &__acoes {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: $azul;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  text-decoration: underline;
+
+  &:hover { color: darken($azul, 10%); }
+}
+
+@media (max-width: 600px) {
+  .aula-item {
+    flex-wrap: wrap;
+
+    &__acoes {
+      width: 100%;
+      justify-content: flex-end;
+    }
+  }
+}

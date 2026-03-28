@@ -1,0 +1,92 @@
+<!-- src/app/area-admin/cursos/lista-cursos/lista-cursos.component.html -->
+<div class="admin-page">
+
+  <div class="admin-page-header">
+    <div>
+      <h1 class="admin-page-titulo">Cursos</h1>
+      <p class="admin-page-subtitulo">Gerencie os cursos da plataforma</p>
+    </div>
+    <a routerLink="/admin/cursos/novo" class="btn btn--primario" aria-label="Criar novo curso">
+      ➕ Novo Curso
+    </a>
+  </div>
+
+  <div *ngIf="carregando" class="admin-loading" role="status" aria-live="polite">
+    <div class="admin-loading__spinner"></div>
+    <p>Carregando cursos...</p>
+  </div>
+
+  <div *ngIf="erro" class="admin-alert admin-alert--erro" role="alert">⚠️ {{ erro }}</div>
+
+  <!-- Modal de confirmação de exclusão -->
+  <div *ngIf="confirmarExclusaoId" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Confirmar exclusão">
+    <div class="modal">
+      <p class="modal__texto">Tem certeza que deseja excluir este curso? Esta ação não pode ser desfeita.</p>
+      <div class="modal__acoes">
+        <button class="btn btn--secundario" (click)="cancelarExclusao()" [disabled]="excluindo">Cancelar</button>
+        <button class="btn btn--perigo" (click)="excluir(confirmarExclusaoId)" [disabled]="excluindo">
+          {{ excluindo ? 'Excluindo...' : 'Excluir' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!carregando && !erro">
+
+    <p *ngIf="cursos.length === 0" class="admin-vazio">Nenhum curso cadastrado ainda. <a routerLink="/admin/cursos/novo">Criar o primeiro</a>.</p>
+
+    <div *ngIf="cursos.length > 0" class="tabela-container" role="region" aria-label="Lista de cursos">
+      <table class="tabela" aria-label="Cursos cadastrados">
+        <thead>
+          <tr>
+            <th scope="col">Curso</th>
+            <th scope="col">Categoria</th>
+            <th scope="col">Instrutor</th>
+            <th scope="col">Aulas</th>
+            <th scope="col">Certificado</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let curso of cursos">
+            <td>
+              <div class="curso-info">
+                <img [src]="curso.imagemUrl" [alt]="curso.titulo" class="curso-thumb" loading="lazy" />
+                <div>
+                  <strong>{{ curso.titulo }}</strong>
+                  <p class="curso-desc">{{ curso.descricao | slice:0:80 }}{{ curso.descricao.length > 80 ? '...' : '' }}</p>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="badge badge--categoria">{{ curso.categoria ?? '—' }}</span>
+            </td>
+            <td>{{ curso.instrutor }}</td>
+            <td>
+              <span class="badge badge--neutro">{{ curso.totalAulas }} aulas</span>
+            </td>
+            <td>
+              <span [class]="curso.certificadoDisponivel ? 'badge badge--verde' : 'badge badge--cinza'">
+                {{ curso.certificadoDisponivel ? 'Sim' : 'Não' }}
+              </span>
+            </td>
+            <td>
+              <div class="acoes">
+                <a [routerLink]="['/admin/cursos', curso.id, 'editar']"
+                   class="btn-acao btn-acao--editar"
+                   [attr.aria-label]="'Editar curso ' + curso.titulo">✏️</a>
+                <a [routerLink]="['/admin/cursos', curso.id, 'aulas']"
+                   class="btn-acao btn-acao--aulas"
+                   [attr.aria-label]="'Gerenciar aulas de ' + curso.titulo">🎬</a>
+                <button class="btn-acao btn-acao--excluir"
+                        (click)="confirmarExclusao(curso.id)"
+                        [attr.aria-label]="'Excluir curso ' + curso.titulo">🗑️</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

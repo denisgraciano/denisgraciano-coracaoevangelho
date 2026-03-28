@@ -1,0 +1,153 @@
+// src/app/area-admin/pedidos/lista-pedidos.component.scss
+@import '../_admin-utils';
+
+.badge-nao-lidos {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba($erro, 0.12);
+  color: darken($erro, 8%);
+  margin-left: 10px;
+}
+
+.pedidos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pedido-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1.5px solid #e8ecf0;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &--lido {
+    opacity: 0.72;
+    background: #fafafa;
+  }
+
+  &--expandido {
+    border-color: $azul;
+    box-shadow: 0 0 0 3px rgba($azul, 0.1);
+    opacity: 1;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: 100%;
+    padding: 14px 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    flex-wrap: wrap;
+    transition: background 0.15s;
+
+    &:hover { background: #f8fafc; }
+    &:focus-visible { outline: 2px solid $azul; outline-offset: -2px; }
+  }
+
+  &__remetente {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+
+    &--nao-lido { background: $erro; box-shadow: 0 0 0 3px rgba($erro, 0.2); }
+    &--lido     { background: $cinza; }
+  }
+
+  &__icone { font-size: 1.2rem; flex-shrink: 0; }
+
+  &__identificacao {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+  }
+
+  &__nome {
+    font-size: 0.9rem;
+    color: #1a1f2e;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__email { font-size: 0.78rem; color: #888; }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    flex-shrink: 0;
+  }
+
+  &__local { font-size: 0.78rem; color: #666; }
+  &__data  { font-size: 0.78rem; color: #888; white-space: nowrap; }
+  &__chevron { font-size: 0.7rem; color: #aaa; }
+
+  &__body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    padding: 0 18px;
+
+    &--visivel {
+      max-height: 600px;
+      padding: 0 18px 18px;
+    }
+  }
+
+  &__texto {
+    margin: 0 0 16px;
+    padding: 14px 16px;
+    background: #f8fafc;
+    border-left: 3px solid $azul;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.9rem;
+    color: #334155;
+    line-height: 1.6;
+    white-space: pre-wrap;
+  }
+
+  &__acoes {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+}
+
+.pedido-lido-label {
+  font-size: 0.82rem;
+  color: darken($verde, 12%);
+  font-weight: 600;
+}
+
+.btn--sm {
+  padding: 6px 14px;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 600px) {
+  .pedido-card__header { flex-direction: column; align-items: flex-start; }
+  .pedido-card__meta   { width: 100%; }
+}

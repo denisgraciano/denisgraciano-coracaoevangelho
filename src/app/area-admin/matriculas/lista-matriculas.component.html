@@ -1,0 +1,75 @@
+<!-- src/app/area-admin/matriculas/lista-matriculas.component.html -->
+<div class="admin-page">
+
+  <div class="admin-page-header">
+    <div>
+      <h1 class="admin-page-titulo">Matrículas</h1>
+      <p class="admin-page-subtitulo">
+        {{ resultado ? resultado.totalItens + ' matrículas no total' : 'Carregando...' }}
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="carregando" class="admin-loading" role="status" aria-live="polite">
+    <div class="admin-loading__spinner"></div>
+    <p>Carregando matrículas...</p>
+  </div>
+
+  <div *ngIf="erro" class="admin-alert admin-alert--erro" role="alert">⚠️ {{ erro }}</div>
+
+  <div *ngIf="!carregando && !erro && resultado">
+
+    <p *ngIf="resultado.items.length === 0" class="admin-vazio">
+      Nenhuma matrícula registrada ainda.
+    </p>
+
+    <div *ngIf="resultado.items.length > 0" class="tabela-container" role="region" aria-label="Lista de matrículas">
+      <table class="tabela" aria-label="Matrículas realizadas">
+        <thead>
+          <tr>
+            <th scope="col">Aluno</th>
+            <th scope="col">Curso</th>
+            <th scope="col">Data</th>
+            <th scope="col">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let m of resultado.items">
+            <td>
+              <div class="usuario-info">
+                <strong>{{ m.usuarioNome }}</strong>
+                <span class="usuario-email">{{ m.usuarioEmail }}</span>
+              </div>
+            </td>
+            <td>{{ m.cursoTitulo }}</td>
+            <td>
+              <span class="data-texto">{{ m.dataMatricula | date:'dd/MM/yyyy' }}</span>
+            </td>
+            <td>
+              <span [class]="m.ativa ? 'badge badge--verde' : 'badge badge--cinza'">
+                {{ m.ativa ? 'Ativa' : 'Inativa' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginação -->
+    <nav *ngIf="resultado.totalPaginas > 1" class="paginacao" aria-label="Navegação de páginas">
+      <button class="paginacao__btn" (click)="irPagina(paginaAtual - 1)"
+              [disabled]="!resultado.temAnterior" aria-label="Página anterior">←</button>
+
+      <button *ngFor="let p of paginas"
+              class="paginacao__btn"
+              [class.ativo]="p === paginaAtual"
+              (click)="irPagina(p)"
+              [attr.aria-label]="'Ir para página ' + p"
+              [attr.aria-current]="p === paginaAtual ? 'page' : null">{{ p }}</button>
+
+      <button class="paginacao__btn" (click)="irPagina(paginaAtual + 1)"
+              [disabled]="!resultado.temProxima" aria-label="Próxima página">→</button>
+    </nav>
+
+  </div>
+</div>

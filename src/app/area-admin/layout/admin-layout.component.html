@@ -1,0 +1,71 @@
+<!-- src/app/area-admin/layout/admin-layout.component.html -->
+<div class="admin-shell" [class.sidebar-fechada]="!sidebarAberta">
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar" role="navigation" aria-label="Menu administrativo">
+    <div class="admin-sidebar__logo">
+      <span class="admin-sidebar__logo-icon" aria-hidden="true">✝</span>
+      <span class="admin-sidebar__logo-text">Admin Panel</span>
+    </div>
+
+    <nav class="admin-sidebar__nav">
+      <ul role="list">
+        <li *ngFor="let menu of menus" role="listitem">
+          <a
+            [routerLink]="menu.route"
+            routerLinkActive="ativo"
+            [routerLinkActiveOptions]="{ exact: menu.route === '/admin' }"
+            class="admin-sidebar__link"
+            [attr.aria-label]="menu.ariaLabel"
+          >
+            <span class="admin-sidebar__icon" aria-hidden="true">{{ menu.icon }}</span>
+            <span class="admin-sidebar__label">{{ menu.label }}</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="admin-sidebar__footer">
+      <a routerLink="/area-aluno" class="admin-sidebar__link admin-sidebar__link--secondary"
+         aria-label="Ir para área do aluno">
+        <span aria-hidden="true">🎓</span>
+        <span class="admin-sidebar__label">Área do Aluno</span>
+      </a>
+      <button class="admin-sidebar__link admin-sidebar__link--danger"
+              (click)="logout()" aria-label="Sair do sistema">
+        <span aria-hidden="true">🚪</span>
+        <span class="admin-sidebar__label">Sair</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="admin-main">
+
+    <!-- Topbar -->
+    <header class="admin-topbar" role="banner">
+      <button
+        class="admin-topbar__toggle"
+        (click)="toggleSidebar()"
+        [attr.aria-expanded]="sidebarAberta"
+        aria-label="Alternar menu lateral"
+      >
+        <span aria-hidden="true">☰</span>
+      </button>
+
+      <span class="admin-topbar__titulo">Painel Administrativo</span>
+
+      <div class="admin-topbar__usuario">
+        <span class="admin-topbar__avatar" aria-hidden="true">👤</span>
+        <span class="admin-topbar__nome">{{ nomeAdmin }}</span>
+        <span class="admin-topbar__badge" role="img" aria-label="Administrador">Admin</span>
+      </div>
+    </header>
+
+    <!-- Conteúdo das páginas -->
+    <main class="admin-content" role="main" id="conteudo-principal">
+      <router-outlet />
+    </main>
+
+  </div>
+</div>

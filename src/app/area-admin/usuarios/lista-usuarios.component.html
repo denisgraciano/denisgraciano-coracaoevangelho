@@ -1,0 +1,156 @@
+<!-- src/app/area-admin/usuarios/lista-usuarios.component.html -->
+<div class="admin-page">
+
+  <div class="admin-page-header">
+    <div>
+      <h1 class="admin-page-titulo">Usuários</h1>
+      <p class="admin-page-subtitulo">
+        {{ resultado ? resultado.totalItens + ' usuários cadastrados' : 'Carregando...' }}
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="carregando" class="admin-loading" role="status" aria-live="polite">
+    <div class="admin-loading__spinner"></div>
+    <p>Carregando usuários...</p>
+  </div>
+
+  <div *ngIf="erro && !usuarioEmEdicao" class="admin-alert admin-alert--erro" role="alert">⚠️ {{ erro }}</div>
+  <div *ngIf="sucesso" class="admin-alert admin-alert--sucesso" role="status">✅ {{ sucesso }}</div>
+
+  <!-- Modal de edição -->
+  <div *ngIf="usuarioEmEdicao" class="modal-overlay" role="dialog" aria-modal="true"
+       [attr.aria-label]="'Editar usuário ' + usuarioEmEdicao.nome">
+
+    <div class="modal modal--medio">
+      <header class="modal__cabecalho">
+        <h2 class="modal__titulo">Editar Usuário</h2>
+        <button class="modal__fechar" (click)="fecharModal()" aria-label="Fechar modal">✕</button>
+      </header>
+
+      <!-- Info readonly do usuário -->
+      <div class="modal__info-usuario">
+        <div class="usuario-avatar usuario-avatar--modal" aria-hidden="true">
+          <img *ngIf="usuarioEmEdicao.avatarUrl" [src]="usuarioEmEdicao.avatarUrl"
+               [alt]="usuarioEmEdicao.nome" />
+          <span *ngIf="!usuarioEmEdicao.avatarUrl" class="usuario-avatar__inicial">
+            {{ inicial(usuarioEmEdicao.nome) }}
+          </span>
+        </div>
+        <div>
+          <p class="modal__usuario-email">{{ usuarioEmEdicao.email }}</p>
+          <p class="modal__usuario-data">
+            Cadastrado em {{ usuarioEmEdicao.dataCadastro | date:'dd/MM/yyyy' }}
+          </p>
+        </div>
+      </div>
+
+      <div *ngIf="erro" class="admin-alert admin-alert--erro" role="alert">⚠️ {{ erro }}</div>
+
+      <form [formGroup]="form" (ngSubmit)="salvar()" class="admin-form" novalidate
+            aria-label="Formulário de edição de usuário">
+
+        <div class="form-grupo">
+          <label for="nome-usuario" class="form-label">
+            Nome <span aria-label="obrigatório">*</span>
+          </label>
+          <input id="nome-usuario" type="text" formControlName="nome" class="form-input"
+                 [class.invalido]="f['nome'].invalid && f['nome'].touched"
+                 placeholder="Nome completo do usuário"
+                 aria-required="true" />
+          <span *ngIf="f['nome'].invalid && f['nome'].touched" class="form-erro" role="alert">
+            Nome obrigatório (mínimo 2 caracteres)
+          </span>
+        </div>
+
+        <div class="form-grupo">
+          <label for="role-usuario" class="form-label">
+            Perfil de acesso <span aria-label="obrigatório">*</span>
+          </label>
+          <select id="role-usuario" formControlName="role" class="form-input form-select"
+                  aria-required="true">
+            <option value="aluno">🎓 Aluno — acesso somente à área do aluno</option>
+            <option value="admin">🔑 Admin — acesso completo ao painel administrativo</option>
+          </select>
+          <small class="form-dica" *ngIf="f['role'].value === 'admin'">
+            ⚠️ Permissão de administrador dá acesso total ao painel. Use com cautela.
+          </small>
+        </div>
+
+        <div class="modal__acoes">
+          <button type="button" class="btn btn--secundario"
+                  (click)="fecharModal()" [disabled]="salvando">Cancelar</button>
+          <button type="submit" class="btn btn--primario" [disabled]="salvando">
+            {{ salvando ? 'Salvando...' : 'Salvar alterações' }}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <!-- Tabela de usuários -->
+  <div *ngIf="!carregando && resultado">
+
+    <p *ngIf="resultado.items.length === 0" class="admin-vazio">Nenhum usuário cadastrado.</p>
+
+    <div *ngIf="resultado.items.length > 0" class="tabela-container" role="region"
+         aria-label="Lista de usuários">
+      <table class="tabela" aria-label="Usuários cadastrados">
+        <thead>
+          <tr>
+            <th scope="col">Usuário</th>
+            <th scope="col">E-mail</th>
+            <th scope="col">Perfil</th>
+            <th scope="col">Cadastro</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let u of resultado.items">
+            <td>
+              <div class="usuario-cell">
+                <div class="usuario-avatar" aria-hidden="true">
+                  <img *ngIf="u.avatarUrl" [src]="u.avatarUrl" [alt]="u.nome" />
+                  <span *ngIf="!u.avatarUrl" class="usuario-avatar__inicial">{{ inicial(u.nome) }}</span>
+                </div>
+                <strong>{{ u.nome }}</strong>
+              </div>
+            </td>
+            <td class="usuario-email">{{ u.email }}</td>
+            <td>
+              <span [class]="u.role === 'admin' ? 'badge badge--admin' : 'badge badge--aluno'">
+                {{ u.role === 'admin' ? '🔑 Admin' : '🎓 Aluno' }}
+              </span>
+            </td>
+            <td>
+              <span class="data-texto">{{ u.dataCadastro | date:'dd/MM/yyyy' }}</span>
+            </td>
+            <td>
+              <button class="btn-acao btn-acao--editar"
+                      (click)="abrirEdicao(u)"
+                      [attr.aria-label]="'Editar usuário ' + u.nome">✏️</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginação -->
+    <nav *ngIf="resultado.totalPaginas > 1" class="paginacao" aria-label="Navegação de páginas">
+      <button class="paginacao__btn" (click)="irPagina(paginaAtual - 1)"
+              [disabled]="!resultado.temAnterior" aria-label="Página anterior">←</button>
+
+      <button *ngFor="let p of paginas"
+              class="paginacao__btn"
+              [class.ativo]="p === paginaAtual"
+              (click)="irPagina(p)"
+              [attr.aria-label]="'Ir para página ' + p"
+              [attr.aria-current]="p === paginaAtual ? 'page' : null">{{ p }}</button>
+
+      <button class="paginacao__btn" (click)="irPagina(paginaAtual + 1)"
+              [disabled]="!resultado.temProxima" aria-label="Próxima página">→</button>
+    </nav>
+
+  </div>
+</div>

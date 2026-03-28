@@ -1,0 +1,141 @@
+<!-- src/app/area-admin/cursos/gestao-aulas/gestao-aulas.component.html -->
+<div class="admin-page">
+
+  <div class="admin-page-header">
+    <div>
+      <a [routerLink]="['/admin/cursos']" class="breadcrumb" aria-label="Voltar para lista de cursos">← Cursos</a>
+      <h1 class="admin-page-titulo">
+        Aulas: <span class="titulo-curso">{{ curso?.titulo ?? '...' }}</span>
+      </h1>
+      <p class="admin-page-subtitulo">{{ curso?.aulas?.length ?? 0 }} aula(s) cadastrada(s)</p>
+    </div>
+    <button *ngIf="modoFormulario === 'oculto'" class="btn btn--primario"
+            (click)="abrirNovaAula()" aria-label="Adicionar nova aula">
+      ➕ Nova Aula
+    </button>
+  </div>
+
+  <div *ngIf="carregando" class="admin-loading" role="status">
+    <div class="admin-loading__spinner"></div>
+    <p>Carregando aulas...</p>
+  </div>
+
+  <div *ngIf="erro" class="admin-alert admin-alert--erro" role="alert">⚠️ {{ erro }}</div>
+
+  <!-- Modal de confirmação de exclusão -->
+  <div *ngIf="confirmarExclusaoId" class="modal-overlay" role="dialog" aria-modal="true" aria-label="Confirmar exclusão de aula">
+    <div class="modal">
+      <p class="modal__texto">Deseja excluir esta aula? Esta ação não pode ser desfeita.</p>
+      <div class="modal__acoes">
+        <button class="btn btn--secundario" (click)="cancelarExclusao()" [disabled]="excluindo">Cancelar</button>
+        <button class="btn btn--perigo" (click)="excluir(confirmarExclusaoId!)" [disabled]="excluindo">
+          {{ excluindo ? 'Excluindo...' : 'Excluir' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulário inline nova/editar aula -->
+  <div *ngIf="modoFormulario !== 'oculto'" class="admin-card aula-form-card" role="region"
+       [attr.aria-label]="modoFormulario === 'novo' ? 'Formulário nova aula' : 'Formulário edição de aula'">
+    <h2 class="aula-form-card__titulo">
+      {{ modoFormulario === 'novo' ? '➕ Nova Aula' : '✏️ Editar Aula' }}
+    </h2>
+
+    <form [formGroup]="form" (ngSubmit)="salvar()" novalidate class="admin-form">
+      <div class="form-row">
+        <div class="form-grupo form-grupo--flex2">
+          <label for="titulo" class="form-label">Título <span aria-label="obrigatório">*</span></label>
+          <input id="titulo" type="text" formControlName="titulo" class="form-input"
+                 [class.invalido]="f['titulo'].invalid && f['titulo'].touched"
+                 placeholder="Título da aula" aria-required="true" />
+          <span *ngIf="f['titulo'].invalid && f['titulo'].touched" class="form-erro" role="alert">
+            Título obrigatório (mínimo 3 caracteres)
+          </span>
+        </div>
+
+        <div class="form-grupo">
+          <label for="ordem" class="form-label">Ordem <span aria-label="obrigatório">*</span></label>
+          <input id="ordem" type="number" formControlName="ordem" class="form-input"
+                 [class.invalido]="f['ordem'].invalid && f['ordem'].touched"
+                 min="1" aria-required="true" />
+          <span *ngIf="f['ordem'].invalid && f['ordem'].touched" class="form-erro" role="alert">
+            Ordem inválida
+          </span>
+        </div>
+
+        <div class="form-grupo">
+          <label for="duracaoMinutos" class="form-label">Duração (min) <span aria-label="obrigatório">*</span></label>
+          <input id="duracaoMinutos" type="number" formControlName="duracaoMinutos" class="form-input"
+                 [class.invalido]="f['duracaoMinutos'].invalid && f['duracaoMinutos'].touched"
+                 min="1" aria-required="true" />
+          <span *ngIf="f['duracaoMinutos'].invalid && f['duracaoMinutos'].touched" class="form-erro" role="alert">
+            Duração inválida
+          </span>
+        </div>
+      </div>
+
+      <div class="form-grupo">
+        <label for="youtubeVideoId" class="form-label">YouTube Video ID <span aria-label="obrigatório">*</span></label>
+        <input id="youtubeVideoId" type="text" formControlName="youtubeVideoId" class="form-input"
+               [class.invalido]="f['youtubeVideoId'].invalid && f['youtubeVideoId'].touched"
+               placeholder="Ex: dQw4w9WgXcQ (apenas o ID, não a URL completa)"
+               aria-required="true"
+               aria-describedby="yt-dica" />
+        <small id="yt-dica" class="form-dica">
+          Copie apenas o ID do vídeo do YouTube (ex: em youtube.com/watch?v=<strong>dQw4w9WgXcQ</strong>)
+        </small>
+        <span *ngIf="f['youtubeVideoId'].invalid && f['youtubeVideoId'].touched" class="form-erro" role="alert">
+          Video ID obrigatório
+        </span>
+      </div>
+
+      <div class="form-grupo">
+        <label for="descricao" class="form-label">Descrição</label>
+        <textarea id="descricao" formControlName="descricao" class="form-input form-textarea"
+                  rows="2" placeholder="Descrição opcional da aula..."></textarea>
+      </div>
+
+      <div class="form-acoes">
+        <button type="button" class="btn btn--secundario" (click)="fecharFormulario()">Cancelar</button>
+        <button type="submit" class="btn btn--primario" [disabled]="salvando">
+          {{ salvando ? 'Salvando...' : (modoFormulario === 'novo' ? 'Adicionar aula' : 'Salvar alterações') }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista de aulas -->
+  <div *ngIf="!carregando" class="aulas-lista-admin" role="list" aria-label="Lista de aulas do curso">
+
+    <p *ngIf="aulasOrdenadas.length === 0 && modoFormulario === 'oculto'" class="admin-vazio">
+      Nenhuma aula cadastrada. <button class="link-btn" (click)="abrirNovaAula()">Adicionar a primeira aula</button>.
+    </p>
+
+    <div *ngFor="let aula of aulasOrdenadas; let i = index"
+         class="aula-item"
+         [class.editando]="aula.id === aulaEditandoId"
+         role="listitem">
+      <div class="aula-item__ordem" aria-hidden="true">{{ aula.ordem }}</div>
+      <div class="aula-item__info">
+        <strong class="aula-item__titulo">{{ aula.titulo }}</strong>
+        <span class="aula-item__meta">
+          <span>🎬 {{ aula.youtubeVideoId }}</span>
+          <span>⏱ {{ aula.duracaoMinutos }} min</span>
+          <span *ngIf="aula.descricao">📝 {{ aula.descricao | slice:0:60 }}...</span>
+        </span>
+      </div>
+      <div class="aula-item__acoes">
+        <button class="btn-acao btn-acao--editar"
+                (click)="abrirEdicaoAula(aula)"
+                [attr.aria-label]="'Editar aula ' + aula.titulo"
+                [disabled]="modoFormulario !== 'oculto' && aula.id !== aulaEditandoId">✏️</button>
+        <button class="btn-acao btn-acao--excluir"
+                (click)="confirmarExclusao(aula.id)"
+                [attr.aria-label]="'Excluir aula ' + aula.titulo">🗑️</button>
+      </div>
+    </div>
+
+  </div>
+
+</div>
