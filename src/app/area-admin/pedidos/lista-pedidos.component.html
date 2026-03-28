@@ -1,0 +1,121 @@
+<!-- src/app/area-admin/pedidos/lista-pedidos.component.html -->
+<div class="admin-page">
+
+  <div class="admin-page-header">
+    <div>
+      <h1 class="admin-page-titulo">Pedidos de Vibração</h1>
+      <p class="admin-page-subtitulo">
+        {{ resultado ? resultado.totalItens + ' pedidos recebidos' : 'Carregando...' }}
+        <span *ngIf="resultado && totalNaoLidos > 0" class="badge-nao-lidos">
+          {{ totalNaoLidos }} não lido{{ totalNaoLidos > 1 ? 's' : '' }}
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <div *ngIf="carregando" class="admin-loading" role="status" aria-live="polite">
+    <div class="admin-loading__spinner"></div>
+    <p>Carregando pedidos...</p>
+  </div>
+
+  <div *ngIf="erro" class="admin-alert admin-alert--erro" role="alert">⚠️ {{ erro }}</div>
+  <div *ngIf="sucesso" class="admin-alert admin-alert--sucesso" role="status">✅ {{ sucesso }}</div>
+
+  <div *ngIf="!carregando && resultado">
+
+    <p *ngIf="resultado.items.length === 0" class="admin-vazio">
+      Nenhum pedido de vibração recebido ainda.
+    </p>
+
+    <div *ngIf="resultado.items.length > 0" class="pedidos-lista" role="list"
+         aria-label="Pedidos de vibração">
+
+      <div *ngFor="let pedido of resultado.items"
+           class="pedido-card"
+           [class.pedido-card--lido]="pedido.lido"
+           [class.pedido-card--expandido]="pedido.id === pedidoExpandidoId"
+           role="listitem">
+
+        <!-- Cabeçalho clicável para expandir -->
+        <button class="pedido-card__header"
+                (click)="togglePedido(pedido.id)"
+                [attr.aria-expanded]="pedido.id === pedidoExpandidoId"
+                [attr.aria-controls]="'pedido-body-' + pedido.id"
+                [attr.aria-label]="'Pedido de ' + pedido.nome + (pedido.lido ? ' — lido' : ' — não lido') + ', clique para ' + (pedido.id === pedidoExpandidoId ? 'recolher' : 'expandir')">
+
+          <div class="pedido-card__remetente">
+            <!-- Indicador visual de lido/não lido -->
+            <span class="pedido-card__dot"
+                  [class.pedido-card__dot--nao-lido]="!pedido.lido"
+                  [class.pedido-card__dot--lido]="pedido.lido"
+                  [attr.aria-label]="pedido.lido ? 'Lido' : 'Não lido'"
+                  role="img"></span>
+            <span class="pedido-card__icone" aria-hidden="true">🙏</span>
+            <div class="pedido-card__identificacao">
+              <strong class="pedido-card__nome">{{ pedido.nome }}</strong>
+              <span class="pedido-card__email">{{ pedido.email }}</span>
+            </div>
+          </div>
+
+          <div class="pedido-card__meta">
+            <span *ngIf="pedido.cidade" class="pedido-card__local">
+              📍 {{ pedido.cidade }}{{ pedido.estado ? '/' + pedido.estado : '' }}
+            </span>
+            <span class="pedido-card__data">{{ pedido.criadoEm | date:'dd/MM/yyyy HH:mm' }}</span>
+            <span *ngIf="pedido.usuarioNome" class="badge badge--azul">{{ pedido.usuarioNome }}</span>
+            <span *ngIf="!pedido.usuarioId" class="badge badge--cinza">Anônimo</span>
+            <span class="pedido-card__chevron" aria-hidden="true">
+              {{ pedido.id === pedidoExpandidoId ? '▲' : '▼' }}
+            </span>
+          </div>
+
+        </button>
+
+        <!-- Conteúdo expandível -->
+        <div [id]="'pedido-body-' + pedido.id"
+             class="pedido-card__body"
+             [class.pedido-card__body--visivel]="pedido.id === pedidoExpandidoId"
+             role="region"
+             [attr.aria-label]="'Conteúdo do pedido de ' + pedido.nome">
+
+          <blockquote class="pedido-card__texto">{{ pedido.pedido }}</blockquote>
+
+          <div class="pedido-card__acoes">
+            <!-- Botão "Marcar como lido" — só aparece se ainda não lido -->
+            <button *ngIf="!pedido.lido"
+                    class="btn btn--primario btn--sm"
+                    (click)="marcarLido(pedido)"
+                    [disabled]="marcandoLidoIds.has(pedido.id)"
+                    [attr.aria-label]="'Marcar pedido de ' + pedido.nome + ' como lido'">
+              <span *ngIf="!marcandoLidoIds.has(pedido.id)">✅ Marcar como lido</span>
+              <span *ngIf="marcandoLidoIds.has(pedido.id)">Salvando...</span>
+            </button>
+
+            <span *ngIf="pedido.lido" class="pedido-lido-label" aria-label="Pedido lido">
+              ✅ Pedido lido
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Paginação -->
+    <nav *ngIf="resultado.totalPaginas > 1" class="paginacao" aria-label="Navegação de páginas">
+      <button class="paginacao__btn" (click)="irPagina(paginaAtual - 1)"
+              [disabled]="!resultado.temAnterior" aria-label="Página anterior">←</button>
+
+      <button *ngFor="let p of paginas"
+              class="paginacao__btn"
+              [class.ativo]="p === paginaAtual"
+              (click)="irPagina(p)"
+              [attr.aria-label]="'Ir para página ' + p"
+              [attr.aria-current]="p === paginaAtual ? 'page' : null">{{ p }}</button>
+
+      <button class="paginacao__btn" (click)="irPagina(paginaAtual + 1)"
+              [disabled]="!resultado.temProxima" aria-label="Próxima página">→</button>
+    </nav>
+
+  </div>
+</div>

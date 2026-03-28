@@ -26,7 +26,7 @@ interface PedidoVibracaoPayload {
   providedIn: 'root',
 })
 export class PedidoVibracaoService {
-  private readonly endpoint = `${environment.apiUrl}/pedidos-vibracao`;
+  private readonly endpoint = `${environment.apiUrl}/api/pedidos-vibracao`;
 
   constructor(private http: HttpClient) {}
 

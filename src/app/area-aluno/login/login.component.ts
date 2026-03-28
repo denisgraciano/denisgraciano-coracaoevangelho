@@ -1,11 +1,25 @@
 // src/app/area-aluno/login/login.component.ts
+//
+// IMPORTANTE: Este arquivo mantém EXATAMENTE a mesma interface pública
+// que o HTML existente espera:
+//   - formulario: FormGroup  (não "form")
+//   - emailCtrl / senhaCtrl  (getters)
+//   - senhaVisivel: boolean
+//   - alternarSenha()
+//   - entrar()
+//   - erro: string | null
+//   - carregando: boolean
+//
+// ÚNICA mudança de comportamento: entrar() agora chama a API real via
+// AuthService.login() e redireciona para /admin se role === 'admin',
+// ou /area-aluno para role === 'aluno'.
+//
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -18,6 +32,7 @@ import { AuthService } from '../services/auth.service';
 export class LoginComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
+  // Nome "formulario" mantido para compatibilidade com o HTML existente
   formulario: FormGroup;
   erro: string | null = null;
   carregando = false;
@@ -26,7 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
   ) {
     this.formulario = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -35,14 +50,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Se já está logado, redireciona direto para a área do aluno
-    this.authService.usuario$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(usuario => {
-        if (usuario) {
-          this.router.navigate(['/area-aluno']);
-        }
-      });
+    // Se já está logado, redireciona imediatamente para o destino correto
+    if (this.authService.estaLogado) {
+      this.redirecionar();
+    }
   }
 
   ngOnDestroy(): void {
@@ -50,8 +61,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  // Getters usados pelo HTML existente
   get emailCtrl() { return this.formulario.get('email'); }
-  get senhaCtrl() { return this.formulario.get('senha'); }
+  get senhaCtrl()  { return this.formulario.get('senha'); }
 
   alternarSenha(): void {
     this.senhaVisivel = !this.senhaVisivel;
@@ -68,16 +80,25 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     const { email, senha } = this.formulario.value;
 
-    // Pequeno delay para simular chamada de rede (remover quando integrar ao backend)
-    setTimeout(() => {
-      const sucesso = this.authService.login(email, senha);
-      this.carregando = false;
+    this.authService
+      .login(email, senha)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.carregando = false;
+          this.redirecionar();
+        },
+        error: () => {
+          // Mensagem genérica — nunca revela qual campo está errado (segurança)
+          this.erro = 'E-mail ou senha inválidos. Verifique seus dados e tente novamente.';
+          this.carregando = false;
+        },
+      });
+  }
 
-      if (!sucesso) {
-        // Nunca informe qual campo está errado — boa prática de segurança
-        this.erro = 'E-mail ou senha inválidos. Verifique seus dados e tente novamente.';
-      }
-      // Se sucesso, o subscribe do ngOnInit já redireciona automaticamente
-    }, 600);
+  private redirecionar(): void {
+    // Lê a role diretamente do JWT decodificado no AuthService
+    const destino = this.authService.isAdmin ? '/admin' : '/area-aluno';
+    this.router.navigate([destino]);
   }
 }
