@@ -29,7 +29,7 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   formularioInscricao: FormGroup;
-  cursoId: number = 0;
+  cursoId: string = '';
   cursoTitulo: string = 'Fundamentos da Doutrina Espírita';
 
   // Estados de UI
@@ -72,8 +72,7 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
       .subscribe(params => {
         const id = params.get('id');
         if (id) {
-          this.cursoId = parseInt(id, 10);
-          // TODO: this.cursoService.getCurso(this.cursoId)... quando CursoService existir
+          this.cursoId = id;
         }
       });
   }
@@ -146,20 +145,13 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
       ...this.formularioInscricao.value
     };
 
-    this.inscricaoService.inscrever(dadosInscricao)
+    this.inscricaoService.inscrever(this.cursoId, dadosInscricao)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (resposta) => {
+        next: () => {
           this.processandoInscricao = false;
           this.inscricaoRealizada = true;
-
-          // Se o back-end retornar URL de acesso direto, redireciona para ela;
-          // caso contrário, volta para a home após breve delay para o usuário ler a mensagem.
-          if (resposta.acessoUrl) {
-            this.router.navigateByUrl(resposta.acessoUrl);
-          } else {
-            setTimeout(() => this.router.navigate(['/']), 3000);
-          }
+          setTimeout(() => this.router.navigate(['/area-aluno/dashboard']), 2000);
         },
         error: (erro: Error) => {
           this.processandoInscricao = false;
@@ -186,6 +178,6 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
   }
 
   voltar(): void {
-    this.router.navigate(['/curso', this.cursoId]);
+    this.router.navigate(['/detalhes-curso', this.cursoId]);
   }
 }
