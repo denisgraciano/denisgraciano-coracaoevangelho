@@ -20,6 +20,10 @@ interface ApiResponse<T> {
   message: string;
 }
 
+interface CheckMatriculaData {
+  matriculado: boolean;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -35,10 +39,15 @@ export class InscricaoService {
    */
   inscrever(cursoId: string, dados: DadosInscricao): Observable<MatriculaResponse> {
     const body = {
-      nomeCompleto: dados.nomeCompleto,
-      email: dados.email,
-      telefone: dados.telefone ?? null,
-      endereco: dados.endereco ?? null,
+      nomeCompleto:   dados.nomeCompleto,
+      email:          dados.email,
+      telefone:       dados.telefone ?? null,
+      cpf:            dados.cpf ?? null,
+      dataNascimento: dados.dataNascimento ?? null,
+      endereco:       dados.endereco ?? null,
+      observacoes:    dados.observacoes ?? '',
+      aceitaTermos:   dados.aceitaTermos,
+      receberEmails:  dados.receberEmails,
     };
 
     return this.http
@@ -54,9 +63,9 @@ export class InscricaoService {
    */
   verificarMatricula(cursoId: string): Observable<boolean> {
     return this.http
-      .get<ApiResponse<boolean>>(`${this.baseUrl}/${cursoId}/check`)
+      .get<ApiResponse<CheckMatriculaData>>(`${this.baseUrl}/${cursoId}/check`)
       .pipe(
-        map(res => res.data),
+        map(res => res.data.matriculado),
         catchError(() => [false])
       );
   }
