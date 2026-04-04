@@ -1,8 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { Curso } from './curso.model';
+import { InscricaoService } from '../inscricao-curso/inscricao.service';
 
 @Component({
   selector: 'app-detalhes-curso',
@@ -11,7 +14,10 @@ import { Curso } from './curso.model';
   templateUrl: './detalhes-curso.component.html',
   styleUrl: './detalhes-curso.component.scss'
 })
-export class DetalhesCursoComponent {
+export class DetalhesCursoComponent implements OnInit, OnDestroy {
+
+  private destroy$ = new Subject<void>();
+
   curso: Curso = {
     id: 1,
     titulo: 'Fundamentos da Doutrina Espírita',
@@ -66,23 +72,34 @@ export class DetalhesCursoComponent {
     ]
   };
 
+  jaMatriculado = false;
+  private cursoIdStr = '';
+
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private inscricaoService: InscricaoService
   ) { }
 
   ngOnInit() {
-    // Aqui você carregaria o curso baseado no ID da rota
     const cursoId = this.route.snapshot.paramMap.get('id');
     if (cursoId) {
-      // Carregar curso específico baseado no ID
+      this.cursoIdStr = cursoId;
       this.carregarCurso(parseInt(cursoId));
+      this.inscricaoService.verificarMatricula(cursoId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(matriculado => {
+          this.jaMatriculado = matriculado;
+        });
     }
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   carregarCurso(id: number) {
-    // Aqui você faria a chamada para carregar o curso específico
-    // Por enquanto, usando dados de exemplo
     console.log('Carregando curso com ID:', id);
   }
 
@@ -91,10 +108,8 @@ export class DetalhesCursoComponent {
   }
 
   abrirInscricao() {
-    // Navegar para formulário de inscrição ou abrir modal
-    this.router.navigate(['/inscricao', this.curso.id]);
+    this.router.navigate(['/inscricao', this.cursoIdStr || this.curso.id]);
   }
-
 
   formatarData(data: string): string {
     const date = new Date(data);

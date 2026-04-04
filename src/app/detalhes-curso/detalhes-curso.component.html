@@ -38,8 +38,9 @@
                     </div>
                 </div>
 
-                <button class="btn-inscrever" (click)="abrirInscricao()" [disabled]="curso.vagasDisponiveis === 0">
-                    {{ curso.vagasDisponiveis > 0 ? 'Inscrever-se Agora' : 'Esgotado' }}
+                <button class="btn-inscrever" (click)="abrirInscricao()"
+                    [disabled]="curso.vagasDisponiveis === 0 || jaMatriculado">
+                    {{ jaMatriculado ? 'Já matriculado ✓' : (curso.vagasDisponiveis > 0 ? 'Inscrever-se Agora' : 'Esgotado') }}
                 </button>
             </div>
         </div>
@@ -121,8 +122,8 @@
                 </div>
 
                 <button class="btn-inscrever-sidebar" (click)="abrirInscricao()"
-                    [disabled]="curso.vagasDisponiveis === 0">
-                    {{ curso.vagasDisponiveis > 0 ? 'Inscrever-se' : 'Esgotado' }}
+                    [disabled]="curso.vagasDisponiveis === 0 || jaMatriculado">
+                    {{ jaMatriculado ? 'Já matriculado ✓' : (curso.vagasDisponiveis > 0 ? 'Inscrever-se' : 'Esgotado') }}
                 </button>
             </div>
         </div>

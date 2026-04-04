@@ -1,7 +1,7 @@
 // Removidos: formaPagamento (curso gratuito) — campo não é mais necessário.
 // Mantidos todos os dados cadastrais para identificação do aluno.
 export interface DadosInscricao {
-  cursoId: number;
+  cursoId: string;
   nomeCompleto: string;
   email: string;
   telefone: string;
