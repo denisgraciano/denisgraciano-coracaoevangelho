@@ -27,8 +27,10 @@ export const authInterceptor: HttpInterceptorFn = (
 
   return next(reqAutenticada).pipe(
     catchError((erro: HttpErrorResponse) => {
-      // 401 → tenta refresh uma vez, depois deixa o erro passar
-      if (erro.status === 401 && authService.refreshToken) {
+      // 401 → tenta refresh uma vez, desde que a própria requisição
+      // que falhou não seja o endpoint de refresh (evita loop infinito)
+      const isRefreshEndpoint = req.url.includes('/api/auth/refresh');
+      if (erro.status === 401 && !isRefreshEndpoint && authService.refreshToken) {
         return authService.refresh().pipe(
           switchMap(() => {
             const novoToken = authService.accessToken;
