@@ -1,8 +1,20 @@
 [
   {
     "id": 1,
-    "data": "18/07/2025",
+    "titulo": "Aconteceu na Casa Esprita",
+    "data": "2026-04-10",
+    "horario": "20:00",
     "local": "CEAK - Rua Fernando Cortez, 66 - São Paulo/SP",
+    "tema": "EAconteceu na Casa Esprita",
+    "palestrante": "Denis Graciano",
+    "descricao": "Palestra sobre os benefício que a prece traz na vida espiritual e no dia a dia."
+  },
+    {
+    "id": 1,
+    "titulo": "Eficácia da Prece",
+    "data": "2026-05-27",
+    "horario": "20:00",
+    "local": "FEU - Rua Maria CArlota, 66 - São Paulo/SP",
     "tema": "Eficácia da Prece",
     "palestrante": "Denis Graciano",
     "descricao": "Palestra sobre os benefício que a prece traz na vida espiritual e no dia a dia."
