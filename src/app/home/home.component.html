@@ -21,6 +21,11 @@
             <p>Aprenda com nossos especialistas e transforme sua jornada espiritual</p>
         </div>
 
+        <div *ngIf="carregandoCursos" class="loading-cursos">Carregando cursos...</div>
+        <div *ngIf="!carregandoCursos && cursosDestaque.length === 0" class="empty-state">
+            <p>Nenhum curso disponível no momento.</p>
+        </div>
+
         <div class="cursos-grid">
             <div class="curso-card" *ngFor="let curso of cursosDestaque">
                 <div class="curso-imagem">

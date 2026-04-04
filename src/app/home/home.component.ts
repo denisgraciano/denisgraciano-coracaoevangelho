@@ -4,9 +4,10 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Subject, takeUntil, catchError, of } from 'rxjs';
+import { CursosService } from '../services/cursos.service';
 
 export interface CursoDestaque {
-  id: number;
+  id: string;
   titulo: string;
   categoria: string;
   descricao: string;
@@ -44,41 +45,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   emailNewsletter = '';
   private destroy$ = new Subject<void>();
 
-  cursosDestaque: CursoDestaque[] = [
-    {
-      id: 1,
-      titulo: 'Fundamentos da Doutrina Espírita',
-      categoria: 'Doutrina Espírita',
-      descricao: 'Aprenda os conceitos básicos do Espiritismo com Allan Kardec',
-      dataInicio: 'Início Imediato',
-      duracao: '8 semanas',
-      vagasDisponiveis: 12,
-      gratuito: true,
-      imagem: 'assets/images/curso1.jpg'
-    },
-    {
-      id: 2,
-      titulo: 'Mediunidade e Desenvolvimento Espiritual',
-      categoria: 'Mediunidade',
-      descricao: 'Desenvolva suas faculdades mediúnicas com segurança',
-      dataInicio: 'Início Imediato',
-      duracao: '12 semanas',
-      vagasDisponiveis: 8,
-      gratuito: true,
-      imagem: 'assets/images/curso2.jpg'
-    },
-    {
-      id: 3,
-      titulo: 'Gestão de Conflitos com Base Espírita',
-      categoria: 'Desafios do Dia a Dia',
-      descricao: 'Resolva conflitos aplicando princípios espíritas',
-      dataInicio: 'Início Imediato',
-      duracao: '6 semanas',
-      vagasDisponiveis: 15,
-      gratuito: true,
-      imagem: 'assets/images/curso3.jpg'
-    }
-  ];
+  cursosDestaque: CursoDestaque[] = [];
+  carregandoCursos = true;
 
   categorias: Categoria[] = [
     {
@@ -99,15 +67,35 @@ export class HomeComponent implements OnInit, OnDestroy {
   tituloPalestras = 'Próximas Palestras';
   subtituloPalestras = 'Não perca as próximas oportunidades de aprendizado';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private cursosService: CursosService) {}
 
   ngOnInit(): void {
+    this.carregarCursos();
     this.carregarPalestras();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private carregarCursos(): void {
+    this.cursosService.listarCursos()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(cursos => {
+        this.cursosDestaque = cursos.map(c => ({
+          id: c.id,
+          titulo: c.titulo,
+          categoria: c.categoria ?? '',
+          descricao: c.descricao,
+          dataInicio: 'Início Imediato',
+          duracao: `${c.totalAulas} aula${c.totalAulas !== 1 ? 's' : ''}`,
+          vagasDisponiveis: 0,
+          gratuito: true,
+          imagem: c.imagemUrl,
+        }));
+        this.carregandoCursos = false;
+      });
   }
 
   private carregarPalestras(): void {

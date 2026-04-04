@@ -6,6 +6,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Curso } from './curso.model';
 import { InscricaoService } from '../inscricao-curso/inscricao.service';
+import { CursosService } from '../services/cursos.service';
 
 @Component({
   selector: 'app-detalhes-curso',
@@ -19,58 +20,28 @@ export class DetalhesCursoComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
   curso: Curso = {
-    id: 1,
-    titulo: 'Fundamentos da Doutrina Espírita',
-    categoria: 'Doutrina Espírita',
-    instrutor: 'Prof. João Silva',
-    duracao: '8 semanas',
-    descricao: 'Um curso completo sobre os fundamentos da Doutrina Espírita, abordando os principais conceitos e ensinamentos de Allan Kardec. Ideal para iniciantes que desejam compreender os princípios básicos do Espiritismo.',
-    objetivos: [
-      'Compreender os princípios fundamentais da Doutrina Espírita',
-      'Conhecer a obra de Allan Kardec e sua importância',
-      'Desenvolver uma visão clara sobre a vida após a morte',
-      'Entender o processo de reencarnação e evolução espiritual',
-      'Aplicar os ensinamentos espíritas no dia a dia'
-    ],
-    conteudoProgramatico: [
-      'Introdução ao Espiritismo e Allan Kardec',
-      'O Livro dos Espíritos - Conceitos Fundamentais',
-      'A Natureza dos Espíritos e a Comunicação Mediúnica',
-      'Lei de Reencarnação e Evolução Espiritual',
-      'Lei de Causa e Efeito (Carma)',
-      'A Prática da Caridade e do Amor ao Próximo',
-      'Oração e Evangelização no Lar',
-      'Aplicação Prática dos Ensinamentos Espíritas'
-    ],
-    requisitos: [
-      'Interesse genuíno em aprender sobre Espiritismo',
-      'Mente aberta para novos conceitos',
-      'Disponibilidade para participar das aulas semanais',
-      'Não é necessário conhecimento prévio'
-    ],
-    certificacao: 'Certificado de Conclusão',
-    modalidade: 'Presencial',
-    dataInicio: '2025-02-01',
-    dataFim: '2025-03-29',
-    horario: 'Sábados, 14h às 16h',
-    vagas: 30,
-    vagasDisponiveis: 12,
-    imagem: 'assets/images/curso-fundamentos.jpg',
-    nivel: 'Iniciante',
-    tags: ['Espiritismo', 'Allan Kardec', 'Reencarnação', 'Mediunidade'],
-    depoimentos: [
-      {
-        nome: 'Maria Santos',
-        comentario: 'Curso excelente! Me ajudou muito a compreender os fundamentos do Espiritismo de forma clara e objetiva.',
-        nota: 5
-      },
-      {
-        nome: 'Carlos Oliveira',
-        comentario: 'Professor muito didático e conteúdo bem estruturado. Recomendo para quem está começando.',
-        nota: 5
-      }
-    ]
+    id: 0,
+    titulo: '',
+    categoria: '',
+    instrutor: '',
+    duracao: '',
+    descricao: '',
+    objetivos: [],
+    conteudoProgramatico: [],
+    requisitos: [],
+    certificacao: '',
+    modalidade: '',
+    dataInicio: '',
+    dataFim: '',
+    horario: '',
+    vagas: 0,
+    vagasDisponiveis: 0,
+    imagem: '',
+    nivel: '',
+    tags: [],
+    depoimentos: [],
   };
+  carregando = true;
 
   jaMatriculado = false;
   private cursoIdStr = '';
@@ -78,7 +49,8 @@ export class DetalhesCursoComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private inscricaoService: InscricaoService
+    private inscricaoService: InscricaoService,
+    private cursosService: CursosService,
   ) { }
 
   ngOnInit() {
@@ -100,7 +72,34 @@ export class DetalhesCursoComponent implements OnInit, OnDestroy {
   }
 
   carregarCurso(id: number) {
-    console.log('Carregando curso com ID:', id);
+    this.cursosService.obterCurso(String(id))
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(detalhe => {
+        this.carregando = false;
+        if (!detalhe) return;
+        this.curso = {
+          id,
+          titulo: detalhe.titulo,
+          categoria: detalhe.categoria ?? '',
+          instrutor: detalhe.instrutor,
+          duracao: `${detalhe.totalAulas} aula${detalhe.totalAulas !== 1 ? 's' : ''}`,
+          descricao: detalhe.descricao,
+          objetivos: [],
+          conteudoProgramatico: detalhe.aulas.map(a => a.titulo),
+          requisitos: [],
+          certificacao: detalhe.certificadoDisponivel ? 'Certificado de Conclusão' : '',
+          modalidade: '',
+          dataInicio: '',
+          dataFim: '',
+          horario: '',
+          vagas: 0,
+          vagasDisponiveis: 0,
+          imagem: detalhe.imagemUrl,
+          nivel: '',
+          tags: detalhe.categoria ? [detalhe.categoria] : [],
+          depoimentos: [],
+        };
+      });
   }
 
   voltar() {

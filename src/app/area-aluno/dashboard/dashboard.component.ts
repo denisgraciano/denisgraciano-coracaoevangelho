@@ -8,9 +8,7 @@ import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { ProgressoService } from '../services/progresso.service';
 import { CursoAluno, ProgressoCurso, Usuario, Certificado } from '../models/area-aluno.models';
-
-// Mock de dados — substituir por CursoService.listarCursosAluno() quando o backend existir
-import { CURSOS_MOCK } from '../mocks/cursos.mock';
+import { CursosService } from '../../services/cursos.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,7 +30,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private progressoService: ProgressoService,
-    private router: Router
+    private cursosService: CursosService,
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -40,23 +39,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(u => (this.usuario = u));
 
-    // Mock: todos os cursos são "matriculados". Substituir por API.
-    this.cursosMatriculados = CURSOS_MOCK;
+    this.cursosService.listarMeusCursos()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(cursos => {
+        this.cursosMatriculados = cursos;
 
-    // Carrega progressos reativos para cada curso
-    this.cursosMatriculados.forEach(curso => {
-      this.progressoService
-        .obterProgresso(curso.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(p => this.progressos.set(curso.id, p));
-    });
+        cursos.forEach(curso => {
+          this.progressoService
+            .obterProgresso(curso.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(p => this.progressos.set(curso.id, p));
+        });
 
-    // Sugestões: cursos ainda não iniciados (percentual = 0)
-    // Lógica simples — pode ser substituída por recomendação de API
-    this.sugestoes = CURSOS_MOCK.filter(c => {
-      const p = this.progressoService.obterProgressoSnapshot(c.id);
-      return p.percentualConcluido === 0;
-    }).slice(0, 3);
+        this.sugestoes = cursos.filter(c => {
+          const p = this.progressoService.obterProgressoSnapshot(c.id);
+          return p.percentualConcluido === 0;
+        }).slice(0, 3);
+      });
 
     this.certificados = this.progressoService.listarCertificados();
   }

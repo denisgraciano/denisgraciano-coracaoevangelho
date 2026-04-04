@@ -4,11 +4,11 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { switchMap, takeUntil } from 'rxjs/operators';
 
 import { ProgressoService } from '../services/progresso.service';
 import { CursoAluno, Aula, ProgressoCurso } from '../models/area-aluno.models';
-import { CURSOS_MOCK } from '../mocks/cursos.mock';
+import { CursosService } from '../../services/cursos.service';
 
 // Valores padrão usados antes do ngOnInit carregar os dados reais.
 // Evitam o uso de `!` (non-null assertion) e tornam `?.` desnecessário no template.
@@ -51,32 +51,36 @@ export class PlayerAulaComponent implements OnInit, OnDestroy {
     private router: Router,
     private sanitizer: DomSanitizer,
     private progressoService: ProgressoService,
+    private cursosService: CursosService,
   ) {}
 
   ngOnInit(): void {
     this.route.params
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(params => {
-        const cursoId: string = params['cursoId'];
-        const aulaId: string  = params['aulaId'];
+      .pipe(
+        takeUntil(this.destroy$),
+        switchMap(params => {
+          this.carregando = true;
+          const cursoId: string = params['cursoId'];
+          const aulaId: string  = params['aulaId'];
+          return this.cursosService.obterCurso(cursoId).pipe(
+            switchMap(detalhe => {
+              if (!detalhe) {
+                this.router.navigate(['/area-aluno']);
+                return [];
+              }
+              this.curso          = this.cursosService.detalheParaCursoAluno(detalhe);
+              this.aulasOrdenadas = [...this.curso.aulas].sort((a, b) => a.ordem - b.ordem);
 
-        const curso = CURSOS_MOCK.find(c => c.id === cursoId);
-        if (!curso) {
-          this.router.navigate(['/area-aluno']);
-          return;
-        }
+              const aula = this.curso.aulas.find(a => a.id === aulaId) ?? this.aulasOrdenadas[0];
+              this.definirAula(aula ?? AULA_VAZIA);
 
-        this.curso          = curso;
-        this.aulasOrdenadas = [...curso.aulas].sort((a, b) => a.ordem - b.ordem);
-
-        const aula = curso.aulas.find(a => a.id === aulaId) ?? this.aulasOrdenadas[0];
-        this.definirAula(aula ?? AULA_VAZIA);
-
-        // Assina progresso reativo após o curso estar definido
-        this.progressoService
-          .obterProgresso(curso.id)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(p => (this.progresso = p));
+              return this.progressoService.obterProgresso(this.curso.id);
+            }),
+          );
+        }),
+      )
+      .subscribe(p => {
+        if (p) this.progresso = p;
       });
   }
 
