@@ -35,10 +35,15 @@ export class InscricaoService {
    */
   inscrever(cursoId: string, dados: DadosInscricao): Observable<MatriculaResponse> {
     const body = {
-      nomeCompleto: dados.nomeCompleto,
-      email: dados.email,
-      telefone: dados.telefone ?? null,
-      endereco: dados.endereco ?? null,
+      nomeCompleto:   dados.nomeCompleto,
+      email:          dados.email,
+      telefone:       dados.telefone ?? null,
+      cpf:            dados.cpf ?? null,
+      dataNascimento: dados.dataNascimento ?? null,
+      endereco:       dados.endereco ?? null,
+      observacoes:    dados.observacoes ?? null,
+      aceitaTermos:   dados.aceitaTermos,
+      receberEmails:  dados.receberEmails,
     };
 
     return this.http
