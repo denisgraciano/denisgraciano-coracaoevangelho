@@ -21,10 +21,14 @@
             <p>Aprenda com nossos especialistas e transforme sua jornada espiritual</p>
         </div>
 
-        <div class="cursos-grid">
+        <div *ngIf="carregandoCursos" class="loading-cursos">
+            <p>Carregando cursos...</p>
+        </div>
+
+        <div class="cursos-grid" *ngIf="!carregandoCursos">
             <div class="curso-card" *ngFor="let curso of cursosDestaque">
                 <div class="curso-imagem">
-                    <img [src]="curso.imagem" [alt]="curso.titulo" />
+                    <img [src]="curso.imagemUrl" [alt]="curso.titulo" />
                     <div class="curso-categoria">{{ curso.categoria }}</div>
                 </div>
 
@@ -33,17 +37,21 @@
                     <p class="curso-descricao">{{ curso.descricao }}</p>
 
                     <div class="curso-meta">
-                        <span class="meta-item">📅 {{ curso.dataInicio }}</span>
-                        <span class="meta-item">⏰ {{ curso.duracao }}</span>
-                        <span class="meta-item">👥 {{ curso.vagasDisponiveis }} vagas</span>
+                        <span class="meta-item" *ngIf="curso.duracao">⏰ {{ curso.duracao }}</span>
+                        <span class="meta-item" *ngIf="curso.totalAulas > 0">📚 {{ curso.totalAulas }} aulas</span>
+                        <span class="meta-item" *ngIf="curso.vagas > 0">👥 {{ curso.vagas }} vagas</span>
                     </div>
 
                     <div class="curso-preco">
-                        <span class="badge-gratuito" *ngIf="curso.gratuito">Gratuito</span>
+                        <span class="badge-gratuito">Gratuito</span>
                     </div>
 
                     <a [routerLink]="['/curso', curso.id]" class="btn-curso">Ver Detalhes</a>
                 </div>
+            </div>
+
+            <div class="empty-state" *ngIf="cursosDestaque.length === 0">
+                <p>Nenhum curso disponível no momento.</p>
             </div>
         </div>
     </section>

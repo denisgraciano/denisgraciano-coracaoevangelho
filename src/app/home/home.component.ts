@@ -4,17 +4,22 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Subject, takeUntil, catchError, of } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface CursoDestaque {
-  id: number;
+  id: string;
   titulo: string;
   categoria: string;
   descricao: string;
-  dataInicio: string;
-  duracao: string;
-  vagasDisponiveis: number;
-  gratuito: boolean;
-  imagem: string;
+  imagemUrl: string;
+  duracao?: string;
+  vagas: number;
+  totalAulas: number;
+}
+
+interface ApiResponse<T> {
+  success: boolean;
+  data: T;
 }
 
 export interface Palestra {
@@ -44,41 +49,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   emailNewsletter = '';
   private destroy$ = new Subject<void>();
 
-  cursosDestaque: CursoDestaque[] = [
-    {
-      id: 1,
-      titulo: 'Fundamentos da Doutrina Espírita',
-      categoria: 'Doutrina Espírita',
-      descricao: 'Aprenda os conceitos básicos do Espiritismo com Allan Kardec',
-      dataInicio: 'Início Imediato',
-      duracao: '8 semanas',
-      vagasDisponiveis: 12,
-      gratuito: true,
-      imagem: 'assets/images/curso1.jpg'
-    },
-    {
-      id: 2,
-      titulo: 'Mediunidade e Desenvolvimento Espiritual',
-      categoria: 'Mediunidade',
-      descricao: 'Desenvolva suas faculdades mediúnicas com segurança',
-      dataInicio: 'Início Imediato',
-      duracao: '12 semanas',
-      vagasDisponiveis: 8,
-      gratuito: true,
-      imagem: 'assets/images/curso2.jpg'
-    },
-    {
-      id: 3,
-      titulo: 'Gestão de Conflitos com Base Espírita',
-      categoria: 'Desafios do Dia a Dia',
-      descricao: 'Resolva conflitos aplicando princípios espíritas',
-      dataInicio: 'Início Imediato',
-      duracao: '6 semanas',
-      vagasDisponiveis: 15,
-      gratuito: true,
-      imagem: 'assets/images/curso3.jpg'
-    }
-  ];
+  cursosDestaque: CursoDestaque[] = [];
+  carregandoCursos = true;
 
   categorias: Categoria[] = [
     {
@@ -102,12 +74,25 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
+    this.carregarCursos();
     this.carregarPalestras();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  private carregarCursos(): void {
+    this.http.get<ApiResponse<CursoDestaque[]>>(`${environment.apiUrl}/api/cursos`)
+      .pipe(
+        takeUntil(this.destroy$),
+        catchError(() => of(null))
+      )
+      .subscribe(resposta => {
+        this.cursosDestaque = resposta?.data ?? [];
+        this.carregandoCursos = false;
+      });
   }
 
   private carregarPalestras(): void {
