@@ -6,12 +6,20 @@ import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { DadosInscricao } from './dados-inscricao.model';
 
-export interface MatriculaResponse {
+interface AuthData {
+  accessToken: string;
+  refreshToken: string;
+  expira: string;
+  usuario: { id: string; nome: string; email: string; avatarUrl?: string; role: string };
+}
+
+export interface InscricaoResponse {
   id: string;
   cursoId: string;
   cursoTitulo: string;
-  dataMatricula: string; // ISO string
+  dataMatricula: string;
   ativa: boolean;
+  auth: AuthData | null; // Preenchido quando conta criada automaticamente
 }
 
 interface ApiResponse<T> {
@@ -33,7 +41,7 @@ export class InscricaoService {
    * Inscreve o aluno no curso via POST /api/matriculas/{cursoId}.
    * O JWT é injetado automaticamente pelo authInterceptor.
    */
-  inscrever(cursoId: string, dados: DadosInscricao): Observable<MatriculaResponse> {
+  inscrever(cursoId: string, dados: DadosInscricao): Observable<InscricaoResponse> {
     const body = {
       nomeCompleto:   dados.nomeCompleto,
       email:          dados.email,
@@ -44,10 +52,11 @@ export class InscricaoService {
       observacoes:    dados.observacoes ?? null,
       aceitaTermos:   dados.aceitaTermos,
       receberEmails:  dados.receberEmails,
+      senha:          dados.senha || null,
     };
 
     return this.http
-      .post<ApiResponse<MatriculaResponse>>(`${this.baseUrl}/${cursoId}`, body)
+      .post<ApiResponse<InscricaoResponse>>(`${this.baseUrl}/${cursoId}`, body)
       .pipe(
         map(res => res.data),
         catchError(this.tratarErro)

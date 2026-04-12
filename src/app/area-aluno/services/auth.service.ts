@@ -119,6 +119,14 @@ export class AuthService {
       );
   }
 
+  // ── Inicia sessão com dados já obtidos (ex: após inscrição) ──
+  iniciarSessao(auth: { accessToken: string; refreshToken: string; expira: string; usuario: Usuario }): void {
+    localStorage.setItem(KEY_ACCESS_TOKEN,  auth.accessToken);
+    localStorage.setItem(KEY_REFRESH_TOKEN, auth.refreshToken);
+    localStorage.setItem(KEY_USUARIO,       JSON.stringify(auth.usuario));
+    this.usuarioSubject.next(auth.usuario);
+  }
+
   // ── Logout ─────────────────────────────────────────────────
   logout(): void {
     localStorage.removeItem(KEY_USUARIO);
