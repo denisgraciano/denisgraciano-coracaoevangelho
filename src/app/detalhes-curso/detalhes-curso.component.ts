@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Curso } from './curso.model';
 import { InscricaoService } from '../inscricao-curso/inscricao.service';
+import { AuthService } from '../area-aluno/services/auth.service';
 import { ApiResponse } from '../area-admin/models/admin.models';
 import { environment } from '../../environments/environment';
 
@@ -32,7 +33,8 @@ export class DetalhesCursoComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
-    private inscricaoService: InscricaoService
+    private inscricaoService: InscricaoService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -40,11 +42,15 @@ export class DetalhesCursoComponent implements OnInit, OnDestroy {
     if (id) {
       this.cursoId = id;
       this.carregarCurso(id);
-      this.inscricaoService.verificarMatricula(id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(matriculado => {
-          this.jaMatriculado = matriculado;
-        });
+      // Verifica matrícula apenas se o usuário estiver autenticado — evita
+      // que a chamada protegida dispare o fluxo de refresh/logout em visitantes.
+      if (this.authService.estaLogado) {
+        this.inscricaoService.verificarMatricula(id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(matriculado => {
+            this.jaMatriculado = matriculado;
+          });
+      }
     }
   }
 
