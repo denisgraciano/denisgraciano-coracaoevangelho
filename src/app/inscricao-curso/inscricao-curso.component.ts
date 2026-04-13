@@ -17,6 +17,7 @@ import { takeUntil } from 'rxjs/operators';
 import { DadosInscricao } from './dados-inscricao.model';
 import { InscricaoService } from './inscricao.service';
 import { AuthService } from '../area-aluno/services/auth.service';
+import { PerfilService } from '../area-aluno/services/perfil.service';
 import { CepService } from '../services/cep.service';
 
 function senhasIguaisValidator(group: AbstractControl): ValidationErrors | null {
@@ -53,6 +54,7 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
     private router: Router,
     private inscricaoService: InscricaoService,
     private authService: AuthService,
+    private perfilService: PerfilService,
     private cepService: CepService
   ) {
     this.formularioInscricao = this.fb.group({
@@ -160,6 +162,18 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
 
           if (resposta.auth) {
             this.authService.iniciarSessao(resposta.auth);
+            // Pré-popula o perfil com os dados já informados no formulário
+            const v = this.formularioInscricao.value;
+            this.perfilService.prePopularDaInscricao({
+              nomeCompleto:   v.nomeCompleto,
+              email:          v.email,
+              telefone:       v.telefone,
+              cpf:            v.cpf,
+              dataNascimento: v.dataNascimento,
+              endereco:       v.endereco,
+              receberEmails:  v.receberEmails,
+              observacoes:    v.observacoes,
+            });
             setTimeout(() => this.router.navigate(['/area-aluno']), 1500);
           } else {
             // E-mail já tinha conta — redireciona para login
