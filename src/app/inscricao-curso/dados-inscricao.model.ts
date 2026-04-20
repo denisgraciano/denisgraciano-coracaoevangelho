@@ -19,4 +19,5 @@ export interface DadosInscricao {
   observacoes?: string;
   aceitaTermos: boolean;
   receberEmails: boolean;
+  senha: string;
 }

@@ -287,6 +287,70 @@
         </div>
       </section>
 
+      <!-- ── Acesso ─────────────────────────────────── -->
+      <section class="secao-formulario" formGroupName="acesso" aria-labelledby="titulo-acesso">
+        <h3 id="titulo-acesso">Crie sua Senha de Acesso</h3>
+        <p class="secao-descricao">
+          Crie uma senha para acessar a área do aluno e acompanhar seu progresso no curso.
+        </p>
+
+        <div class="campos-linha">
+          <div class="campo-grupo">
+            <label for="senha">Senha *</label>
+            <div class="campo-senha-wrapper">
+              <input [type]="mostrarSenha ? 'text' : 'password'"
+                     id="senha"
+                     formControlName="senha"
+                     placeholder="Mínimo 6 caracteres"
+                     autocomplete="new-password"
+                     aria-required="true"
+                     aria-describedby="erro-senha"
+                     [class.erro]="formularioInscricao.get('acesso.senha')?.invalid && formularioInscricao.get('acesso.senha')?.touched">
+              <button type="button"
+                      class="btn-toggle-senha"
+                      (click)="mostrarSenha = !mostrarSenha"
+                      [attr.aria-label]="mostrarSenha ? 'Ocultar senha' : 'Mostrar senha'">
+                {{ mostrarSenha ? '🙈' : '👁️' }}
+              </button>
+            </div>
+            <span id="erro-senha"
+                  class="mensagem-erro"
+                  role="alert"
+                  *ngIf="formularioInscricao.get('acesso.senha')?.invalid && formularioInscricao.get('acesso.senha')?.touched">
+              <ng-container *ngIf="formularioInscricao.get('acesso.senha')?.errors?.['required']">Senha é obrigatória</ng-container>
+              <ng-container *ngIf="formularioInscricao.get('acesso.senha')?.errors?.['minlength']">A senha deve ter no mínimo 6 caracteres</ng-container>
+            </span>
+          </div>
+
+          <div class="campo-grupo">
+            <label for="confirmarSenha">Confirmar Senha *</label>
+            <div class="campo-senha-wrapper">
+              <input [type]="mostrarConfirmarSenha ? 'text' : 'password'"
+                     id="confirmarSenha"
+                     formControlName="confirmarSenha"
+                     placeholder="Repita a senha"
+                     autocomplete="new-password"
+                     aria-required="true"
+                     aria-describedby="erro-confirmarSenha"
+                     [class.erro]="(formularioInscricao.get('acesso.confirmarSenha')?.invalid || formularioInscricao.get('acesso')?.errors?.['senhasDivergentes']) && formularioInscricao.get('acesso.confirmarSenha')?.touched">
+              <button type="button"
+                      class="btn-toggle-senha"
+                      (click)="mostrarConfirmarSenha = !mostrarConfirmarSenha"
+                      [attr.aria-label]="mostrarConfirmarSenha ? 'Ocultar senha' : 'Mostrar senha'">
+                {{ mostrarConfirmarSenha ? '🙈' : '👁️' }}
+              </button>
+            </div>
+            <span id="erro-confirmarSenha"
+                  class="mensagem-erro"
+                  role="alert"
+                  *ngIf="formularioInscricao.get('acesso.confirmarSenha')?.touched">
+              <ng-container *ngIf="formularioInscricao.get('acesso.confirmarSenha')?.errors?.['required']">Confirmação de senha é obrigatória</ng-container>
+              <ng-container *ngIf="!formularioInscricao.get('acesso.confirmarSenha')?.errors?.['required'] && formularioInscricao.get('acesso')?.errors?.['senhasDivergentes']">As senhas não coincidem</ng-container>
+            </span>
+          </div>
+        </div>
+      </section>
+
       <!-- ── Termos ──────────────────────────────────── -->
       <section class="secao-formulario secao-formulario--termos" aria-labelledby="titulo-termos">
         <h3 id="titulo-termos" class="sr-only">Consentimentos</h3>
@@ -348,7 +412,7 @@
         </button>
         <div class="erro-inscricao" role="alert" *ngIf="erroInscricao">{{ erroInscricao }}</div>
         <div class="sucesso-inscricao" role="status" *ngIf="inscricaoRealizada">
-          Inscrição realizada! Você receberá um e-mail de confirmação em breve.
+          Inscrição realizada! Redirecionando para a área do aluno...
         </div>
       </div>
     </aside>

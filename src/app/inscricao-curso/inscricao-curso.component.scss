@@ -183,6 +183,39 @@ $sombra-card:    0 2px 4px rgba(0, 0, 0, 0.1);
   display: block;
 }
 
+.secao-descricao {
+  font-size: 14px;
+  color: $cor-texto-suave;
+  margin-bottom: 16px;
+}
+
+.campo-senha-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  input {
+    padding-right: 44px !important;
+  }
+
+  .btn-toggle-senha {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    line-height: 1;
+    color: $cor-texto-suave;
+
+    &:focus-visible {
+      outline: 2px solid $cor-primaria;
+      border-radius: 3px;
+    }
+  }
+}
+
 // ── Checkboxes ────────────────────────────────────────────────────
 .checkbox-grupo {
   margin-bottom: 15px;

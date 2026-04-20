@@ -1,6 +1,7 @@
 // src/app/area-aluno/services/perfil.service.ts
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 import { PerfilAluno } from '../models/area-aluno.models';
 import { AuthService } from './auth.service';
 
@@ -29,6 +30,21 @@ export class PerfilService {
       this.lerStorage()
     );
     this.perfil$ = this.perfilSubject.asObservable();
+
+    // Recarrega o perfil do localStorage toda vez que o usuário logado muda.
+    // Isso garante que o perfil aparece após login via formulário de login
+    // (não apenas após inscrição com conta nova).
+    this.authService.usuario$.pipe(
+      map(u => u?.id ?? null),
+      distinctUntilChanged()
+    ).subscribe(userId => {
+      if (userId) {
+        const perfil = this.lerStorage();
+        this.perfilSubject.next(perfil);
+      } else {
+        this.perfilSubject.next(null);
+      }
+    });
   }
 
   get perfilAtual(): PerfilAluno | null {

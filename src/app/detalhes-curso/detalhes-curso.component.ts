@@ -1,11 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Curso } from './curso.model';
 import { InscricaoService } from '../inscricao-curso/inscricao.service';
+import { AuthService } from '../area-aluno/services/auth.service';
+import { ApiResponse } from '../area-admin/models/admin.models';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-detalhes-curso',
@@ -18,79 +22,35 @@ export class DetalhesCursoComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
 
-  curso: Curso = {
-    id: 1,
-    titulo: 'Fundamentos da Doutrina Espírita',
-    categoria: 'Doutrina Espírita',
-    instrutor: 'Prof. João Silva',
-    duracao: '8 semanas',
-    descricao: 'Um curso completo sobre os fundamentos da Doutrina Espírita, abordando os principais conceitos e ensinamentos de Allan Kardec. Ideal para iniciantes que desejam compreender os princípios básicos do Espiritismo.',
-    objetivos: [
-      'Compreender os princípios fundamentais da Doutrina Espírita',
-      'Conhecer a obra de Allan Kardec e sua importância',
-      'Desenvolver uma visão clara sobre a vida após a morte',
-      'Entender o processo de reencarnação e evolução espiritual',
-      'Aplicar os ensinamentos espíritas no dia a dia'
-    ],
-    conteudoProgramatico: [
-      'Introdução ao Espiritismo e Allan Kardec',
-      'O Livro dos Espíritos - Conceitos Fundamentais',
-      'A Natureza dos Espíritos e a Comunicação Mediúnica',
-      'Lei de Reencarnação e Evolução Espiritual',
-      'Lei de Causa e Efeito (Carma)',
-      'A Prática da Caridade e do Amor ao Próximo',
-      'Oração e Evangelização no Lar',
-      'Aplicação Prática dos Ensinamentos Espíritas'
-    ],
-    requisitos: [
-      'Interesse genuíno em aprender sobre Espiritismo',
-      'Mente aberta para novos conceitos',
-      'Disponibilidade para participar das aulas semanais',
-      'Não é necessário conhecimento prévio'
-    ],
-    certificacao: 'Certificado de Conclusão',
-    modalidade: 'Presencial',
-    dataInicio: '2025-02-01',
-    dataFim: '2025-03-29',
-    horario: 'Sábados, 14h às 16h',
-    vagas: 30,
-    vagasDisponiveis: 12,
-    imagem: 'assets/images/curso-fundamentos.jpg',
-    nivel: 'Iniciante',
-    tags: ['Espiritismo', 'Allan Kardec', 'Reencarnação', 'Mediunidade'],
-    depoimentos: [
-      {
-        nome: 'Maria Santos',
-        comentario: 'Curso excelente! Me ajudou muito a compreender os fundamentos do Espiritismo de forma clara e objetiva.',
-        nota: 5
-      },
-      {
-        nome: 'Carlos Oliveira',
-        comentario: 'Professor muito didático e conteúdo bem estruturado. Recomendo para quem está começando.',
-        nota: 5
-      }
-    ]
-  };
+  curso: Curso | null = null;
+  carregando = true;
+  erro: string | null = null;
 
   jaMatriculado = false;
-  private cursoIdStr = '';
+  private cursoId = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private inscricaoService: InscricaoService
+    private http: HttpClient,
+    private inscricaoService: InscricaoService,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
-    const cursoId = this.route.snapshot.paramMap.get('id');
-    if (cursoId) {
-      this.cursoIdStr = cursoId;
-      this.carregarCurso(parseInt(cursoId));
-      this.inscricaoService.verificarMatricula(cursoId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(matriculado => {
-          this.jaMatriculado = matriculado;
-        });
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.cursoId = id;
+      this.carregarCurso(id);
+      // Verifica matrícula apenas se o usuário estiver autenticado — evita
+      // que a chamada protegida dispare o fluxo de refresh/logout em visitantes.
+      if (this.authService.estaLogado) {
+        this.inscricaoService.verificarMatricula(id)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(matriculado => {
+            this.jaMatriculado = matriculado;
+          });
+      }
     }
   }
 
@@ -99,8 +59,21 @@ export class DetalhesCursoComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  carregarCurso(id: number) {
-    console.log('Carregando curso com ID:', id);
+  carregarCurso(id: string) {
+    this.carregando = true;
+    this.erro = null;
+    this.http.get<ApiResponse<Curso>>(`${environment.apiUrl}/api/cursos/${id}`)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: resposta => {
+          this.curso = resposta.data;
+          this.carregando = false;
+        },
+        error: () => {
+          this.erro = 'Não foi possível carregar o curso. Tente novamente.';
+          this.carregando = false;
+        }
+      });
   }
 
   voltar() {
@@ -108,10 +81,11 @@ export class DetalhesCursoComponent implements OnInit, OnDestroy {
   }
 
   abrirInscricao() {
-    this.router.navigate(['/inscricao', this.cursoIdStr || this.curso.id]);
+    this.router.navigate(['/inscricao', this.cursoId]);
   }
 
-  formatarData(data: string): string {
+  formatarData(data?: string): string {
+    if (!data) return '—';
     const date = new Date(data);
     return date.toLocaleDateString('pt-BR');
   }

@@ -7,14 +7,24 @@ import {
   ReactiveFormsModule,
   FormBuilder,
   FormGroup,
-  Validators
+  Validators,
+  AbstractControl,
+  ValidationErrors
 } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { DadosInscricao } from './dados-inscricao.model';
 import { InscricaoService } from './inscricao.service';
-import { CepService } from '../services/cep.service'; // serviço já existente no projeto
+import { AuthService } from '../area-aluno/services/auth.service';
+import { PerfilService } from '../area-aluno/services/perfil.service';
+import { CepService } from '../services/cep.service';
+
+function senhasIguaisValidator(group: AbstractControl): ValidationErrors | null {
+  const senha    = group.get('senha')?.value;
+  const confirma = group.get('confirmarSenha')?.value;
+  return senha && confirma && senha !== confirma ? { senhasDivergentes: true } : null;
+}
 
 @Component({
   selector: 'app-inscricao-curso',
@@ -25,24 +35,26 @@ import { CepService } from '../services/cep.service'; // serviço já existente 
 })
 export class InscricaoCursoComponent implements OnInit, OnDestroy {
 
-  // ── Gerenciamento de assinaturas RxJS (padrão obrigatório do projeto) ──
   private destroy$ = new Subject<void>();
 
   formularioInscricao: FormGroup;
   cursoId: string = '';
   cursoTitulo: string = 'Fundamentos da Doutrina Espírita';
 
-  // Estados de UI
   processandoInscricao = false;
   buscandoCep = false;
   erroInscricao: string | null = null;
   inscricaoRealizada = false;
+  mostrarSenha = false;
+  mostrarConfirmarSenha = false;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private inscricaoService: InscricaoService,
+    private authService: AuthService,
+    private perfilService: PerfilService,
     private cepService: CepService
   ) {
     this.formularioInscricao = this.fb.group({
@@ -60,9 +72,13 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
         cidade:      ['', [Validators.required]],
         estado:      ['', [Validators.required]]
       }),
-      observacoes:  [''],
-      aceitaTermos: [false, [Validators.requiredTrue]],
-      receberEmails:[false]
+      observacoes:    [''],
+      acesso: this.fb.group({
+        senha:          ['', [Validators.required, Validators.minLength(6)]],
+        confirmarSenha: ['', [Validators.required]]
+      }, { validators: senhasIguaisValidator }),
+      aceitaTermos:   [false, [Validators.requiredTrue]],
+      receberEmails:  [false]
     });
   }
 
@@ -71,9 +87,7 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(params => {
         const id = params.get('id');
-        if (id) {
-          this.cursoId = id;
-        }
+        if (id) this.cursoId = id;
       });
   }
 
@@ -82,16 +96,13 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // ── Busca de CEP via CepService (já existente no projeto) ──────────────
   buscarCep(): void {
-    // Remove máscara antes de enviar (ex.: "01310-100" → "01310100")
     const cepRaw: string = (this.formularioInscricao.get('endereco.cep')?.value ?? '')
       .replace(/\D/g, '');
 
     if (cepRaw.length !== 8) return;
 
     this.buscandoCep = true;
-    // Desabilita os campos enquanto carrega para evitar edição simultânea
     this.formularioInscricao.get('endereco.logradouro')?.disable();
     this.formularioInscricao.get('endereco.bairro')?.disable();
     this.formularioInscricao.get('endereco.cidade')?.disable();
@@ -103,25 +114,21 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
         next: (endereco) => {
           this.formularioInscricao.patchValue({
             endereco: {
-              // ViaCEP usa "localidade" para cidade e "uf" para estado
               logradouro: endereco.logradouro,
               bairro:     endereco.bairro,
               cidade:     endereco.localidade,
               estado:     endereco.uf
             }
           });
-          // Foca no campo número após preenchimento automático
           document.getElementById('numero')?.focus();
         },
         error: () => {
-          // CEP não encontrado — libera campos para preenchimento manual, sem bloquear o usuário
           this.formularioInscricao.patchValue({
             endereco: { logradouro: '', bairro: '', cidade: '', estado: '' }
           });
         },
         complete: () => {
           this.buscandoCep = false;
-          // Reabilita os campos após a consulta (com ou sem sucesso)
           this.formularioInscricao.get('endereco.logradouro')?.enable();
           this.formularioInscricao.get('endereco.bairro')?.enable();
           this.formularioInscricao.get('endereco.cidade')?.enable();
@@ -130,7 +137,6 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
       });
   }
 
-  // ── Submissão do formulário ─────────────────────────────────────────────
   submeterInscricao(): void {
     if (this.formularioInscricao.invalid) {
       this.marcarCamposComoTocados();
@@ -140,30 +146,48 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
     this.processandoInscricao = true;
     this.erroInscricao = null;
 
+    const { acesso, ...resto } = this.formularioInscricao.value;
     const dadosInscricao: DadosInscricao = {
       cursoId: this.cursoId,
-      ...this.formularioInscricao.value
+      ...resto,
+      senha: acesso.senha
     };
 
     this.inscricaoService.inscrever(this.cursoId, dadosInscricao)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: (resposta) => {
           this.processandoInscricao = false;
           this.inscricaoRealizada = true;
-          setTimeout(() => this.router.navigate(['/area-aluno/dashboard']), 2000);
+
+          if (resposta.auth) {
+            this.authService.iniciarSessao(resposta.auth);
+            // Pré-popula o perfil com os dados já informados no formulário
+            const v = this.formularioInscricao.value;
+            this.perfilService.prePopularDaInscricao({
+              nomeCompleto:   v.nomeCompleto,
+              email:          v.email,
+              telefone:       v.telefone,
+              cpf:            v.cpf,
+              dataNascimento: v.dataNascimento,
+              endereco:       v.endereco,
+              receberEmails:  v.receberEmails,
+              observacoes:    v.observacoes,
+            });
+            setTimeout(() => this.router.navigate(['/area-aluno']), 1500);
+          } else {
+            // E-mail já tinha conta — redireciona para login
+            setTimeout(() => this.router.navigate(['/login']), 2000);
+          }
         },
         error: (erro: Error) => {
           this.processandoInscricao = false;
-          // Mensagem já tratada e traduzida pelo InscricaoService
           this.erroInscricao = erro.message;
-          // Rola a página até a mensagem de erro para não deixar o usuário perdido
           document.querySelector('.erro-inscricao')?.scrollIntoView({ behavior: 'smooth' });
         }
       });
   }
 
-  // ── Utilitário: marca todos os campos como touched para exibir erros ───
   marcarCamposComoTocados(): void {
     Object.keys(this.formularioInscricao.controls).forEach(key => {
       const control = this.formularioInscricao.get(key);
@@ -178,6 +202,6 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
   }
 
   voltar(): void {
-    this.router.navigate(['/detalhes-curso', this.cursoId]);
+    this.router.navigate(['/curso', this.cursoId]);
   }
 }
