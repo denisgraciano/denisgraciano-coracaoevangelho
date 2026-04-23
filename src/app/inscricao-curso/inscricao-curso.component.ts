@@ -12,11 +12,8 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { DadosInscricao } from './dados-inscricao.model';
 import { InscricaoService } from './inscricao.service';
 import { CepService, Endereco } from '../services/cep.service';
-
-// ── NOVO: importa os serviços de autenticação e perfil já existentes ──
 import { AuthService } from '../area-aluno/services/auth.service';
 import { PerfilService } from '../area-aluno/services/perfil.service';
 
@@ -38,7 +35,6 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
   cursoId: number = 0;
   cursoTitulo: string = 'Fundamentos da Doutrina Espírita';
 
-  // ── NOVO: controla visualmente se o usuário está logado ──
   usuarioLogado = false;
 
   processandoInscricao = false;
@@ -52,7 +48,6 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
     private router: Router,
     private inscricaoService: InscricaoService,
     private cepService: CepService,
-    // ── NOVO: injeta AuthService e PerfilService ──
     private authService: AuthService,
     private perfilService: PerfilService
   ) {
@@ -74,12 +69,10 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
       observacoes:  [''],
       aceitaTermos: [false, [Validators.requiredTrue]],
       receberEmails:[false],
-      
     });
   }
 
   ngOnInit(): void {
-    // 1) Carrega o cursoId da rota
     this.route.paramMap
       .pipe(takeUntil(this.destroy$))
       .subscribe(params => {
@@ -89,10 +82,7 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
         }
       });
 
-    // 2) ── NOVO: pré-preenche o formulário se o usuário estiver logado ──
     this.preencherComDadosDoUsuario();
-
-    
   }
 
   ngOnDestroy(): void {
@@ -100,22 +90,9 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  /**
-   * Pré-preenche o formulário com os dados do usuário logado.
-   *
-   * Ordem de prioridade:
-   *   1. PerfilService  — dados completos (CPF, endereço, telefone...)
-   *   2. AuthService    — fallback mínimo (nome + email do token de sessão)
-   *
-   * Campos preenchidos via sessão são desabilitados para evitar edição
-   * acidental, mas permanecem válidos para o FormGroup (disabled não
-   * exclui do value em patchValue, apenas em getRawValue — usaremos
-   * getRawValue() no submit).
-   */
   private preencherComDadosDoUsuario(): void {
     const usuario = this.authService.usuarioAtual;
 
-    // Usuário não está logado — formulário permanece vazio
     if (!usuario) {
       this.usuarioLogado = false;
       return;
@@ -125,7 +102,6 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
     const perfil = this.perfilService.perfilAtual;
 
     if (perfil?.nomeCompleto) {
-      // ── Perfil completo encontrado: preenche tudo ──
       this.formularioInscricao.patchValue({
         nomeCompleto:   perfil.nomeCompleto,
         email:          perfil.email ?? usuario.email,
@@ -144,36 +120,25 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
         receberEmails: perfil.receberEmails ?? false
       });
 
-      // Desabilita campos já preenchidos pelo perfil salvo
       this.desabilitarCamposPreenchidos([
         'nomeCompleto', 'email', 'telefone', 'cpf', 'dataNascimento'
       ]);
 
-      // Desabilita sub-campos do endereço se estiverem preenchidos
       if (perfil.endereco?.cep) {
         this.desabilitarCamposPreenchidos([
           'endereco.cep', 'endereco.logradouro', 'endereco.numero',
           'endereco.bairro', 'endereco.cidade', 'endereco.estado'
         ]);
       }
-
     } else {
-      // ── Apenas sessão disponível: preenche só nome e email ──
       this.formularioInscricao.patchValue({
         nomeCompleto: usuario.nome,
         email:        usuario.email
       });
-
-      // Desabilita apenas email (dado do token — não deve ser alterado)
       this.desabilitarCamposPreenchidos(['email']);
     }
   }
 
-  /**
-   * Desabilita campos por caminho (suporta notação "grupo.campo").
-   * Desabilitar não remove o valor do formulário — getRawValue() inclui
-   * campos disabled, ao contrário de .value.
-   */
   private desabilitarCamposPreenchidos(caminhos: string[]): void {
     caminhos.forEach(caminho => {
       const control = this.formularioInscricao.get(caminho);
@@ -183,107 +148,71 @@ export class InscricaoCursoComponent implements OnInit, OnDestroy {
     });
   }
 
-  // ── Busca de CEP ────────────────────────────────────────────────────────
-buscarCep(): void {
-  const cepRaw: string = (this.formularioInscricao.get('endereco.cep')?.value ?? '')
-    .replace(/\D/g, '');
+  buscarCep(): void {
+    const cepRaw: string = (this.formularioInscricao.get('endereco.cep')?.value ?? '')
+      .replace(/\D/g, '');
 
-  if (cepRaw.length !== 8) return;
+    if (cepRaw.length !== 8) return;
 
-  this.buscandoCep = true;
-  this.formularioInscricao.get('endereco.logradouro')?.disable();
-  this.formularioInscricao.get('endereco.bairro')?.disable();
-  this.formularioInscricao.get('endereco.cidade')?.disable();
-  this.formularioInscricao.get('endereco.estado')?.disable();
+    this.buscandoCep = true;
+    this.formularioInscricao.get('endereco.logradouro')?.disable();
+    this.formularioInscricao.get('endereco.bairro')?.disable();
+    this.formularioInscricao.get('endereco.cidade')?.disable();
+    this.formularioInscricao.get('endereco.estado')?.disable();
 
-  // ← buscarCEP (nome correto do método no CepService)
-  this.cepService.buscarCEP(cepRaw)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (dados: Endereco) => {
-        this.formularioInscricao.patchValue({
-          endereco: {
-            logradouro: dados.logradouro,
-            bairro:     dados.bairro,
-            cidade:     dados.localidade,
-            estado:     dados.uf
-          }
-        });
-        document.getElementById('numero')?.focus();
-      },
-      error: () => {
-        this.formularioInscricao.patchValue({
-          endereco: { logradouro: '', bairro: '', cidade: '', estado: '' }
-        });
-      },
-      complete: () => {
-        this.buscandoCep = false;
-        this.formularioInscricao.get('endereco.logradouro')?.enable();
-        this.formularioInscricao.get('endereco.bairro')?.enable();
-        this.formularioInscricao.get('endereco.cidade')?.enable();
-        this.formularioInscricao.get('endereco.estado')?.enable();
-      }
-    });
-}
-
-  // ── Submit ──────────────────────────────────────────────────────────────
-submeterInscricao(): void {
-  if (this.formularioInscricao.invalid) {
-    this.marcarCamposComoTocados();
-    return;
+    this.cepService.buscarCEP(cepRaw)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (dados: Endereco) => {
+          this.formularioInscricao.patchValue({
+            endereco: {
+              logradouro: dados.logradouro,
+              bairro:     dados.bairro,
+              cidade:     dados.localidade,
+              estado:     dados.uf
+            }
+          });
+          document.getElementById('numero')?.focus();
+        },
+        error: () => {
+          this.formularioInscricao.patchValue({
+            endereco: { logradouro: '', bairro: '', cidade: '', estado: '' }
+          });
+        },
+        complete: () => {
+          this.buscandoCep = false;
+          this.formularioInscricao.get('endereco.logradouro')?.enable();
+          this.formularioInscricao.get('endereco.bairro')?.enable();
+          this.formularioInscricao.get('endereco.cidade')?.enable();
+          this.formularioInscricao.get('endereco.estado')?.enable();
+        }
+      });
   }
 
-  this.processandoInscricao = true;
-  this.erroInscricao = null;
+  submeterInscricao(): void {
+    if (this.formularioInscricao.invalid) {
+      this.marcarCamposComoTocados();
+      return;
+    }
 
-  const formValue = this.formularioInscricao.getRawValue();
+    this.processandoInscricao = true;
+    this.erroInscricao = null;
 
-  const dados: DadosInscricao = {
-    cursoId:        String(this.cursoId), // number → string (tipo do model)
-    nomeCompleto:   formValue['nomeCompleto'],
-    email:          formValue['email'],
-    telefone:       formValue['telefone'],
-    cpf:            formValue['cpf'],
-    dataNascimento: formValue['dataNascimento'],
-    endereco:       formValue['endereco'],
-    observacoes:    formValue['observacoes'],
-    aceitaTermos:   formValue['aceitaTermos'],
-    receberEmails:  formValue['receberEmails'],
-    senha:          formValue['senha'],   
-  };
-
-  // ← assinatura real: inscrever(cursoId, dados)
-  this.inscricaoService.inscrever(this.cursoId, dados)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (resposta) => {
-        this.processandoInscricao = false;
-        this.inscricaoRealizada = true;
-
-        this.perfilService.prePopularDaInscricao({
-          nomeCompleto:   dados.nomeCompleto,
-          email:          dados.email,
-          telefone:       dados.telefone,
-          cpf:            dados.cpf,
-          dataNascimento: dados.dataNascimento,
-          endereco:       dados.endereco,
-          receberEmails:  dados.receberEmails,
-          observacoes:    dados.observacoes
-        });
-
-        if (resposta.acessoUrl) {
-          this.router.navigateByUrl(resposta.acessoUrl);
-        } else {
-          setTimeout(() => this.router.navigate(['/']), 3000);
+    this.inscricaoService.inscrever(this.cursoId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: () => {
+          this.processandoInscricao = false;
+          this.inscricaoRealizada = true;
+          setTimeout(() => this.router.navigate(['/area-aluno']), 2000);
+        },
+        error: (erro: Error) => {
+          this.processandoInscricao = false;
+          this.erroInscricao = erro.message;
+          document.querySelector('.erro-inscricao')?.scrollIntoView({ behavior: 'smooth' });
         }
-      },
-      error: (erro: Error) => {
-        this.processandoInscricao = false;
-        this.erroInscricao = erro.message;
-        document.querySelector('.erro-inscricao')?.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-}
+      });
+  }
 
   marcarCamposComoTocados(): void {
     Object.keys(this.formularioInscricao.controls).forEach(key => {
