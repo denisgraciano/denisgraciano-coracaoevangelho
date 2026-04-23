@@ -4,25 +4,22 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { switchMap, takeUntil } from 'rxjs/operators';
 
 import { ProgressoService } from '../services/progresso.service';
+import { CursoService } from '../services/curso.service';
 import { CursoAluno, Aula, ProgressoCurso } from '../models/area-aluno.models';
-import { CURSOS_MOCK } from '../mocks/cursos.mock';
+// ✅ CURSOS_MOCK removido
 
-// Valores padrão usados antes do ngOnInit carregar os dados reais.
-// Evitam o uso de `!` (non-null assertion) e tornam `?.` desnecessário no template.
 const CURSO_VAZIO: CursoAluno = {
   id: '', titulo: '', descricao: '', categoria: '',
   imagemUrl: '', instrutor: '', totalAulas: 0,
   aulas: [], certificadoDisponivel: false,
 };
-
 const AULA_VAZIA: Aula = {
   id: '', titulo: '', descricao: '',
   youtubeVideoId: '', duracaoMinutos: 0, ordem: 0,
 };
-
 const PROGRESSO_VAZIO: ProgressoCurso = {
   cursoId: '', aulasProgresso: [],
   percentualConcluido: 0, certificadoEmitido: false,
@@ -38,45 +35,55 @@ const PROGRESSO_VAZIO: ProgressoCurso = {
 export class PlayerAulaComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
 
-  // Propriedades inicializadas com valores padrão — nunca undefined
-  curso: CursoAluno           = CURSO_VAZIO;
-  aulaAtual: Aula             = AULA_VAZIA;
-  aulasOrdenadas: Aula[]      = [];
-  progresso: ProgressoCurso   = PROGRESSO_VAZIO;
-  embedUrl: SafeResourceUrl   = '';
-  carregando                  = true;
+  curso: CursoAluno         = CURSO_VAZIO;
+  aulaAtual: Aula           = AULA_VAZIA;
+  aulasOrdenadas: Aula[]    = [];
+  progresso: ProgressoCurso = PROGRESSO_VAZIO;
+  embedUrl: SafeResourceUrl = '';
+  carregando = true;
+  erro: string | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private sanitizer: DomSanitizer,
     private progressoService: ProgressoService,
+    private cursoService: CursoService,
   ) {}
 
   ngOnInit(): void {
     this.route.params
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(params => {
-        const cursoId: string = params['cursoId'];
-        const aulaId: string  = params['aulaId'];
+      .pipe(
+        switchMap(params => {
+          this.carregando = true;
+          this.erro = null;
+          // Guarda o aulaId do snapshot para uso após o curso carregar
+          return this.cursoService.obterPorId(params['cursoId']).pipe(
+            takeUntil(this.destroy$)
+          );
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe({
+        next: curso => {
+          this.curso = curso;
+          this.aulasOrdenadas = [...curso.aulas].sort((a, b) => a.ordem - b.ordem);
 
-        const curso = CURSOS_MOCK.find(c => c.id === cursoId);
-        if (!curso) {
+          const aulaId = this.route.snapshot.params['aulaId'];
+          const aula = curso.aulas.find(a => a.id === aulaId) ?? this.aulasOrdenadas[0];
+          this.definirAula(aula ?? AULA_VAZIA);
+
+          // Assina progresso reativo após o curso estar definido
+          this.progressoService
+            .obterProgresso(curso.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(p => (this.progresso = p));
+        },
+        error: () => {
+          this.erro = 'Curso não encontrado.';
+          this.carregando = false;
           this.router.navigate(['/area-aluno']);
-          return;
-        }
-
-        this.curso          = curso;
-        this.aulasOrdenadas = [...curso.aulas].sort((a, b) => a.ordem - b.ordem);
-
-        const aula = curso.aulas.find(a => a.id === aulaId) ?? this.aulasOrdenadas[0];
-        this.definirAula(aula ?? AULA_VAZIA);
-
-        // Assina progresso reativo após o curso estar definido
-        this.progressoService
-          .obterProgresso(curso.id)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(p => (this.progresso = p));
+        },
       });
   }
 
@@ -92,9 +99,7 @@ export class PlayerAulaComponent implements OnInit, OnDestroy {
   }
 
   irParaProximaAula(): void {
-    // Marca a aula atual como concluída ao avançar
     this.progressoService.marcarAulaConcluida(this.curso, this.aulaAtual.id);
-
     const proxima = this.aulasOrdenadas[this.indiceAtual + 1];
     if (proxima) {
       this.irParaAula(proxima);
@@ -126,14 +131,13 @@ export class PlayerAulaComponent implements OnInit, OnDestroy {
     return this.indiceAtual > 0;
   }
 
-  /** ID da aula atual garantido como string — elimina `?.id` no template */
+  /** ID da aula atual como string garantida — elimina `?.id` no template */
   get aulaAtualId(): string {
     return this.aulaAtual.id;
   }
 
   aulaConcluida(aulaId: string): boolean {
-    return this.progresso.aulasProgresso
-      .some(a => a.aulaId === aulaId && a.concluida);
+    return this.progresso.aulasProgresso.some(a => a.aulaId === aulaId && a.concluida);
   }
 
   // ── Privados ──────────────────────────────────────────────────
@@ -141,12 +145,9 @@ export class PlayerAulaComponent implements OnInit, OnDestroy {
   private definirAula(aula: Aula): void {
     this.aulaAtual  = aula;
     this.carregando = true;
-
-    const baseUrl   = 'https://www.youtube.com/embed/';
     this.embedUrl   = this.sanitizer.bypassSecurityTrustResourceUrl(
-      `${baseUrl}${aula.youtubeVideoId}?rel=0&modestbranding=1`,
+      `https://www.youtube.com/embed/${aula.youtubeVideoId}?rel=0&modestbranding=1`
     );
-
     setTimeout(() => (this.carregando = false), 400);
   }
 }

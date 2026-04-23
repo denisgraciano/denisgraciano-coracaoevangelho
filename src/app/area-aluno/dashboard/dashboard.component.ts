@@ -2,15 +2,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject, forkJoin, of } from 'rxjs';
+import { takeUntil, catchError } from 'rxjs/operators';
 
 import { AuthService } from '../services/auth.service';
 import { ProgressoService } from '../services/progresso.service';
+import { CursoService } from '../services/curso.service';
 import { CursoAluno, ProgressoCurso, Usuario, Certificado } from '../models/area-aluno.models';
-
-// Mock de dados — substituir por CursoService.listarCursosAluno() quando o backend existir
-import { CURSOS_MOCK } from '../mocks/cursos.mock';
+// ✅ CURSOS_MOCK removido
 
 @Component({
   selector: 'app-dashboard',
@@ -28,10 +27,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   sugestoes: CursoAluno[] = [];
   certificados: Certificado[] = [];
   abaSelecionada: 'cursos' | 'certificados' | 'sugestoes' = 'cursos';
+  carregando = true;
+  erro: string | null = null;
 
   constructor(
     private authService: AuthService,
     private progressoService: ProgressoService,
+    private cursoService: CursoService,
     private router: Router
   ) {}
 
@@ -40,31 +42,39 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(u => (this.usuario = u));
 
-    // Mock: todos os cursos são "matriculados". Substituir por API.
-    this.cursosMatriculados = CURSOS_MOCK;
+    forkJoin({
+      meus:      this.cursoService.listarMeus().pipe(catchError(() => of([]))),
+      sugestoes: this.cursoService.listarSugestoes().pipe(catchError(() => of([]))),
+    })
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: ({ meus, sugestoes }) => {
+          this.cursosMatriculados = meus;
+          this.sugestoes = sugestoes;
+          this.carregando = false;
 
-    // Carrega progressos reativos para cada curso
-    this.cursosMatriculados.forEach(curso => {
-      this.progressoService
-        .obterProgresso(curso.id)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(p => this.progressos.set(curso.id, p));
-    });
+          this.cursosMatriculados.forEach(curso => {
+            this.progressoService
+              .obterProgresso(curso.id)
+              .pipe(takeUntil(this.destroy$))
+              .subscribe(p => this.progressos.set(curso.id, p));
+          });
 
-    // Sugestões: cursos ainda não iniciados (percentual = 0)
-    // Lógica simples — pode ser substituída por recomendação de API
-    this.sugestoes = CURSOS_MOCK.filter(c => {
-      const p = this.progressoService.obterProgressoSnapshot(c.id);
-      return p.percentualConcluido === 0;
-    }).slice(0, 3);
-
-    this.certificados = this.progressoService.listarCertificados();
+          this.certificados = this.progressoService.listarCertificados();
+        },
+        error: () => {
+          this.erro = 'Não foi possível carregar seus cursos. Tente novamente.';
+          this.carregando = false;
+        },
+      });
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+  // ── Métodos usados pelo template ───────────────────────────────
 
   obterProgresso(cursoId: string): ProgressoCurso {
     return this.progressos.get(cursoId) ?? {
@@ -75,8 +85,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     };
   }
 
-  irParaCurso(cursoId: string, primeiraAulaId: string): void {
-    this.router.navigate(['/area-aluno/player', cursoId, primeiraAulaId]);
+  /** Retorna a primeira aula não concluída, ou a primeira do curso */
+  proximaAula(curso: CursoAluno): string {
+    const progresso = this.obterProgresso(curso.id);
+    const concluidas = new Set(
+      progresso.aulasProgresso.filter(a => a.concluida).map(a => a.aulaId)
+    );
+    const proxima = [...curso.aulas]
+      .sort((a, b) => a.ordem - b.ordem)
+      .find(a => !concluidas.has(a.id));
+    return proxima?.id ?? curso.aulas[0]?.id ?? '';
+  }
+
+  irParaCurso(cursoId: string, aulaId: string): void {
+    this.router.navigate(['/area-aluno/player', cursoId, aulaId]);
   }
 
   irParaCertificado(cursoId: string): void {
@@ -89,17 +111,5 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.authService.logout();
-  }
-
-  // Retorna a primeira aula não concluída, ou a primeira do curso
-  proximaAula(curso: CursoAluno): string {
-    const progresso = this.obterProgresso(curso.id);
-    const idsConcluidosSet = new Set(
-      progresso.aulasProgresso.filter(a => a.concluida).map(a => a.aulaId)
-    );
-    const proxima = curso.aulas
-      .sort((a, b) => a.ordem - b.ordem)
-      .find(a => !idsConcluidosSet.has(a.id));
-    return proxima?.id ?? curso.aulas[0]?.id;
   }
 }

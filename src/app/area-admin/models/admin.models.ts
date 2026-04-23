@@ -38,6 +38,7 @@ export interface CursoResumo {
   instrutor: string;
   totalAulas: number;
   certificadoDisponivel: boolean;
+  vagas: number;
 }
 
 export interface AulaAdmin {
@@ -60,6 +61,7 @@ export interface CursoPayload {
   imagemUrl: string;
   instrutor: string;
   certificadoDisponivel: boolean;
+  vagas: number;
 }
 
 export interface AulaPayload {

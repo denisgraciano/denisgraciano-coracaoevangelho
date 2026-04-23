@@ -60,6 +60,15 @@
             <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nome }}</option>
           </select>
         </div>
+        <div class="form-grupo">
+          <label for="vagas" class="form-label">Vagas <span aria-label="obrigatório">*</span></label>
+          <input id="vagas" type="text" formControlName="vagas" class="form-input"
+                 [class.invalido]="f['vagas'].invalid && f['vagas'].touched"
+                 placeholder="Numero de Vagas" aria-required="true" />
+          <span *ngIf="f['vagas'].invalid && f['vagas'].touched" class="form-erro" role="alert">
+            Vagas obrigatório
+          </span>
+        </div>
       </div>
 
       <div class="form-grupo">

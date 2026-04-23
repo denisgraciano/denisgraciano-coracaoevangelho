@@ -42,6 +42,7 @@ export class FormCursoComponent implements OnInit, OnDestroy {
       imagemUrl:             ['', Validators.required],
       instrutor:             ['', Validators.required],
       certificadoDisponivel: [false],
+      vagas:                 ['', Validators.required],
     });
 
     // Carrega categorias e verifica se é edição
@@ -68,6 +69,7 @@ export class FormCursoComponent implements OnInit, OnDestroy {
               imagemUrl:             curso.imagemUrl,
               instrutor:             curso.instrutor,
               certificadoDisponivel: curso.certificadoDisponivel,
+              vagas:                 curso.vagas,
             });
             this.carregando = false;
           },
@@ -97,11 +99,13 @@ export class FormCursoComponent implements OnInit, OnDestroy {
     this.salvando = true;
     this.erro = '';
     this.sucesso = '';
-
+   
     const payload = this.form.value;
     const operacao = this.modoEdicao
       ? this.adminService.atualizarCurso(this.cursoId, payload)
       : this.adminService.criarCurso(payload);
+
+     console.log(payload);
 
     operacao.pipe(takeUntil(this.destroy$)).subscribe({
       next: () => {
