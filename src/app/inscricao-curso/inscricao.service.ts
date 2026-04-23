@@ -4,13 +4,11 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
-import { DadosInscricao } from './dados-inscricao.model';
 
 export interface RespostaInscricao {
   id: string;
   mensagem: string;
   acessoUrl?: string;
-  // ✅ REMOVIDO: campo 'auth' — não existe no contrato do backend
 }
 
 interface ApiResponse<T> {
@@ -32,9 +30,10 @@ export class InscricaoService {
 
   inscrever(cursoId: number | string): Observable<RespostaInscricao> {
     return this.http
-      .post<RespostaInscricao>(`${environment.apiUrl}/matriculas/${cursoId}`, {})
+      .post<RespostaInscricao>(`${this.endpoint}/${cursoId}`, {})
       .pipe(catchError(this.tratarErro));
   }
+
   verificarMatricula(cursoId: string): Observable<boolean> {
     return this.http
       .get<ApiResponse<MatriculaCheckResponseDto>>(`${this.endpoint}/${cursoId}/check`)
@@ -51,7 +50,7 @@ export class InscricaoService {
     } else if (erro.status === 409) {
       mensagem = 'Você já possui uma inscrição ativa neste curso.';
     } else if (erro.status >= 400 && erro.status < 500) {
-      mensagem = erro.error?.mensagem ?? 'Dados inválidos. Verifique o formulário e tente novamente.';
+      mensagem = erro.error?.mensagem ?? 'Dados inválidos. Tente novamente.';
     } else if (erro.status >= 500) {
       mensagem = 'O servidor encontrou um problema. Por favor, tente mais tarde.';
     }

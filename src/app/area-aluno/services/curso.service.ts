@@ -6,7 +6,6 @@ import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { CursoAluno } from '../models/area-aluno.models';
 
-// Formato do envelope padrão da API: { success, data }
 interface ApiResponse<T> {
   success: boolean;
   data: T;
@@ -14,7 +13,7 @@ interface ApiResponse<T> {
 
 @Injectable({ providedIn: 'root' })
 export class CursoService {
-  private readonly base = `${environment.apiUrl}/cursos`;
+  private readonly base = `${environment.apiUrl}/api/cursos`;
 
   constructor(private http: HttpClient) {}
 
@@ -39,7 +38,7 @@ export class CursoService {
       .pipe(map(r => r.data), catchError(this.tratarErro));
   }
 
-  /** Detalhe completo com array de aulas — PlayerAula, Certificado */
+  /** Detalhe completo com array de aulas — DetalhesCursoComponent, PlayerAula, Certificado */
   obterPorId(id: string): Observable<CursoAluno> {
     return this.http
       .get<ApiResponse<CursoAluno>>(`${this.base}/${id}`)
