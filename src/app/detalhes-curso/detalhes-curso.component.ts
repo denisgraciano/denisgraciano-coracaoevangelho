@@ -1,57 +1,40 @@
 // src/app/detalhes-curso/detalhes-curso.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { environment } from '../../environments/environment';
-import { Curso } from './curso.model';
+// Injeta AuthService e InscricaoService já existentes
+import { AuthService } from '../area-aluno/services/auth.service';
 import { InscricaoService } from '../inscricao-curso/inscricao.service';
-
-interface ApiResponse<T> {
-  success: boolean;
-  data: T;
-  message?: string;
-}
 
 @Component({
   selector: 'app-detalhes-curso',
-  standalone: true,
-  imports: [CommonModule],      
   templateUrl: './detalhes-curso.component.html',
   styleUrls: ['./detalhes-curso.component.scss']
 })
 export class DetalhesCursoComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
-  private readonly cursosUrl = `${environment.apiUrl}/api/cursos`;
 
-  curso!: Curso;
-  carregando = true;
-  erro: string | null = null;
+  // Estados de UI para o botão
+  inscrevendo = false;
+  erroInscricao: string | null = null;
 
-  jaMatriculado = false;
-  carregandoStatusMatricula = true;
+  // ... (resto das propriedades existentes: curso, etc.)
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private http: HttpClient,
-    private inscricaoService: InscricaoService
-  ) {}
+    private authService: AuthService,       // ← NOVO
+    private inscricaoService: InscricaoService  // ← NOVO
+  ) { }
 
   ngOnInit(): void {
     const cursoId = this.route.snapshot.paramMap.get('id');
-    if (!cursoId) {
-      this.erro = 'Curso não encontrado.';
-      this.carregando = false;
-      return;
+    if (cursoId) {
+      this.carregarCurso(parseInt(cursoId));
     }
-
-    this.carregarCurso(cursoId);
-    this.verificarStatusMatricula(cursoId);
   }
 
   ngOnDestroy(): void {
@@ -59,38 +42,37 @@ export class DetalhesCursoComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-private carregarCurso(id: string): void {
-  console.log('[DetalhesCurso] chamando:', `${this.cursosUrl}/${id}`);
+  /**
+   * Fluxo de inscrição simplificado:
+   *
+   * NÃO logado → redireciona para /login com returnUrl para voltar ao curso
+   * Logado      → chama o service direto → redireciona para o dashboard
+   *
+   * Sem formulário, sem revisão de dados — o JWT já identifica o usuário no backend.
+   */
+  abrirInscricao(): void {
+    // ── Não logado: vai para login e volta ao curso após autenticar ──
+    if (!this.authService.estaLogado) {
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: `/curso/${this.curso.id}` }
+      });
+      return;
+    }
 
-  this.http
-    .get<ApiResponse<Curso>>(`${this.cursosUrl}/${id}`)
-    .pipe(takeUntil(this.destroy$))
-    .subscribe({
-      next: (resposta) => {
-        console.log('[DetalhesCurso] resposta:', resposta);  // ← veja aqui
-        this.curso = resposta.data;
-        this.carregando = false;
-      },
-      error: (err) => {
-        console.error('[DetalhesCurso] erro:', err);         // ← ou aqui
-        this.erro = 'Não foi possível carregar o curso. Tente novamente.';
-        this.carregando = false;
-      }
-    });
-}
+    // ── Logado: inscreve direto, sem formulário ──
+    this.inscrevendo = true;
+    this.erroInscricao = null;
 
-  private verificarStatusMatricula(cursoId: string): void {
-    this.inscricaoService
-      .verificarMatricula(cursoId)
+    this.inscricaoService.inscrever(this.curso.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (estaMatriculado) => {
-          this.jaMatriculado = estaMatriculado;
-          this.carregandoStatusMatricula = false;
+        next: () => {
+          // Inscrição OK → vai direto para o dashboard do aluno
+          this.router.navigate(['/area-aluno']);
         },
-        error: () => {
-          this.jaMatriculado = false;
-          this.carregandoStatusMatricula = false;
+        error: (erro: Error) => {
+          this.inscrevendo = false;
+          this.erroInscricao = erro.message;
         }
       });
   }
@@ -99,12 +81,7 @@ private carregarCurso(id: string): void {
     this.router.navigate(['/']);
   }
 
-  abrirInscricao(): void {
-    this.router.navigate(['/inscricao', this.curso.id]);
-  }
-
-  formatarData(data: string | undefined): string {
-    if (!data) return '';
+  formatarData(data: string): string {
     return new Date(data).toLocaleDateString('pt-BR');
   }
 
@@ -112,12 +89,8 @@ private carregarCurso(id: string): void {
     return Array(nota).fill(0);
   }
 
-  calcularDesconto(): number {
-    if (this.curso?.precoPromocional && this.curso?.preco) {
-      return Math.round(
-        ((this.curso.preco - this.curso.precoPromocional) / this.curso.preco) * 100
-      );
-    }
-    return 0;
+  carregarCurso(id: number): void {
+    console.log('Carregando curso com ID:', id);
+    // TODO: chamar CursoService quando disponível
   }
 }

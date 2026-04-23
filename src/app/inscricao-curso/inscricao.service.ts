@@ -30,13 +30,11 @@ export class InscricaoService {
 
   constructor(private http: HttpClient) {}
 
-  // ✅ Aceita cursoId separado — compatível com InscricaoCursoComponent linha 156
-  inscrever(cursoId: number | string, dados: DadosInscricao): Observable<RespostaInscricao> {
+  inscrever(cursoId: number | string): Observable<RespostaInscricao> {
     return this.http
-      .post<RespostaInscricao>(`${this.endpoint}/${cursoId}`, dados)
+      .post<RespostaInscricao>(`${environment.apiUrl}/matriculas/${cursoId}`, {})
       .pipe(catchError(this.tratarErro));
   }
-
   verificarMatricula(cursoId: string): Observable<boolean> {
     return this.http
       .get<ApiResponse<MatriculaCheckResponseDto>>(`${this.endpoint}/${cursoId}/check`)

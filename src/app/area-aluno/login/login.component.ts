@@ -1,26 +1,11 @@
-// src/app/area-aluno/login/login.component.ts
-//
-// IMPORTANTE: Este arquivo mantém EXATAMENTE a mesma interface pública
-// que o HTML existente espera:
-//   - formulario: FormGroup  (não "form")
-//   - emailCtrl / senhaCtrl  (getters)
-//   - senhaVisivel: boolean
-//   - alternarSenha()
-//   - entrar()
-//   - erro: string | null
-//   - carregando: boolean
-//
-// ÚNICA mudança de comportamento: entrar() agora chama a API real via
-// AuthService.login() e redireciona para /admin se role === 'admin',
-// ou /area-aluno para role === 'aluno'.
-//
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, ActivatedRoute  } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
+
 
 @Component({
   selector: 'app-login',
@@ -42,6 +27,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute 
   ) {
     this.formulario = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -94,6 +80,14 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.carregando = false;
         },
       });
+        const sucesso = this.authService.login(email, senha);
+        if (sucesso) {
+          // Volta para onde o usuário estava, ou para área do aluno
+          const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') ?? '/area-aluno';
+          this.router.navigateByUrl(returnUrl);
+        } else {
+          this.erro = 'E-mail ou senha incorretos.';
+        }
   }
 
   private redirecionar(): void {

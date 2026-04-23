@@ -249,7 +249,7 @@ submeterInscricao(): void {
     observacoes:    formValue['observacoes'],
     aceitaTermos:   formValue['aceitaTermos'],
     receberEmails:  formValue['receberEmails'],
-    senha: ['']
+    senha:          formValue['senha'],   
   };
 
   // ← assinatura real: inscrever(cursoId, dados)

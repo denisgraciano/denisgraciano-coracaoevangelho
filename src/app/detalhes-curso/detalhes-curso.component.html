@@ -11,8 +11,12 @@
 
         <!-- Estado de erro -->
         <div *ngIf="erro" class="erro-state">
-            <p>{{ erro }}</p>
-            <button class="btn-voltar" (click)="voltar()">Voltar para a home</button>
+                <p
+                *ngIf="erroInscricao"
+                class="erro-inscricao"
+                role="alert">
+                ⚠️ {{ erroInscricao }}
+                </p>
         </div>
 
         <!-- Conteúdo do curso -->
@@ -51,14 +55,14 @@
                         </div>
                     </div>
 
-                    <button class="btn-inscrever" (click)="abrirInscricao()"
-                        [disabled]="((curso.vagas ?? 0) > 0 && (curso.vagasDisponiveis ?? 1) === 0) || jaMatriculado">
-                        {{ jaMatriculado
-                            ? 'Já matriculado ✓'
-                            : (((curso.vagas ?? 0) === 0 || (curso.vagasDisponiveis ?? 1) > 0)
-                                ? 'Inscrever-se Agora'
-                                : 'Esgotado') }}
-                    </button>   
+                    <button
+                    class="btn-inscrever"
+                    type="button"
+                    (click)="abrirInscricao()"
+                    [disabled]="inscrevendo"
+                    [attr.aria-busy]="inscrevendo">
+                    {{ inscrevendo ? 'Inscrevendo...' : 'Inscrever-se Agora' }}
+                    </button> 
                 </div>
             </div>
         </ng-container>
@@ -140,13 +144,13 @@
                         <span class="tag" *ngFor="let tag of curso.tags">{{ tag }}</span>
                     </div>
 
-                    <button class="btn-inscrever-sidebar" (click)="abrirInscricao()"
-                        [disabled]="((curso.vagas ?? 0) > 0 && (curso.vagasDisponiveis ?? 1) === 0) || jaMatriculado">
-                        {{ jaMatriculado
-                            ? 'Já matriculado ✓'
-                            : (((curso.vagas ?? 0) === 0 || (curso.vagasDisponiveis ?? 1) > 0)
-                                ? 'Inscrever-se'
-                                : 'Esgotado') }}
+                    <button
+                    class="btn-inscrever"
+                    type="button"
+                    (click)="abrirInscricao()"
+                    [disabled]="inscrevendo"
+                    [attr.aria-busy]="inscrevendo">
+                    {{ inscrevendo ? 'Inscrevendo...' : 'Inscrever-se Agora' }}
                     </button>
                 </div>
             </div>
