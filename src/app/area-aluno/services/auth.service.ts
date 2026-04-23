@@ -104,6 +104,15 @@ export class AuthService {
       );
   }
 
+  register(nome: string, email: string, senha: string): Observable<AuthApiResponse> {
+  return this.http
+    .post<AuthApiResponse>(`${environment.apiUrl}/api/auth/register`, { nome, email, senha })
+    .pipe(
+      tap(response => this.persistirSessao(response)),
+      catchError(err => throwError(() => err)),
+    );
+}
+
   // ── Refresh token ──────────────────────────────────────────
   refresh(): Observable<AuthApiResponse> {
     return this.http

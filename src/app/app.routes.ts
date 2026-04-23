@@ -118,6 +118,11 @@ export const routes: Routes = [
       },
     ],
   },
-
+// ── Cadastro ────────────────────────────────────────────────────
+{
+  path: 'cadastro',
+  loadComponent: () =>
+    import('./area-aluno/cadastro/cadastro.component').then(m => m.CadastroComponent),
+},
   { path: '**', redirectTo: '' },
 ];
