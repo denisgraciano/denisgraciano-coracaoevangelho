@@ -33,7 +33,14 @@
         aria-label="Formulário de inscrição no curso">
 
     <div class="secoes-formulario">
-
+    <div
+      *ngIf="usuarioLogado"
+      class="banner-usuario-logado"
+      role="status"
+      aria-live="polite">
+      ✅ Seus dados foram preenchidos automaticamente com base no seu perfil.
+      <a routerLink="/area-aluno/perfil">Editar perfil</a>
+    </div>
       <!-- ── Dados Pessoais ───────────────────────────── -->
       <section class="secao-formulario" aria-labelledby="titulo-dados-pessoais">
         <h3 id="titulo-dados-pessoais">Dados Pessoais</h3>

@@ -1,87 +1,55 @@
 // src/app/inscricao-curso/inscricao.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { DadosInscricao } from './dados-inscricao.model';
 
-interface AuthData {
-  accessToken: string;
-  refreshToken: string;
-  expira: string;
-  usuario: { id: string; nome: string; email: string; avatarUrl?: string; role: string };
-}
-
-export interface InscricaoResponse {
+export interface RespostaInscricao {
   id: string;
-  cursoId: string;
-  cursoTitulo: string;
-  dataMatricula: string;
-  ativa: boolean;
-  auth: AuthData | null; // Preenchido quando conta criada automaticamente
+  mensagem: string;
+  acessoUrl?: string;
+  // ✅ REMOVIDO: campo 'auth' — não existe no contrato do backend
 }
 
 interface ApiResponse<T> {
   success: boolean;
   data: T;
-  message: string;
+  message?: string;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+interface MatriculaCheckResponseDto {
+  estaMatriculado: boolean;
+}
+
+@Injectable({ providedIn: 'root' })
 export class InscricaoService {
 
-  private readonly baseUrl = `${environment.apiUrl}/api/matriculas`;
+  private readonly endpoint = `${environment.apiUrl}/api/matriculas`;
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Inscreve o aluno no curso via POST /api/matriculas/{cursoId}.
-   * O JWT é injetado automaticamente pelo authInterceptor.
-   */
-  inscrever(cursoId: string, dados: DadosInscricao): Observable<InscricaoResponse> {
-    const body = {
-      nomeCompleto:   dados.nomeCompleto,
-      email:          dados.email,
-      telefone:       dados.telefone ?? null,
-      cpf:            dados.cpf ?? null,
-      dataNascimento: dados.dataNascimento ?? null,
-      endereco:       dados.endereco ?? null,
-      observacoes:    dados.observacoes ?? null,
-      aceitaTermos:   dados.aceitaTermos,
-      receberEmails:  dados.receberEmails,
-      senha:          dados.senha || null,
-    };
-
+  // ✅ Aceita cursoId separado — compatível com InscricaoCursoComponent linha 156
+  inscrever(cursoId: number | string, dados: DadosInscricao): Observable<RespostaInscricao> {
     return this.http
-      .post<ApiResponse<InscricaoResponse>>(`${this.baseUrl}/${cursoId}`, body)
-      .pipe(
-        map(res => res.data),
-        catchError(this.tratarErro)
-      );
+      .post<RespostaInscricao>(`${this.endpoint}/${cursoId}`, dados)
+      .pipe(catchError(this.tratarErro));
   }
 
-  /**
-   * Verifica se o aluno já está matriculado via GET /api/matriculas/{cursoId}/check.
-   */
   verificarMatricula(cursoId: string): Observable<boolean> {
     return this.http
-      .get<ApiResponse<boolean>>(`${this.baseUrl}/${cursoId}/check`)
+      .get<ApiResponse<MatriculaCheckResponseDto>>(`${this.endpoint}/${cursoId}/check`)
       .pipe(
-        map(res => res.data),
-        catchError(() => [false])
+        map(resposta => resposta.data?.estaMatriculado ?? false),
+        catchError(() => of(false))
       );
   }
 
   private tratarErro(erro: HttpErrorResponse): Observable<never> {
     let mensagem = 'Ocorreu um erro inesperado. Por favor, tente novamente.';
-
     if (erro.status === 0) {
       mensagem = 'Não foi possível conectar ao servidor. Verifique sua conexão.';
-    } else if (erro.status === 404) {
-      mensagem = 'Curso não encontrado.';
     } else if (erro.status === 409) {
       mensagem = 'Você já possui uma inscrição ativa neste curso.';
     } else if (erro.status >= 400 && erro.status < 500) {
@@ -89,7 +57,6 @@ export class InscricaoService {
     } else if (erro.status >= 500) {
       mensagem = 'O servidor encontrou um problema. Por favor, tente mais tarde.';
     }
-
     return throwError(() => new Error(mensagem));
   }
 }

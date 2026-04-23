@@ -39,7 +39,7 @@
                             <span class="meta-label">Modalidade:</span>
                             <span class="meta-value">{{ curso.modalidade }}</span>
                         </div>
-                        <div class="meta-item" *ngIf="curso.vagas > 0">
+                        <div class="meta-item" *ngIf="(curso.vagas ?? 0) > 0">
                             <span class="meta-label">Vagas:</span>
                             <span class="meta-value">{{ curso.vagasDisponiveis }}/{{ curso.vagas }}</span>
                         </div>
@@ -52,9 +52,13 @@
                     </div>
 
                     <button class="btn-inscrever" (click)="abrirInscricao()"
-                        [disabled]="(curso.vagas > 0 && curso.vagasDisponiveis === 0) || jaMatriculado">
-                        {{ jaMatriculado ? 'Já matriculado ✓' : ((curso.vagas === 0 || curso.vagasDisponiveis > 0) ? 'Inscrever-se Agora' : 'Esgotado') }}
-                    </button>
+                        [disabled]="((curso.vagas ?? 0) > 0 && (curso.vagasDisponiveis ?? 1) === 0) || jaMatriculado">
+                        {{ jaMatriculado
+                            ? 'Já matriculado ✓'
+                            : (((curso.vagas ?? 0) === 0 || (curso.vagasDisponiveis ?? 1) > 0)
+                                ? 'Inscrever-se Agora'
+                                : 'Esgotado') }}
+                    </button>   
                 </div>
             </div>
         </ng-container>
@@ -68,14 +72,14 @@
                     <p>{{ curso.descricao }}</p>
                 </section>
 
-                <section class="secao" *ngIf="curso.objetivos.length > 0">
+                <section class="secao" *ngIf="curso.objetivos?.length ?? 0 > 0">
                     <h2>Objetivos</h2>
                     <ul class="lista-objetivos">
                         <li *ngFor="let objetivo of curso.objetivos">{{ objetivo }}</li>
                     </ul>
                 </section>
 
-                <section class="secao" *ngIf="curso.conteudoProgramatico.length > 0">
+                <section class="secao" *ngIf="curso.conteudoProgramatico?.length ?? 0 > 0">
                     <h2>Conteúdo Programático</h2>
                     <div class="programatico">
                         <div class="modulo" *ngFor="let modulo of curso.conteudoProgramatico; let i = index">
@@ -85,14 +89,14 @@
                     </div>
                 </section>
 
-                <section class="secao" *ngIf="curso.requisitos.length > 0">
+                <section class="secao" *ngIf="curso.requisitos?.length ?? 0 > 0">
                     <h2>Requisitos</h2>
                     <ul class="lista-requisitos">
                         <li *ngFor="let requisito of curso.requisitos">{{ requisito }}</li>
                     </ul>
                 </section>
 
-                <section class="secao" *ngIf="curso.depoimentos.length > 0">
+                <section class="secao" *ngIf="curso.depoimentos?.length ?? 0 > 0">
                     <h2>Depoimentos</h2>
                     <div class="depoimentos">
                         <div class="depoimento" *ngFor="let depoimento of curso.depoimentos">
@@ -132,13 +136,17 @@
                         <span>{{ curso.certificacao }}</span>
                     </div>
 
-                    <div class="tags" *ngIf="curso.tags.length > 0">
+                    <div class="tags" *ngIf="curso.tags?.length ?? 0 > 0">
                         <span class="tag" *ngFor="let tag of curso.tags">{{ tag }}</span>
                     </div>
 
                     <button class="btn-inscrever-sidebar" (click)="abrirInscricao()"
-                        [disabled]="(curso.vagas > 0 && curso.vagasDisponiveis === 0) || jaMatriculado">
-                        {{ jaMatriculado ? 'Já matriculado ✓' : ((curso.vagas === 0 || curso.vagasDisponiveis > 0) ? 'Inscrever-se' : 'Esgotado') }}
+                        [disabled]="((curso.vagas ?? 0) > 0 && (curso.vagasDisponiveis ?? 1) === 0) || jaMatriculado">
+                        {{ jaMatriculado
+                            ? 'Já matriculado ✓'
+                            : (((curso.vagas ?? 0) === 0 || (curso.vagasDisponiveis ?? 1) > 0)
+                                ? 'Inscrever-se'
+                                : 'Esgotado') }}
                     </button>
                 </div>
             </div>
