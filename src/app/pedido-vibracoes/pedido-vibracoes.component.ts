@@ -23,6 +23,7 @@ export class PedidoVibracoesComponent {
   constructor(private fb: FormBuilder, private http: HttpClient, private cepService: CepService,  private pedidoVibracaoService: PedidoVibracaoService) {
     this.formularioPedido = this.fb.group({
       nome: ['', [Validators.required, Validators.minLength(3)]],
+      email: [''],
       endereco: this.fb.group({
         cep: ['', [Validators.required]],
         logradouro: ['', [Validators.required]],
@@ -72,9 +73,6 @@ export class PedidoVibracoesComponent {
       };
 
       console.log('Dados do pedido:', pedidoData);
-
-      // Aqui você faria a chamada para o backend
-      // Exemplo de estrutura para chamada HTTP:
       
       this.pedidoVibracaoService.enviarPedido(pedidoData).subscribe({
         next: (response) => {
